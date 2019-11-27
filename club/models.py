@@ -3,6 +3,7 @@ from django.db import models
 ### Events represent one-time club meetings. 
 class Event(models.Model):
     # Recognized types of events
+    # Taken from https://sites.google.com/google.com/developerstudentclubleads/dsc-activities-reporting
     EVENT_TYPES = [
         ('IS', 'Info Session'),
         ('WS', 'Workshop'),
@@ -17,8 +18,8 @@ class Event(models.Model):
     # Title of Event limited to 100 characters
     title = models.CharField(max_length=100)
     
-    # Optional event tagline
-    tagline = models.CharField(max_length=200, null=True)
+    # (Optional) Event tagline
+    tagline = models.CharField(max_length=200, blank=True, null=True)
     
     # Required event description
     description = models.CharField(max_length=5000)
@@ -30,3 +31,8 @@ class Event(models.Model):
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    # String representation of an Event
+    # e.g. "Welcome!: Info Session on 11/14/2019"
+    def __str__(self):
+        return f'{self.title}: {self.get_event_type_display()} on {self.start.strftime("%m/%d/%Y")}'
