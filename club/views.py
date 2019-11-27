@@ -8,6 +8,9 @@ def index(request):
 def splash(request):
     return render(request, 'club/splash.html')
 
+def about(request):
+    return render(request, 'club/about.html')
+
 # EVENTS
 def event_index(request):
     events = Event.objects.all()

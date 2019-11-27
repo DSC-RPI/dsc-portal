@@ -15,21 +15,23 @@
 
     <div id="top-navbar" class="navbar-menu">
         <div class="navbar-start">
-            <a href="#" class="navbar-item">
-                Home
-            </a>
-
-            <a href="#" class="navbar-item">
+            
+            <a href="{% url 'events' %}" class="navbar-item" title="See the events being held.">
                 Events
             </a>
-
-            <a href="#" class="navbar-item">
+            
+            <a href="#" class="navbar-item" title="Check out the projects DSC University has been working on!">
                 Projects
             </a>
-            
-            <a href="#" class="navbar-item">
-                Core Team
+
+            <a href="#" class="navbar-item" title="Find out what's been going on!">
+                Updates
             </a>
+            
+            <a href="{% url 'about' %}" class="navbar-item" title="Learn about the DSC program.">
+                About
+            </a>
+            
         </div>
 
         <div class="navbar-end">
