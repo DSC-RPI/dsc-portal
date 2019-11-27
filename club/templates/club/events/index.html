@@ -1,0 +1,17 @@
+{% extends "club/base.html" %}
+
+{% block content %}
+<div class="event-index">
+    <h2>Events</h2>
+
+    {% for event in events %}
+    <div class="event-summary">
+        <h3>{{ event.title }}</h3>
+        <p>{{ event.description|truncatewords:"100" }}</p>
+        <a href="/events/{{ event.id }}">
+            <button>View</button>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
