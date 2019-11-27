@@ -10,17 +10,11 @@
 </head>
 
 <body>
-    <header>
-        {% include 'club/includes/header.html' %}
-    </header>
+    {% include 'club/includes/header.html' %}
     <main>
         {% block content %}{% endblock %}
-    </main>
-    <footer class="footer">
-        <p class="has-text-centered">
-            Developer Students Club Portal
-        </p>
-    </footer>
+    </main>    
+    {% include 'club/includes/footer.html' %}
 </body>
 
 </html>
