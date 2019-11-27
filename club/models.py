@@ -11,9 +11,19 @@ class Event(models.Model):
         ('HO', 'Hands-on Workshop'),
         ('HA', 'Hackathon'),
         ('SS', 'Speaker Session'),
-        ('SC', 'Showcase')
+        ('SC', 'Showcase'),
+        ('CT', 'Core Team Meeting')
     ]
+
     event_type = models.CharField(max_length=2, choices=EVENT_TYPES)
+    
+    # Who can see the event
+    VISIBILITY_TYPES = [
+        ('E', 'Everyone'),
+        ('A', 'Active Members'),
+        ('C', 'Core Team')
+    ]
+    visibility = models.CharField(max_length=1, choices=VISIBILITY_TYPES)
     
     # Title of Event limited to 100 characters
     title = models.CharField(max_length=100)
