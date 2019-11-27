@@ -5,6 +5,8 @@ from .models import Event
 def index(request):
     return render(request, 'club/index.html')
 
+def splash(request):
+    return render(request, 'club/splash.html')
 
 # EVENTS
 def event_index(request):
