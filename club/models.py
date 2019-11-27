@@ -19,8 +19,8 @@ class Event(models.Model):
     
     # Who can see the event
     VISIBILITY_TYPES = [
-        ('E', 'Everyone'),
-        ('A', 'Active Members'),
+        ('P', 'Public'),
+        ('M', 'Members'),
         ('C', 'Core Team')
     ]
     visibility = models.CharField(max_length=1, choices=VISIBILITY_TYPES)
@@ -38,6 +38,9 @@ class Event(models.Model):
     start = models.DateTimeField()
     end = models.DateTimeField()
 
+    # (optional) Link to slideshow
+    presentation_link = models.URLField(blank=True, null=True)
+
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -46,3 +49,18 @@ class Event(models.Model):
     # e.g. "Welcome!: Info Session on 11/14/2019"
     def __str__(self):
         return f'{self.title}: {self.get_event_type_display()} on {self.start.strftime("%m/%d/%Y")}'
+
+### Project represents a "tech based solution"
+class Project(models.Model):
+
+    # Title of the project
+    title = models.CharField(max_length=200)
+    
+    # Description of the project
+    description = models.CharField(max_length=3000)
+
+    # Link to project code
+    repository_link = models.URLField()
+
+    def __str__(self):
+        return f'Project "{self.title}" ({self.repository_link})'
