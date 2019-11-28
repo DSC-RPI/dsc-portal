@@ -1,7 +1,7 @@
 {% load static %}
 <header>
-    <nav class="navbar {% if request.path == '/' and not user.is_authenticated %}is-white{% else %}is-dark{% endif %}" role="navigation"
-        aria-label="main navigation">
+    <nav class="navbar {% if request.path == '/' and not user.is_authenticated %}is-white{% else %}is-dark{% endif %}"
+        role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="/">
                 <img class="dsc-logomark" src="{% static 'club/img/google_developers_logomark_color.png' %}"
@@ -19,28 +19,48 @@
 
         <div id="top-navbar" class="navbar-menu">
             <div class="navbar-start">
+                <a href="{% url 'index' %}" class="navbar-item" title="See your dashboard.">
+                    Home
+                </a>
 
                 <a href="{% url 'events' %}" class="navbar-item" title="See the events being held.">
                     Events
                 </a>
 
-                <a href="{% url 'projects' %}" class="navbar-item" title="Check out the projects DSC University has been working on!">
+                <a href="{% url 'projects' %}" class="navbar-item"
+                    title="Check out the projects DSC University has been working on!">
                     Projects
                 </a>
 
-                <a href="#" class="navbar-item" title="Find out what's been going on!">
+                <a href="{% url 'updates' %}" class="navbar-item" title="Find out what's been going on!">
                     Updates
                 </a>
 
+                {% if not user.is_authenticated %}
                 <a href="{% url 'about' %}" class="navbar-item" title="Learn about the DSC program.">
                     About
                 </a>
+                {% endif %}
 
             </div>
 
             <div class="navbar-end">
                 {% if user.is_authenticated %}
-                <a href="{% url 'logout' %}" class="navbar-item"><strong>{{ user.first_name }} {{ user.last_name }}</strong></a>
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">
+                        <strong>{{ user.first_name }} {{ user.last_name }}</strong>
+                    </a>
+
+                    <div class="navbar-dropdown">
+                        <a href="#" class="navbar-item">
+                            Profile
+                        </a>
+                        <hr class="navbar-divider">
+                        <a href="{% url 'logout' %}" class="navbar-item">
+                            Logout
+                        </a>
+                    </div>
+                </div>
                 {% else %}
                 <a class="navbar-item" href="{% url 'login' %}">
                     Login
@@ -48,7 +68,7 @@
                 <div class="navbar-item">
                     <a class="button is-primary" href="#">
                         <strong>Join</strong>
-                        </a>
+                    </a>
                 </div>
                 {% endif %}
             </div>
