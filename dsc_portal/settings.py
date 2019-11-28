@@ -32,6 +32,9 @@ ALLOWED_HOSTS = []
 # SCHOOL INFO
 SCHOOL_NAME = 'Rensselaer Polytechnic Institute'
 SCHOOL_NAME_SHORT = 'RPI'
+INSTAGRAM_LINK = '#'
+FACEBOOK_LINK = 'https://www.facebook.com/Developer-Student-Club-RPI-116239323105529'
+GITHUB_LINK = 'https://github.com/DSC-RPI/dsc-portal'
 
 # Application definition
 
