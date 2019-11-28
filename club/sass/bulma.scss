@@ -1,0 +1,24 @@
+@charset "utf-8";
+
+// Import Roboto
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
+// Google colors
+// From Brand Guide
+$blue: #4285F4;
+$blue-lighter: #D2E3FC;
+
+$red: #EA4335;
+$red-lighter: #FAD2CF;
+
+$yellow: #FBBC04;
+$yellow-lighter: #FEEFC3;
+
+$green: #34A853;
+$green-lighter: #CEEAD6;
+
+// Edit Bulma variables
+$family-sans-serif: "Roboto", sans-serif;
+$primary: $blue;
+
+@import "./bulma-0.8.0/bulma.sass";
