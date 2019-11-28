@@ -120,3 +120,4 @@ dmypy.json
 .pyre/
 
 .sass-cache/
+.env
