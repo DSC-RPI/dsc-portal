@@ -20,24 +20,39 @@
         <div id="top-navbar" class="navbar-menu">
             <div class="navbar-start">
                 <a href="{% url 'index' %}" class="navbar-item" title="See your dashboard.">
+                    <span class="icon">
+                        <i class="fas fa-home"></i>
+                    </span>
                     Home
                 </a>
 
                 <a href="{% url 'events' %}" class="navbar-item" title="See the events being held.">
+                    <span class="icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </span>
                     Events
                 </a>
 
                 <a href="{% url 'projects' %}" class="navbar-item"
                     title="Check out the projects DSC University has been working on!">
+                    <span class="icon">
+                        <i class="fas fa-archive"></i>
+                    </span>
                     Projects
                 </a>
 
                 <a href="{% url 'updates' %}" class="navbar-item" title="Find out what's been going on!">
+                    <span class="icon">
+                        <i class="fas fa-newspaper"></i>
+                    </span>
                     Updates
                 </a>
 
                 {% if not user.is_authenticated %}
                 <a href="{% url 'about' %}" class="navbar-item" title="Learn about the DSC program.">
+                    <span class="icon">
+                        <i class="fas fa-info-circle"></i>
+                    </span>
                     About
                 </a>
                 {% endif %}
