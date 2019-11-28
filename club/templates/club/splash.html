@@ -1,15 +1,24 @@
 {% extends "club/base.html" %}
+{% load static %}
 
 {% block content %}
-<section class="hero is-primary is-medium is-bold">
-    <div class="hero-body">
-        <div class="container">
-            <h1 class="title">
-                Welcome to Developer Student Clubs University
-            </h1>
-            <h2 class="subtitle">
-                Powered by Google Developers
-            </h2>
+<section class="section">
+    <img src="{% static 'club/img/DSC-Homepage-Banner-2.png' %}" alt="DSC Banner">
+</section>
+<section class="section">
+    <div class="container">
+        <div class="columns has-text-centered">
+            <div class="column is-one-third">
+                <h3 class="title">Thing 1</h3>
+            </div>
+            <div class="column is-one-third">
+                <h3 class="title">Thing 2</h3>
+
+            </div>
+            <div class="column is-one-third">
+                <h3 class="title">Thing 3</h3>
+
+            </div>
         </div>
     </div>
 </section>
