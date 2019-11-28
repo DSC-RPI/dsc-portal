@@ -57,3 +57,7 @@ def event_detail(request, event_id):
 def project_index(request):
     projects = []
     return render(request, 'club/projects/index.html', {'projects':projects})
+
+def update_index(request):
+    updates = []
+    return render(request, 'club/updates/index.html')
