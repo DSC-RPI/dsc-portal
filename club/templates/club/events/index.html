@@ -1,17 +1,28 @@
 {% extends "club/base.html" %}
 
 {% block content %}
-<div class="event-index">
-    <h2>Events</h2>
+<section class="section event-index">
+    <div class="container">
+        <h2 class="title">Upcoming Events</h2>
 
-    {% for event in events %}
-    <div class="event-summary">
-        <h3>{{ event.title }}</h3>
-        <p>{{ event.description|truncatewords:"100" }}</p>
-        <a href="/events/{{ event.id }}">
-            <button>View</button>
-        </a>
+        <div class="columns">
+            <div class="column is-half">
+                {% for event in events %}
+                <div class="box event-summary">
+                    <h3 class="title is-size-4">{{ event.title }}</h3>
+                    {% if event.tagline %}
+                    <h4 class="subtitle">{{ event.tagline }}</h4>
+                    {% endif %}
+                    <p>{{ event.description|truncatewords:"100" }}</p>
+                    <a class="button is-primary"href="/events/{{ event.id }}">Learn More</a>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="column is-half">
+                <iframe src="https://calendar.google.com/calendar/embed?src=scg6hcfie2ebi9bg7ecmj8epn4%40group.calendar.google.com&ctz=America%2FNew_York" style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+            </div>
+        </div>
     </div>
-    {% endfor %}
-</div>
+</section>
+
 {% endblock %}

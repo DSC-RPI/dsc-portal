@@ -1,48 +1,51 @@
 {% load static %}
-<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-        <a class="navbar-item" href="/">
-            <img class="dsc-logomark" src="{% static 'club/img/google_developers_logomark_color.png' %}"
-                alt="Official white DSC logomark" width="40">
-        </a>
-
-        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="top-navbar">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-        </a>
-    </div>
-
-    <div id="top-navbar" class="navbar-menu">
-        <div class="navbar-start">
-
-            <a href="{% url 'events' %}" class="navbar-item" title="See the events being held." style="color: #B31412">
-                Events
+<header>
+    <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="/">
+                <img class="dsc-logomark" src="{% static 'club/img/google_developers_logomark_color.png' %}"
+                    alt="Official white DSC logomark" width="40">
+                <b>DSC RPI</b>
             </a>
 
-            <a href="#" class="navbar-item" title="Check out the projects DSC University has been working on!"
-                style="color: #174EA6">
-                Projects
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+                data-target="top-navbar">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
             </a>
-
-            <a href="#" class="navbar-item" title="Find out what's been going on!" style="color: #137333">
-                Updates
-            </a>
-
-            <a href="{% url 'about' %}" class="navbar-item" title="Learn about the DSC program." style="color: #F9AB00">
-                About
-            </a>
-
         </div>
 
-        <div class="navbar-end">
-            <div class="navbar-item">
-                <div class="buttons">
-                    <a class="button is-white">
-                        <strong>Join</strong>
-                    </a>
+        <div id="top-navbar" class="navbar-menu">
+            <div class="navbar-start">
+
+                <a href="{% url 'events' %}" class="navbar-item" title="See the events being held.">
+                    Events
+                </a>
+
+                <a href="#" class="navbar-item" title="Check out the projects DSC University has been working on!">
+                    Projects
+                </a>
+
+                <a href="#" class="navbar-item" title="Find out what's been going on!">
+                    Updates
+                </a>
+
+                <a href="{% url 'about' %}" class="navbar-item" title="Learn about the DSC program.">
+                    About
+                </a>
+
+            </div>
+
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-white">
+                            <strong>Join</strong>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
+</header>
