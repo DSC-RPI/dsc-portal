@@ -29,6 +29,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# SCHOOL INFO
+SCHOOL_NAME = 'Rensselaer Polytechnic Institute'
+SCHOOL_NAME_SHORT = 'RPI'
 
 # Application definition
 
@@ -66,6 +69,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'club.context_processors.add_school'
             ],
         },
     },
