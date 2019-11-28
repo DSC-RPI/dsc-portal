@@ -3,10 +3,10 @@ from django.http import HttpResponse
 from .models import Event
 
 def index(request):
-    return render(request, 'club/index.html')
-
-def splash(request):
-    return render(request, 'club/splash.html')
+    if request.user.is_authenticated:
+        return render(request, 'club/index.html')
+    else:
+        return render(request, 'club/splash.html')
 
 def about(request):
     return render(request, 'club/about.html')

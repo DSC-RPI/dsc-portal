@@ -1,6 +1,6 @@
 {% load static %}
 <header>
-    <nav class="navbar {% if request.path == '/splash' %}is-white{% else %}is-dark{% endif %}" role="navigation"
+    <nav class="navbar {% if request.path == '/' and not user.is_authenticated %}is-white{% else %}is-dark{% endif %}" role="navigation"
         aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="/">
