@@ -3,6 +3,10 @@
 {%block content %}
 <section class="section event-detail">
     <div class="container">
+        {% if event.hidden %}
+        <div class="notification is-warning"><strong>HIDDEN EVENT</strong> This event is not public or listed on the events page yet.</div>
+        {% endif %}
+
         <h1 class="title event-title">{{ event.title }}</h2>
         <h2 class="subtitle has-text-grey">{{ event.get_event_type_display }}</h2>
         

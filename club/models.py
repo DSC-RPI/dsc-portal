@@ -31,6 +31,8 @@ class Event(models.Model):
     ]
     visibility = models.CharField(max_length=1, choices=VISIBILITY_TYPES, help_text='Determines who can see/register for the event.')
     
+    hidden = models.BooleanField(default=False, help_text='If true then the event will not be shown anywhere. Use this to create event drafts.')
+
     # Title of Event limited to 100 characters
     title = models.CharField(max_length=100, help_text='The headline title of the event. Should be very concise.')
     
