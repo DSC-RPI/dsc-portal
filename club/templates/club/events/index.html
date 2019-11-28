@@ -7,7 +7,7 @@
 
         <div class="columns">
             <div class="column is-half">
-                {% for event in events %}
+                {% for event in upcoming_events %}
                 <div class="box event-summary">
                     <h3 class="title is-size-4">{{ event.title }}</h3>
                     {% if event.tagline %}
@@ -22,6 +22,37 @@
                 <iframe src="https://calendar.google.com/calendar/embed?src=scg6hcfie2ebi9bg7ecmj8epn4%40group.calendar.google.com&ctz=America%2FNew_York" style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
             </div>
         </div>
+
+        <hr>
+
+        <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                    <td>When</td>
+                    <td>Type</td>
+                    <td>Title</td>
+                    <td>Tagline</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                {% if past_events|length > 0 %}
+                {% for event in past_events %}
+                <tr>
+                    <td>{{ event.start }}</td>
+                    <td>{{ event.get_event_type_display }}</td>
+                    <td>{{ event.title }}</td>
+                    <td>{% if event.tagline %}{{ event.tagline }}{% else %}<span class="has-text-grey">-</span>{% endif %}</td>
+                    <td>
+                        <a href="#" class="button is-small is-pulled-right">View</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <p class="has-text-centered has-text-grey">There are no past events.</p>
+                {% endif %}
+            </tbody>
+        </table>
     </div>
 </section>
 

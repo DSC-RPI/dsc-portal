@@ -2,6 +2,8 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
 from .models import Event
 
+from datetime import date
+
 def index(request):
     if request.user.is_authenticated:
         return render(request, 'club/index.html')
@@ -13,8 +15,12 @@ def about(request):
 
 # EVENTS
 def event_index(request):
-    events = Event.objects.all()
-    return render(request, 'club/events/index.html', {'events':events})
+    today = date.today()
+
+    upcoming_events = Event.objects.filter(start__gt=today)
+    past_events = Event.objects.filter(end__lt=today)
+
+    return render(request, 'club/events/index.html', {'upcoming_events':upcoming_events, 'past_events':past_events})
 
 def event_detail(request, event_id):
     '''
