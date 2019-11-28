@@ -1,11 +1,15 @@
 {% extends "club/base.html" %}
 
 {%block content %}
-<div class="event-detail">
-    <h2 class="event-title">{{ event.title }}</h2>
-
-    <p class="event-description">{{ event.description }}</p>
-    <hr>
-    <button>RSVP</button>
-</div>
+<section class="section event-detail">
+    <div class="container">
+        <h1 class="title event-title">{{ event.title }}</h2>
+        <h2 class="subtitle has-text-grey">{{ event.get_event_type_display }}</h2>
+        
+        <p class="event-description">{{ event.description }}</p>
+        <hr>
+        <button class="button is-primary">RSVP</button>
+        <a href="{% url 'events' %}" class="button is-link">All Events</a>
+    </div>
+</section>
 {% endblock %}
