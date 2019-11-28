@@ -24,14 +24,14 @@
                     <span class="icon">
                         <i class="fas fa-home"></i>
                     </span>
-                    Home
+                    <span>Home</span>
                 </a>
                 {% else %}
                 <a href="{% url 'about' %}" class="navbar-item" title="Learn about the DSC program.">
                     <span class="icon">
                         <i class="fas fa-info-circle"></i>
                     </span>
-                    About
+                    <span>About</span>
                 </a>
                 {% endif %}
 
@@ -39,7 +39,7 @@
                     <span class="icon">
                         <i class="fas fa-calendar-alt"></i>
                     </span>
-                    Events
+                    <span>Events</span>
                 </a>
 
                 <a href="{% url 'projects' %}" class="navbar-item"
@@ -47,14 +47,14 @@
                     <span class="icon">
                         <i class="fas fa-archive"></i>
                     </span>
-                    Projects
+                    <span>Projects</span>
                 </a>
 
                 <a href="{% url 'updates' %}" class="navbar-item" title="Find out what's been going on!">
                     <span class="icon">
                         <i class="fas fa-newspaper"></i>
                     </span>
-                    Updates
+                    <span>Updates</span>
                 </a>
             </div>
 
@@ -62,16 +62,25 @@
                 {% if user.is_authenticated %}
                 <div class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link">
+                        <span class="icon">
+                            <i class="fas fa-user-circle"></i>
+                        </span>
                         <strong>{{ user.first_name }} {{ user.last_name }}</strong>
                     </a>
 
                     <div class="navbar-dropdown">
                         <a href="#" class="navbar-item">
-                            Profile
+                            <span class="icon">
+                                <i class="fas fa-edit"></i>
+                            </span>
+                            <span>Edit Profile</span>
                         </a>
                         <hr class="navbar-divider">
                         <a href="{% url 'logout' %}" class="navbar-item">
-                            Logout
+                            <span class="icon">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </span>
+                            <span>Logout</span>
                         </a>
                     </div>
                 </div>
