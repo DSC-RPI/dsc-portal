@@ -53,3 +53,7 @@ def event_detail(request, event_id):
     '''
     event = get_object_or_404(Event, pk=event_id)
     return render(request, 'club/events/detail.html', {'event':event})
+
+def project_index(request):
+    projects = []
+    return render(request, 'club/projects/index.html', {'projects':projects})
