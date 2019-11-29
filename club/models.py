@@ -180,6 +180,8 @@ class Event(models.Model):
         if self.meeting_notes_id:
             drive_service.files().delete(fileId=self.meeting_notes_id).execute()
         
+        if self.calendar_event_id:
+            calendar_service.events().delete(calendarId=settings.GOOGLE_CALENDAR_ID, eventId=self.calendar_event_id).execute()
         # Carry on with actual event delete
         super().delete(*args, **kwargs)
 
