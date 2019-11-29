@@ -3,8 +3,6 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import Event, Project, Update
 
-from .google import drive_service
-
 from datetime import date
 
 def index(request):
@@ -72,5 +70,4 @@ def update_detail(request, update_id):
 @login_required
 def member_index(request):
     members = []
-
     return render(request, 'club/members/index.html', {'members':members})

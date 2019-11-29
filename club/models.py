@@ -2,6 +2,8 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 
+from .google import docs_service, drive_service
+
 class Member(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     
@@ -52,10 +54,44 @@ class Event(models.Model):
     # (optional) Link to slideshow
     presentation_link = models.URLField(blank=True, null=True, help_text='An optional link to presentation slides for the event. Most likely Google Slides.')
 
+    # (optonal) Link to meeting notes
+    meeting_notes_link = models.URLField(blank=True, null=True, help_text='An optional link to the meeting notes for the event. This is most likely to an auto-generated Google Docs.')
+
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def create_meeting_notes(self):
+        if self.meeting_notes_link:
+            return
+
+        name = start.strftime("[%y/%m/%d] DSC RPI Meeting Notes")
+
+        document = drive_service.files().copy(fileId=settings.GOOGLE_DRIVE_MEETING_NOTES_TEMPLATE_ID, body={
+            'name': name,  # Name document
+            # Place document in meeting notes folder
+            'parents': [settings.GOOGLE_DRIVE_MEETING_NOTES_FOLDER_ID]
+        }).execute()
+
+        requests = [
+            {
+                'replaceAllText': {
+                    'containsText': {
+                        'text': '{{date}}',
+                        'matchCase':  'true'
+                    },
+                    'replaceText': start.strftime('%A, %B %-m %Y | %y/%m/%d'),
+                }
+            }
+        ]
+
+        result = docs_service.documents().batchUpdate(
+            documentId=document.get('id'), body={'requests': requests}).execute()
+
+        self.meeting_notes_link = 'https://docs.google.com/document/d/' + document.get('id')
+
+        self.save()
+    
     # String representation of an Event
     # e.g. "Welcome!: Info Session on 11/14/2019"
     def __str__(self):
