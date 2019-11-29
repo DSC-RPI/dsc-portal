@@ -7,12 +7,6 @@
 
         <div class="columns">
             <div class="column is-half">
-                {% if upcoming_events|length == 0 %}
-                <p class="has-text-grey is-size-4">
-                    There are no upcoming events yet. Stay tuned!
-                </p>
-                {% endif %}
-
                 {% for event in upcoming_events %}
                 <div class="box event-summary">
                     <a href="/events/{{ event.id }}">
@@ -25,6 +19,10 @@
                     {% endif %}
                     <!-- <a class="button is-primary" >View</a> -->
                 </div>
+                {% empty %}
+                <p class="has-text-grey is-size-4">
+                    There are no upcoming events yet. Stay tuned!
+                </p>
                 {% endfor %}
             </div>
             <div class="column is-half">

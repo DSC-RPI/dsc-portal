@@ -33,8 +33,8 @@ def event_index(request):
     '''
     today = date.today()
 
-    upcoming_events = Event.objects.filter(start__gt=today, hidden=False)
-    past_events = Event.objects.filter(end__lt=today, hidden=False)
+    upcoming_events = Event.objects.filter(start__gt=today, hidden=False).order_by('start')
+    past_events = Event.objects.filter(end__lt=today, hidden=False).order_by('created_at')
 
     return render(request, 'club/events/index.html', {'upcoming_events':upcoming_events, 'past_events':past_events})
 
@@ -59,8 +59,8 @@ def project_index(request):
     return render(request, 'club/projects/index.html', {'projects':projects})
 
 def update_index(request):
-    updates = []
-    return render(request, 'club/updates/index.html')
+    updates = Update.objects.filter(hidden=False).order_by('created_at')
+    return render(request, 'club/updates/index.html', {'updates':updates})
 
 def update_detail(request, update_id):
     update = get_object_or_404(Update, pk=update_id)
