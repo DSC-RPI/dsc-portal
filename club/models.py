@@ -55,14 +55,18 @@ class Event(models.Model):
     presentation_link = models.URLField(blank=True, null=True, help_text='An optional link to presentation slides for the event. Most likely Google Slides.')
 
     # (optonal) Link to meeting notes
-    meeting_notes_link = models.URLField(blank=True, null=True, help_text='An optional link to the meeting notes for the event. This is most likely to an auto-generated Google Docs.')
+    meeting_notes_id = models.URLField(blank=True, null=True, help_text='An optional link to the meeting notes for the event. This is most likely to an auto-generated Google Docs.')
+    
+    @property
+    def meeting_notes_link(self):
+        return 'https://docs.google.com/document/d/' + self.meeting_notes_id
 
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def create_meeting_notes(self):
-        if self.meeting_notes_link:
+        if self.meeting_notes_id:
             return
 
         name = self.start.strftime("[%y/%m/%d] DSC RPI Meeting Notes")
@@ -86,6 +90,15 @@ class Event(models.Model):
             {
                 'replaceAllText': {
                     'containsText': {
+                        'text': '{{event_type}}',
+                        'matchCase':  'true'
+                    },
+                    'replaceText': self.get_event_type_display(),
+                }
+            },
+            {
+                'replaceAllText': {
+                    'containsText': {
                         'text': '{{date}}',
                         'matchCase':  'true'
                     },
@@ -98,7 +111,7 @@ class Event(models.Model):
                         'text': '{{short_date}}',
                         'matchCase':  'true'
                     },
-                    'replaceText': self.start.strftime('"%m/%d/%y'),
+                    'replaceText': self.start.strftime('%m/%d/%y'),
                 }
             }
         ]
@@ -106,10 +119,18 @@ class Event(models.Model):
         result = docs_service.documents().batchUpdate(
             documentId=document.get('id'), body={'requests': requests}).execute()
 
-        self.meeting_notes_link = 'https://docs.google.com/document/d/' + document.get('id')
+        self.meeting_notes_id = document.get('id')
 
         self.save()
     
+    def delete(self, *args, **kwargs):
+        # Delete meeting notes if they were made when event is deleted
+        if self.meeting_notes_id:
+            drive_service.files().delete(fileId=self.meeting_notes_id).execute()
+        
+        # Carry on with actual event delete
+        super().delete(*args, **kwargs)
+
     # String representation of an Event
     # e.g. "Welcome!: Info Session on 11/14/2019"
     def __str__(self):

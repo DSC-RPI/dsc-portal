@@ -10,7 +10,7 @@
 
         <h1 class="title event-title">{{ event.title }}</h1>
         <h2 class="subtitle has-text-grey">{{ event.get_event_type_display }}</h2>
-        {% if event.meeting_notes_link %}
+        {% if event.meeting_notes_id %}
         <a href="{{ event.meeting_notes_link }}" target="_blank" class="event-meeting-notes">
             <span class="icon">
                 <i class="fas fa-file-alt"></i>
@@ -24,7 +24,7 @@
         <div class="buttons">
 
             {% if user.is_authenticated %}
-            {% if user.is_staff and not event.meeting_notes_link %}
+            {% if user.is_staff and not event.meeting_notes_id %}
             <form method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="create-document" value="meeting-notes">
