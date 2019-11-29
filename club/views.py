@@ -65,3 +65,7 @@ def update_index(request):
 def update_detail(request, update_id):
     update = get_object_or_404(Update, pk=update_id)
     return render(request, 'club/updates/detail.html', {'update':update})
+
+def member_index(request):
+    members = []
+    return render(request, 'club/members/index.html', {'members':members})
