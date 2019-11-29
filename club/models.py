@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
 
 class Member(models.Model):
@@ -94,3 +95,15 @@ class Update(models.Model):
 
     def __str__(self):
         return f'Update "{self.title}" on {self.created_at.strftime("%m/%d/%Y")}'
+
+class UpdateComment(models.Model):
+    '''Represents a user comment on an Update.'''
+    
+    update = models.ForeignKey(Update, on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    body = models.TextField(max_length=2000, help_text='The text of the comment.')
+
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
