@@ -9,6 +9,7 @@
         {% endif %}
 
         <h1 class="title update-title">{{ update.title }}</h1>
+        <h2 class="subtitle">Posted on {{ update.created_at }} | Last updated {{ update.updated_at }}</h2>
 
         <p class="content update-body">{{ update.body }}</p>
         <hr>
