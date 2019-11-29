@@ -69,6 +69,14 @@
                     </a>
 
                     <div class="navbar-dropdown">
+                        {% if user.is_staff %}
+                        <a href="/admin" target="_blank" class="navbar-item">
+                            <span class="icon">
+                                <i class="fas fa-users-cog"></i>
+                            </span>
+                            <span>Administration</span>
+                        </a>
+                        {% endif %}
                         <a href="#" class="navbar-item">
                             <span class="icon">
                                 <i class="fas fa-edit"></i>
