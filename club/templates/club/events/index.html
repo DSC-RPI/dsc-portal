@@ -11,18 +11,28 @@
 </section>
 <section class="section event-index">
     <div class="container">
+        <h1 class="title">Upcoming</h1>
         <div class="columns">
             <div class="column is-half">
                 {% for event in upcoming_events %}
-                <div class="box event-summary">
-                    <a href="{% url 'event_detail' event.id %}">
-                        <h3 class="title is-size-4">{{ event.title }}
-                            <span class="has-text-grey">{{ event.get_event_type_display }}</span>
-                        </h3>
-                    </a>
-                    {% if event.tagline %}
-                    <h4 class="subtitle">{{ event.tagline }}</h4>
-                    {% endif %}
+                <div class="box media event-summary">
+                    <div class="media-left">
+                        <p class="image is-128x128">
+                            <img src="https://bulma.io/images/placeholders/128x128.png">
+                        </p>
+                    </div>
+                    <div class="media-body">
+                        <a href="{% url 'event_detail' event.id %}">
+                            <h3 class="title is-size-4">{{ event.title }}
+                                <span class="has-text-grey">{{ event.get_event_type_display }}</span>
+                            </h3>
+                        </a>
+                        {% if event.tagline %}
+                        <h4 class="subtitle"><em>{{ event.tagline }}</em></h4>
+                        {% endif %}
+
+                        <span>{{ event.start }} - {{ event.end }}</span>
+                    </div>
                     <!-- <a class="button is-primary" >View</a> -->
                 </div>
                 {% empty %}
@@ -40,7 +50,7 @@
 
         <hr>
 
-        <h2 class="title is-size-5">Past Events</h2>
+        <h2 class="title is-size-3">Past Events</h2>
         {% if past_events|length > 0 %}
         <table class="table is-fullwidth">
             <thead>
