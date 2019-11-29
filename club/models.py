@@ -1,6 +1,9 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+
+from .google import docs_service, drive_service, calendar_service
 
 class Member(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -52,14 +55,141 @@ class Event(models.Model):
     # (optional) Link to slideshow
     presentation_link = models.URLField(blank=True, null=True, help_text='An optional link to presentation slides for the event. Most likely Google Slides.')
 
+    # (optonal) Link to meeting notes
+    meeting_notes_id = models.CharField(max_length=300, blank=True, null=True, help_text='The ID of the Google Docs meeting notes. This is most likely to an auto-generated Google Docs.')
+    
+    @property
+    def meeting_notes_link(self):
+        return 'https://docs.google.com/document/d/' + self.meeting_notes_id
+
+    calendar_event_id = models.CharField(max_length=300, blank=True, null=True, help_text='The Google Calendar event ID')
+
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def create_google_calendar_event(self):
+        event = {
+            'summary': f'{self.title}: {self.get_event_type_display()}',
+            'location': self.location,
+            'description': self.description,
+            'start': {
+                'dateTime': self.start.isoformat(),
+                'timeZone': settings.TIME_ZONE
+            },
+            'end': {
+                'dateTime': self.end.isoformat(),
+                'timeZone': settings.TIME_ZONE
+            },
+            'source': {
+                'title': self.title,
+                'url': settings.DOMAIN + '/events/' + str(self.id)
+            }
+        }
+
+        calendar_event = calendar_service.events().insert(calendarId=settings.GOOGLE_CALENDAR_ID, body=event).execute()
+
+        self.calendar_event_id = calendar_event.get('id')
+
+        self.save()
+    
+    def update_google_calendar_event(self):
+        calendar_service.events().patch(calendarId=settings.GOOGLE_CALENDAR_ID, eventId=self.calendar_event_id, body={
+            'summary': f'{self.title}: {self.get_event_type_display()}',
+            'location': self.location,
+            'description': self.description,
+            'start': {
+                'dateTime': self.start.isoformat(),
+                'timeZone': settings.TIME_ZONE
+            },
+            'end': {
+                'dateTime': self.end.isoformat(),
+                'timeZone': settings.TIME_ZONE
+            },
+        }).execute()
+
+    def create_meeting_notes(self):
+        if self.meeting_notes_id:
+            return
+
+        name = self.start.strftime("[%y/%m/%d] DSC RPI Meeting Notes")
+
+        document = drive_service.files().copy(fileId=settings.GOOGLE_DRIVE_MEETING_NOTES_TEMPLATE_ID, body={
+            'name': name,  # Name document
+            # Place document in meeting notes folder
+            'parents': [settings.GOOGLE_DRIVE_MEETING_NOTES_FOLDER_ID]
+        }).execute()
+
+        requests = [
+            {
+                'replaceAllText': {
+                    'containsText': {
+                        'text': '{{event_title}}',
+                        'matchCase':  'true'
+                    },
+                    'replaceText': self.title,
+                }
+            },
+            {
+                'replaceAllText': {
+                    'containsText': {
+                        'text': '{{event_type}}',
+                        'matchCase':  'true'
+                    },
+                    'replaceText': self.get_event_type_display(),
+                }
+            },
+            {
+                'replaceAllText': {
+                    'containsText': {
+                        'text': '{{date}}',
+                        'matchCase':  'true'
+                    },
+                    'replaceText': self.start.strftime('%A, %B %-m %Y'),
+                }
+            },
+            {
+                'replaceAllText': {
+                    'containsText': {
+                        'text': '{{short_date}}',
+                        'matchCase':  'true'
+                    },
+                    'replaceText': self.start.strftime('%m/%d/%y'),
+                }
+            }
+        ]
+
+        result = docs_service.documents().batchUpdate(
+            documentId=document.get('id'), body={'requests': requests}).execute()
+
+        self.meeting_notes_id = document.get('id')
+
+        self.save()
+    
+    @classmethod
+    def post_save(cls, sender, instance, created, *args, **kwargs):
+        if created:
+            instance.create_google_calendar_event()
+        else:
+            instance.update_google_calendar_event()
+        
+
+
+    def delete(self, *args, **kwargs):
+        # Delete meeting notes if they were made when event is deleted
+        if self.meeting_notes_id:
+            drive_service.files().delete(fileId=self.meeting_notes_id).execute()
+        
+        if self.calendar_event_id:
+            calendar_service.events().delete(calendarId=settings.GOOGLE_CALENDAR_ID, eventId=self.calendar_event_id).execute()
+        # Carry on with actual event delete
+        super().delete(*args, **kwargs)
 
     # String representation of an Event
     # e.g. "Welcome!: Info Session on 11/14/2019"
     def __str__(self):
         return f'{self.title}: {self.get_event_type_display()} on {self.start.strftime("%m/%d/%Y")}'
+post_save.connect(Event.post_save, sender=Event)
 
 class Project(models.Model):
     '''Project represents a tech-based solution.'''
