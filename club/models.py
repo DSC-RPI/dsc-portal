@@ -86,6 +86,8 @@ class Update(models.Model):
 
     hidden = models.BooleanField(default=False, help_text='If true then post is not shown anywhere. Use this to create drafts.')
 
+    image_url = models.URLField(blank=True, null=True, help_text='Optional url of cover image to display on top of update and on index page.')
+
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
