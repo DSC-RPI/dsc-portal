@@ -70,5 +70,25 @@ class Project(models.Model):
     # Link to project code
     repository_link = models.URLField(help_text='Link to where the code can be found. Most likely GitHub.')
 
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return f'Project "{self.title}" ({self.repository_link})'
+
+class Update(models.Model):
+    '''Update represents a post for an update, news article, etc.'''
+
+    title = models.CharField(max_length=200, help_text='Required title for post')
+
+    body = models.TextField(max_length=10000, help_text='The body of the post. Supports Markdown.')
+
+    hidden = models.BooleanField(default=False, help_text='If true then post is not shown anywhere. Use this to create drafts.')
+
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'Update "{self.title}" on {self.created_at.strftime("%m/%d/%Y")}'
