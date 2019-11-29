@@ -47,6 +47,8 @@ class Event(models.Model):
     start = models.DateTimeField(help_text='The exact start date and time of the event.')
     end = models.DateTimeField(help_text='The exact end date and time of the event.')
 
+    location = models.CharField(max_length=100, help_text='Where the event is being held.')
+
     # (optional) Link to slideshow
     presentation_link = models.URLField(blank=True, null=True, help_text='An optional link to presentation slides for the event. Most likely Google Slides.')
 
@@ -98,7 +100,7 @@ class Update(models.Model):
 
 class UpdateComment(models.Model):
     '''Represents a user comment on an Update.'''
-    
+
     update = models.ForeignKey(Update, on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 

@@ -31,7 +31,11 @@
                         <h4 class="subtitle"><em>{{ event.tagline }}</em></h4>
                         {% endif %}
 
-                        <span>{{ event.start }} - {{ event.end }}</span>
+                        <a href="https://maps.google.com/?q={{ event.location|urlencode }}" title="This event is being held in {{ event.location }}" target="_blank" class="event-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            {{ event.location }}
+                        </a>
+                        <span class="event-date-time">{{ event.start }} - {{ event.end }}</span>
                     </div>
                     <!-- <a class="button is-primary" >View</a> -->
                 </div>
