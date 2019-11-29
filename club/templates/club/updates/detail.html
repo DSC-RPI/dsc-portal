@@ -12,7 +12,12 @@
 
         <p class="content update-body">{{ update.body }}</p>
         <hr>
-        <h2 class="subtitle">Comments</h2>
+
+        <div id="comments" class="update-comments">
+            <h2 class="title is-size-5">
+                <a href="#comments">Comments</a>
+            </h2>
+        </div>
         <hr>
         <a href="{% url 'updates' %}" class="button is-link">
             <span class="icon">

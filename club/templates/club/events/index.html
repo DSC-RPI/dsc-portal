@@ -11,7 +11,9 @@
 </section>
 <section class="section event-index">
     <div class="container">
-        <h1 class="title">Upcoming</h1>
+        <h1 id="upcoming" class="title">
+            <a href="#upcoming">Upcoming</a>
+        </h1>
         <div class="columns">
             <div class="column is-half">
                 {% for event in upcoming_events %}
@@ -54,7 +56,9 @@
 
         <hr>
 
-        <h2 class="title is-size-3">Past Events</h2>
+        <h2 id="past" class="title is-size-4">
+            <a href="#past">Past Events</a>
+        </h2>
         {% if past_events|length > 0 %}
         <table class="table is-fullwidth">
             <thead>

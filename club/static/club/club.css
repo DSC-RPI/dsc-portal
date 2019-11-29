@@ -1,7 +1,23 @@
 header .navbar-brand b {
     margin-left: 5px;
 }
+
 /* 
 header span.icon {
     margin-right: 0px !important;
 } */
+
+main section .title > a, main section .subtitle > a {
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+}
+
+/* For section titles with anchor links, add a '#' on hover to the left */
+
+main section .title > a:hover::before, main section .subtitle > a:hover::before {
+    content: '#';
+    position: absolute;
+    left: -20px;
+    color: #444;
+}
