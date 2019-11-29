@@ -1,8 +1,9 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 
-from .google import docs_service, drive_service
+from .google import docs_service, drive_service, calendar_service
 
 class Member(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -55,15 +56,57 @@ class Event(models.Model):
     presentation_link = models.URLField(blank=True, null=True, help_text='An optional link to presentation slides for the event. Most likely Google Slides.')
 
     # (optonal) Link to meeting notes
-    meeting_notes_id = models.URLField(blank=True, null=True, help_text='An optional link to the meeting notes for the event. This is most likely to an auto-generated Google Docs.')
+    meeting_notes_id = models.CharField(max_length=300, blank=True, null=True, help_text='The ID of the Google Docs meeting notes. This is most likely to an auto-generated Google Docs.')
     
     @property
     def meeting_notes_link(self):
         return 'https://docs.google.com/document/d/' + self.meeting_notes_id
 
+    calendar_event_id = models.CharField(max_length=300, blank=True, null=True, help_text='The Google Calendar event ID')
+
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def create_google_calendar_event(self):
+        event = {
+            'summary': f'{self.title}: {self.get_event_type_display()}',
+            'location': self.location,
+            'description': self.description,
+            'start': {
+                'dateTime': self.start.isoformat(),
+                'timeZone': settings.TIME_ZONE
+            },
+            'end': {
+                'dateTime': self.end.isoformat(),
+                'timeZone': settings.TIME_ZONE
+            },
+            'source': {
+                'title': self.title,
+                'url': settings.DOMAIN + '/events/' + str(self.id)
+            }
+        }
+
+        calendar_event = calendar_service.events().insert(calendarId=settings.GOOGLE_CALENDAR_ID, body=event).execute()
+
+        self.calendar_event_id = calendar_event.get('id')
+
+        self.save()
+    
+    def update_google_calendar_event(self):
+        calendar_service.events().patch(calendarId=settings.GOOGLE_CALENDAR_ID, eventId=self.calendar_event_id, body={
+            'summary': f'{self.title}: {self.get_event_type_display()}',
+            'location': self.location,
+            'description': self.description,
+            'start': {
+                'dateTime': self.start.isoformat(),
+                'timeZone': settings.TIME_ZONE
+            },
+            'end': {
+                'dateTime': self.end.isoformat(),
+                'timeZone': settings.TIME_ZONE
+            },
+        }).execute()
 
     def create_meeting_notes(self):
         if self.meeting_notes_id:
@@ -123,6 +166,15 @@ class Event(models.Model):
 
         self.save()
     
+    @classmethod
+    def post_save(cls, sender, instance, created, *args, **kwargs):
+        if created:
+            instance.create_google_calendar_event()
+        else:
+            instance.update_google_calendar_event()
+        
+
+
     def delete(self, *args, **kwargs):
         # Delete meeting notes if they were made when event is deleted
         if self.meeting_notes_id:
@@ -135,6 +187,7 @@ class Event(models.Model):
     # e.g. "Welcome!: Info Session on 11/14/2019"
     def __str__(self):
         return f'{self.title}: {self.get_event_type_display()} on {self.start.strftime("%m/%d/%Y")}'
+post_save.connect(Event.post_save, sender=Event)
 
 class Project(models.Model):
     '''Project represents a tech-based solution.'''
