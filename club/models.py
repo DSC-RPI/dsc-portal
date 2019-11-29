@@ -77,10 +77,28 @@ class Event(models.Model):
             {
                 'replaceAllText': {
                     'containsText': {
+                        'text': '{{event_title}}',
+                        'matchCase':  'true'
+                    },
+                    'replaceText': self.title,
+                }
+            },
+            {
+                'replaceAllText': {
+                    'containsText': {
                         'text': '{{date}}',
                         'matchCase':  'true'
                     },
-                    'replaceText': self.start.strftime('%A, %B %-m %Y | %y/%m/%d'),
+                    'replaceText': self.start.strftime('%A, %B %-m %Y'),
+                }
+            },
+            {
+                'replaceAllText': {
+                    'containsText': {
+                        'text': '{{short_date}}',
+                        'matchCase':  'true'
+                    },
+                    'replaceText': self.start.strftime('"%m/%d/%y'),
                 }
             }
         ]

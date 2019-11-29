@@ -33,7 +33,9 @@
                         <h4 class="subtitle"><em>{{ event.tagline }}</em></h4>
                         {% endif %}
 
-                        <a href="https://maps.google.com/?q={{ event.location|urlencode }}" title="This event is being held in {{ event.location }}" target="_blank" class="event-location">
+                        <a href="https://maps.google.com/?q={{ event.location|urlencode }}"
+                            title="This event is being held in {{ event.location }}" target="_blank"
+                            class="event-location">
                             <i class="fas fa-map-marker-alt"></i>
                             {{ event.location }}
                         </a>
@@ -66,6 +68,7 @@
                     <td>When</td>
                     <td>Type</td>
                     <td>Title</td>
+                    <td>Meeting Notes</td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -76,10 +79,22 @@
                     <td>{{ event.start }}</td>
                     <td>{{ event.get_event_type_display }}</td>
                     <td>{{ event.title }}</td>
+                    <td>
+                        {% if event.meeting_notes_link %}
+                        <a href="{{ event.meeting_notes_link }}" target="_blank" class="event-meeting-notes">
+                            <span class="icon">
+                                <i class="fas fa-file-alt"></i>
+                            </span>
+                            <span>Meeting Notes</span>
+                        </a>
+                        {% else %}
+                        <span class="has-text-grey">-</span>
+                        {% endif %}
+                    </td>
                     <td>{% if event.tagline %}{{ event.tagline }}{% else %}<span
                             class="has-text-grey">-</span>{% endif %}</td>
                     <td>
-                        <a href="#" class="button is-small is-pulled-right">View</a>
+                        <a href="{% url 'event_detail' event.id %}" class="button is-small is-pulled-right">View</a>
                     </td>
                 </tr>
                 {% endfor %}

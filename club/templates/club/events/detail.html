@@ -28,15 +28,20 @@
             <form method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="create-document" value="meeting-notes">
-                <input type="submit" class="button is-danger" value="Create Meeting Notes"/>
+                <button type="submit" class="button is-danger">
+                    <span class="icon">
+                        <i class="fas fa-file-alt"></i>
+                    </span>
+                    <span>Create Meeting Notes</span>
+                </button>
             </form>
             {% endif %}
-            <button class="button is-light">
+            <!-- <button class="button is-light">
                 <span class="icon">
                     <i class="far fa-calendar"></i>
                 </span>
                 <span>Not Coming</span>
-            </button>
+            </button> -->
             {% endif %}
             <a href="{% url 'events' %}" class="button is-link">
                 <span class="icon">
