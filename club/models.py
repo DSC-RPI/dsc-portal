@@ -65,7 +65,7 @@ class Event(models.Model):
         if self.meeting_notes_link:
             return
 
-        name = start.strftime("[%y/%m/%d] DSC RPI Meeting Notes")
+        name = self.start.strftime("[%y/%m/%d] DSC RPI Meeting Notes")
 
         document = drive_service.files().copy(fileId=settings.GOOGLE_DRIVE_MEETING_NOTES_TEMPLATE_ID, body={
             'name': name,  # Name document
@@ -80,7 +80,7 @@ class Event(models.Model):
                         'text': '{{date}}',
                         'matchCase':  'true'
                     },
-                    'replaceText': start.strftime('%A, %B %-m %Y | %y/%m/%d'),
+                    'replaceText': self.start.strftime('%A, %B %-m %Y | %y/%m/%d'),
                 }
             }
         ]

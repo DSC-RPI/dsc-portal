@@ -10,23 +10,41 @@
 
         <h1 class="title event-title">{{ event.title }}</h1>
         <h2 class="subtitle has-text-grey">{{ event.get_event_type_display }}</h2>
+        {% if event.meeting_notes_link %}
+        <a href="{{ event.meeting_notes_link }}" target="_blank" class="event-meeting-notes">
+            <span class="icon">
+                <i class="fas fa-file-alt"></i>
+            </span>
+            <span>Meeting Notes</span>
+        </a>
+        {% endif %}
 
         <p class="event-description">{{ event.description }}</p>
         <hr>
-        {% if user.is_authenticated %}
-        <button class="button is-light">
-            <span class="icon">
-                <i class="far fa-calendar"></i>
-            </span>
-            <span>Not Coming</span>
-        </button>
-        {% endif %}
-        <a href="{% url 'events' %}" class="button is-link">
-            <span class="icon">
-                <i class="fas fa-chevron-left"></i>
-            </span>
-            <span>All Events</span>
-        </a>
+        <div class="buttons">
+
+            {% if user.is_authenticated %}
+            {% if user.is_staff and not event.meeting_notes_link %}
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="create-document" value="meeting-notes">
+                <input type="submit" class="button is-danger" value="Create Meeting Notes"/>
+            </form>
+            {% endif %}
+            <button class="button is-light">
+                <span class="icon">
+                    <i class="far fa-calendar"></i>
+                </span>
+                <span>Not Coming</span>
+            </button>
+            {% endif %}
+            <a href="{% url 'events' %}" class="button is-link">
+                <span class="icon">
+                    <i class="fas fa-chevron-left"></i>
+                </span>
+                <span>All Events</span>
+            </a>
+        </div>
     </div>
 </section>
 {% endblock %}
