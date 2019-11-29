@@ -1,9 +1,16 @@
 {% extends "club/base.html" %}
 
 {% block content %}
+<section class="hero is-danger">
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title">Club Updates</h1>
+            <h2 class="subtitle">Keep up to date with what's been going on!</h2>
+        </div>
+    </div>
+</section>
 <section class="section update-index">
     <div class="container">
-        <h1 class="title">Club Updates</h1>
 
         <div class="updates columns">
             {% for update in updates %}
@@ -15,7 +22,7 @@
                         <div class="update-summary">
                             {{ update.body|truncatechars:100 }}
                         </div>
-                        <a href="#">View</a>
+                        <a href="{% url 'update_detail' update.id %}">Read More...</a>
                     </div>
                 </div>
             </div>

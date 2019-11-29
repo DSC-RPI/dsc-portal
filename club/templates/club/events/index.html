@@ -1,15 +1,21 @@
 {% extends "club/base.html" %}
 
 {% block content %}
+<section class="hero is-primary">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">Club Events</h1>
+            <h2 class="subtitle">We host workshops, code jams, speaker sessions and more!</h2>
+        </div>
+    </div>
+</section>
 <section class="section event-index">
     <div class="container">
-        <h2 class="title">Upcoming Events</h2>
-
         <div class="columns">
             <div class="column is-half">
                 {% for event in upcoming_events %}
                 <div class="box event-summary">
-                    <a href="/events/{{ event.id }}">
+                    <a href="{% url 'event_detail' event.id %}">
                         <h3 class="title is-size-4">{{ event.title }}
                             <span class="has-text-grey">{{ event.get_event_type_display }}</span>
                         </h3>

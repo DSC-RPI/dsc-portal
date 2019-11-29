@@ -13,7 +13,14 @@
 
         <p class="event-description">{{ event.description }}</p>
         <hr>
-        <button class="button is-primary">RSVP</button>
+        {% if user.is_authenticated %}
+        <button class="button is-light">
+            <span class="icon">
+                <i class="far fa-calendar"></i>
+            </span>
+            <span>Not Coming</span>
+        </button>
+        {% endif %}
         <a href="{% url 'events' %}" class="button is-link">
             <span class="icon">
                 <i class="fas fa-chevron-left"></i>
