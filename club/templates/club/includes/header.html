@@ -42,12 +42,14 @@
                     <span>Events</span>
                 </a>
 
+                {% if user.is_authenticated %}
                 <a href="{% url 'members' %}" class="navbar-item" title="View the club's members.">
                     <span class="icon">
                         <i class="fas fa-users"></i>
                     </span>
                     <span>Members</span>
                 </a>
+                {% endif %}
 
                 <a href="{% url 'projects' %}" class="navbar-item"
                     title="Check out the projects DSC University has been working on!">

@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from .models import Event, Project, Update
 
 from datetime import date
@@ -66,6 +67,7 @@ def update_detail(request, update_id):
     update = get_object_or_404(Update, pk=update_id)
     return render(request, 'club/updates/detail.html', {'update':update})
 
+@login_required
 def member_index(request):
     members = []
     return render(request, 'club/members/index.html', {'members':members})
