@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
-from .models import Event
+from .models import Event, Project, Update
 
 from datetime import date
 
@@ -61,3 +61,7 @@ def project_index(request):
 def update_index(request):
     updates = []
     return render(request, 'club/updates/index.html')
+
+def update_detail(request, update_id):
+    update = get_object_or_404(Update, pk=update_id)
+    return render(request, 'club/updates/detail.html', {'update':update})

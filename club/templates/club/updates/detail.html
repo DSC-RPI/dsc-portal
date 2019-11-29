@@ -1,0 +1,25 @@
+{% extends "club/base.html" %}
+
+{%block content %}
+<section class="section update-detail">
+    <div class="container">
+        {% if update.hidden %}
+        <div class="notification is-warning"><strong>HIDDEN UPDATE</strong> This update is not public or listed on the
+            updates page yet.</div>
+        {% endif %}
+
+        <h1 class="title update-title">{{ update.title }}</h1>
+
+        <p class="content update-body">{{ update.body }}</p>
+        <hr>
+        <h2 class="subtitle">Comments</h2>
+        <hr>
+        <a href="{% url 'updates' %}" class="button is-link">
+            <span class="icon">
+                <i class="fas fa-chevron-left"></i>
+            </span>
+            <span>All Updates</span>
+        </a>
+    </div>
+</section>
+{% endblock %}
