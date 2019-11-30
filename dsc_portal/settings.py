@@ -20,14 +20,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'iib(xdiiz)t(46dl@&s5*2n-*%#v37jk-&2f99mavkwhqu2^v#'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True#os.environ['ENV'] == 'development'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = []#['localhost', 'www.dsc-rpi.club']
 
 # SCHOOL INFO
 SCHOOL_NAME = 'Rensselaer Polytechnic Institute'
@@ -91,6 +91,13 @@ DATABASES = {
     }
 }
 
+if os.environ['ENV'] != 'development':
+    # SECURE_CONTENT_TYPE_NOSNIFF = True
+    # SECURE_BROWSER_XSS_FILTER = True
+    # SECURE_SSL_REDIRECT = True
+    # CSRF_COOKIE_SECURE = True
+    # SESSION_COOKIE_SECURE = True
+    X_FRAME_OPTIONS = 'DENY'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -130,6 +137,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'public/'
 
 DOMAIN = 'https://dsc-rpi.club/'
 
