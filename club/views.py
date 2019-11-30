@@ -1,7 +1,9 @@
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+
 from .models import Event, Project, Update
+from .forms import UserAccountForm
 
 from datetime import date
 
@@ -13,6 +15,26 @@ def index(request):
 
 def about(request):
     return render(request, 'club/about.html')
+
+def user_account(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = UserAccountForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            request.user.first_name = form.cleaned_data['first_name']
+            request.user.last_name = form.cleaned_data['last_name']
+            request.user.email = form.cleaned_data['email']
+            request.user.save()
+
+            return HttpResponseRedirect('/')
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = UserAccountForm({'first_name':request.user.first_name,'last_name':request.user.last_name,'email':request.user.email})
+
+    return render(request, 'registration/account.html', {'form':form})
 
 # EVENTS
 def event_index(request):

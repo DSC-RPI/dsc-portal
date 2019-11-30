@@ -1,0 +1,14 @@
+{% extends "club/base.html" %}
+{% block content %}
+<section class="section">
+    <div class="container">
+        <h1 class="title">Your Account</h1>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input class="button" type="submit" value="Save">
+        </form>
+    </div>
+</section>
+{% endblock %}
