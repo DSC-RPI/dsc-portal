@@ -25,9 +25,9 @@ SECRET_KEY = os.environ['SECRET_KEY']
 GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True#os.environ['ENV'] == 'development'
+DEBUG = os.environ['ENV'] == 'development'
 
-ALLOWED_HOSTS = []#['localhost', 'www.dsc-rpi.club']
+ALLOWED_HOSTS = ['www.dsc-rpi.club']
 
 # SCHOOL INFO
 SCHOOL_NAME = 'Rensselaer Polytechnic Institute'
@@ -136,8 +136,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
-STATIC_ROOT = 'public/'
 
 DOMAIN = 'https://dsc-rpi.club/'
 
