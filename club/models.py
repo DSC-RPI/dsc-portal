@@ -108,10 +108,14 @@ class Event(models.Model):
             },
         }).execute()
 
+    def delete_google_calendar_event(self):
+        calendar_service.events().delete(calendarId=settings.GOOGLE_CALENDAR_ID, eventId=self.calendar_event_id).execute()
+
     def create_meeting_notes(self):
         if self.meeting_notes_id:
             return
 
+        # This will be the document name
         name = self.start.strftime("[%y/%m/%d] DSC RPI Meeting Notes")
 
         document = drive_service.files().copy(fileId=settings.GOOGLE_DRIVE_MEETING_NOTES_TEMPLATE_ID, body={
@@ -120,6 +124,9 @@ class Event(models.Model):
             'parents': [settings.GOOGLE_DRIVE_MEETING_NOTES_FOLDER_ID]
         }).execute()
 
+        # The template document has placeholders like {{event_title}}, {{event_type}}, etc.
+        # Here we craft a request that will replace the placeholders in the copied document
+        # with their actual value.
         requests = [
             {
                 'replaceAllText': {
@@ -157,17 +164,30 @@ class Event(models.Model):
                     'replaceText': self.start.strftime('%m/%d/%y'),
                 }
             }
+            # Add more replacements here!
         ]
 
+        # Send the update request to Google.
+        # We use a "batch" update since we are sendig many "replaceAllText" requests
+        # combined into one to save bandwidth.
         result = docs_service.documents().batchUpdate(
             documentId=document.get('id'), body={'requests': requests}).execute()
 
+        # Save the ID of the copied document to the model
         self.meeting_notes_id = document.get('id')
 
         self.save()
     
+    def delete_meeting_notes(self):
+        drive_service.files().delete(fileId=self.meeting_notes_id).execute()
+
     @classmethod
     def post_save(cls, sender, instance, created, *args, **kwargs):
+        '''
+        This is called *after* an event is saved. It is "saved" because
+        some of its details have been updated OR it has been newly created.
+        We either create or update the Google Calendar event for it.
+        '''
         if created:
             instance.create_google_calendar_event()
         else:
@@ -176,12 +196,17 @@ class Event(models.Model):
 
 
     def delete(self, *args, **kwargs):
+        '''
+        This is run when a event is deleted. It deletes any associated Google Drive documents
+        or Google Calendar events.
+        '''
         # Delete meeting notes if they were made when event is deleted
         if self.meeting_notes_id:
-            drive_service.files().delete(fileId=self.meeting_notes_id).execute()
-        
+            self.delete_meeting_notes()
+            
         if self.calendar_event_id:
-            calendar_service.events().delete(calendarId=settings.GOOGLE_CALENDAR_ID, eventId=self.calendar_event_id).execute()
+            self.delete_google_calendar_event()
+
         # Carry on with actual event delete
         super().delete(*args, **kwargs)
 
