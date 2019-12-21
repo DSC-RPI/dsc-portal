@@ -13,6 +13,7 @@ google-auth-httplib2 = "*"
 google-auth-oauthlib = "*"
 whitenoise = "*"
 docutils = "*"
+python-twitter = "*"
 
 [requires]
 python_version = "3.6"
