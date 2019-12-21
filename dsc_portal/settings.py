@@ -29,6 +29,9 @@ DEBUG = os.environ['ENV'] == 'development'
 
 ALLOWED_HOSTS = ['127.0.0.1', 'www.dsc-rpi.club']
 
+# DSC GOOGLE ACCOUNT
+GOOGLE_ACCOUNT = os.environ['GOOGLE_ACCOUNT']
+
 # SCHOOL INFO
 SCHOOL_NAME = 'Rensselaer Polytechnic Institute'
 SCHOOL_NAME_SHORT = 'RPI'
