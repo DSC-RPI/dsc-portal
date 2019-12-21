@@ -6,7 +6,9 @@
 
         <form method="post">
             {% csrf_token %}
-            {{ form }}
+            
+            {% include "../includes/form.html" %}
+
             <input class="button" type="submit" value="Save">
         </form>
     </div>
