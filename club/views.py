@@ -84,14 +84,42 @@ def event_detail(request, event_id):
     return render(request, 'club/events/detail.html', {'event':event})
 
 def project_index(request):
-    projects = []
+    '''
+    Display all :model:`club.Project` that users have created.
+
+    **Context**
+
+    ``projects``
+        A list of all projects, ordered by most recently updated.
+    
+    **Template:**
+
+    :template:`club/projects/index.html`
+    '''
+    projects = Project.objects.all().order_by('updated_at')
+
     return render(request, 'club/projects/index.html', {'projects':projects})
 
 def update_index(request):
+    '''
+    Lists all club :model:`club.Update` (posts, news, recaps, etc.)
+
+    **Context**
+        ``updates`` List of all non-hidden updates ordered by creation date
+    '''
     updates = Update.objects.filter(hidden=False).order_by('created_at')
     return render(request, 'club/updates/index.html', {'updates':updates})
 
 def update_detail(request, update_id):
+    '''
+    Display a specific update (post, news, recap, etc.) and comments.
+
+    **Context**
+        ``update`` The :model:`club.Update` to display
+
+    **Template**
+    :template:'club/updates/detail.html'
+    '''
     update = get_object_or_404(Update, pk=update_id)
     return render(request, 'club/updates/detail.html', {'update':update})
 

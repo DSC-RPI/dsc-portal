@@ -60,6 +60,7 @@ class Event(models.Model):
     
     @property
     def meeting_notes_link(self):
+        '''A direct link to the Google Doc meeting notes generated for the event.'''
         return 'https://docs.google.com/document/d/' + self.meeting_notes_id
 
     calendar_event_id = models.CharField(max_length=300, blank=True, null=True, help_text='The Google Calendar event ID')
@@ -69,6 +70,10 @@ class Event(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def create_google_calendar_event(self):
+        '''
+        Creates a Google Calendar event for the club event with the right title, location, time, etc.
+        and adds it to the official club Google Calendar.
+        '''
         event = {
             'summary': f'{self.title}: {self.get_event_type_display()}',
             'location': self.location,
@@ -94,6 +99,9 @@ class Event(models.Model):
         self.save()
     
     def update_google_calendar_event(self):
+        '''
+        Updates the Google Calendar event associated with the club event with the proper title, location, time, etc.
+        '''
         calendar_service.events().patch(calendarId=settings.GOOGLE_CALENDAR_ID, eventId=self.calendar_event_id, body={
             'summary': f'{self.title}: {self.get_event_type_display()}',
             'location': self.location,
@@ -109,9 +117,16 @@ class Event(models.Model):
         }).execute()
 
     def delete_google_calendar_event(self):
+        '''
+        Deletes the Google Calendar event associated with the club event.
+        '''
         calendar_service.events().delete(calendarId=settings.GOOGLE_CALENDAR_ID, eventId=self.calendar_event_id).execute()
 
     def create_meeting_notes(self):
+        '''
+        Creates a Google Doc from the Meeting Notes template in the club's Google Drive,
+        fills in the template with the specified values, and moves it to the meeting notes folder.
+        '''
         if self.meeting_notes_id:
             return
 
@@ -179,6 +194,11 @@ class Event(models.Model):
         self.save()
     
     def delete_meeting_notes(self):
+        '''
+        Deletes the Google Doc meeting notes for the event (if they exist).
+        '''
+        if not self.meeting_notes_id:
+            return
         drive_service.files().delete(fileId=self.meeting_notes_id).execute()
 
     @classmethod
