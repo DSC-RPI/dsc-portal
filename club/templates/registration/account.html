@@ -3,14 +3,27 @@
 <section class="section">
     <div class="container">
         <h1 class="title">Your Account</h1>
-
-        <form method="post">
-            {% csrf_token %}
-            
-            {% include "../includes/form.html" %}
-
-            <input class="button" type="submit" value="Save">
-        </form>
+        
+        <div class="columns">
+            <div class="column">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    {% include "../includes/form.html" %}
+        
+                    <input class="button" type="submit" value="Save">
+                </form>
+            </div>
+            <div class="column">
+                <div class="profile-image-holder has-text-centered">
+                    <img src="https://via.placeholder.com/200" alt="Your profile picture" width="200" height="200">
+                </div>
+                <div class="field">
+                    <label for="profile-image" class="label">Profile Image</label>
+                    <input name="profile-image" id="profile-image" class="input" type="file">
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 {% endblock %}

@@ -27,7 +27,7 @@ GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ['ENV'] == 'development'
 
-ALLOWED_HOSTS = ['www.dsc-rpi.club']
+ALLOWED_HOSTS = ['127.0.0.1', 'www.dsc-rpi.club']
 
 # SCHOOL INFO
 SCHOOL_NAME = 'Rensselaer Polytechnic Institute'
