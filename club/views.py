@@ -6,8 +6,7 @@ from django.contrib import messages
 
 from .models import Event, Project, Update
 from .forms import UserAccountForm
-
-from datetime import date
+from django.utils import timezone
 
 def index(request):
     if request.user.is_authenticated:
@@ -57,7 +56,7 @@ def event_index(request):
 
     :template:`club/events/index.html`
     '''
-    today = date.today()
+    today = timezone.now().date()
 
     upcoming_events = Event.objects.filter(start__gt=today, hidden=False).order_by('start')
     past_events = Event.objects.filter(end__lt=today, hidden=False).order_by('created_at')
@@ -72,12 +71,20 @@ def event_detail(request, event_id):
 
     ``event``
         An instance of :model:`club.Event`.
+    ``ongoing``
+        Whether the event is ongoing at the moment.
+    ``past``
+        Whether the event ended in the past.
+    ``show_attendance_code``
+        Whether or not to show the event attendance code (for Core Team members).
 
     **Template:**
 
     :template:`club/events/detail.html`
     '''
     event = get_object_or_404(Event, pk=event_id)
+    ongoing = event.start <= timezone.now() <= event.end
+    past = event.end < timezone.now()
 
     # Handle form submissions
     if request.method == 'POST':
@@ -88,13 +95,14 @@ def event_detail(request, event_id):
             if request.POST['attendance-code'] == event.attendance_code:
                 # Member submitted correct attendance code
                 messages.success(request, 'Successfully recorded your attendance. Thanks for coming!')
+                # TODO: actually record attendance
             else:
                 # Member submitted incorrect code
                 messages.warning(request, 'Wrong attendance code. Please make sure you\'re on the right event and have typed in the code correctly.')
     
     show_attendance_code = 'show_attendance_code' in request.GET and request.GET['show_attendance_code'] == '1'
 
-    return render(request, 'club/events/detail.html', {'event':event, 'show_attendance_code':show_attendance_code})
+    return render(request, 'club/events/detail.html', {'event':event, 'ongoing':ongoing, 'past':past, 'show_attendance_code':show_attendance_code})
 
 def project_index(request):
     '''

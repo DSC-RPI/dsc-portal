@@ -9,9 +9,11 @@
         <div class="notification is-warning"><strong>HIDDEN EVENT</strong> This event is not public or listed on the
             events page yet.</div>
         {% endif %}
-
+        
         <h1 class="title event-title">{{ event.title }}</h1>
-        <h2 class="subtitle has-text-grey">{{ event.get_event_type_display }}</h2>
+        <h2 class="subtitle has-text-grey">
+            {% if ongoing %}Ongoing{% endif %} {{ event.get_event_type_display }}
+        </h2>
         {% if event.meeting_notes_id %}
         <a href="{{ event.meeting_notes_link }}" target="_blank" class="event-meeting-notes">
             <span class="icon">
@@ -30,26 +32,29 @@
         {% else %}
         <a href="?show_attendance_code=1">Show Attendance Code</a>
         {% endif %}
-        {% else %}
+        {% elif not past %}
         <form id="attendance" method="POST" class="box">
             {% csrf_token %}
             <label class="label" for="attendance-code">Verify Attendance</label>
             <p class="help">The attendance code will be released by the event organizer towards the end of the event. You must enter the code before the end of the event in order to be counted.</p>
-            <div class="field has-addons">
-                <div class="control has-icons-left is-expanded">
-                    <input id="attendance-code" class="input" name="attendance-code" type="text" placeholder="Attendance code">
-                    <span class="icon is-small is-left">
-                        <i class="fas fa-key"></i>
-                    </span>
+            <fieldset {% if not ongoing %}disabled{% endif %}>
+                <div class="field has-addons">
+                    <div class="control has-icons-left is-expanded is-disabled">
+                        <input id="attendance-code" class="input" name="attendance-code" type="text" placeholder="Attendance code">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-key"></i>
+                        </span>
+                    </div>
+                    <div class="control">
+                        <button type="submit" class="button is-info">
+                            Submit
+                        </button>
+                    </div>
                 </div>
-                <div class="control">
-                    <button type="submit" class="button is-info">
-                        Submit
-                    </button>
-                </div>
-            </div>
+            </fieldset>
         </form>
         {% endif %}
+        
         <div class="buttons">
             {% if user.is_authenticated %}
             {% if user.is_staff and not event.meeting_notes_id %}

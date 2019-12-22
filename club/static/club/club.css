@@ -25,3 +25,14 @@ main section .title > a:hover::before, main section .subtitle > a:hover::before 
 main .notifications {
     margin-bottom: 20px;
 }
+
+.fade {
+    opacity: 1;
+    animation: fade 3s ease-in-out;
+    animation-iteration-count: infinite;
+}
+
+@keyframes fade {
+  0%,100% { opacity: 0.1 }
+  50% { opacity: 1 }
+}
