@@ -14,6 +14,7 @@ google-auth-oauthlib = "*"
 whitenoise = "*"
 docutils = "*"
 python-twitter = "*"
+social-auth-app-django = "*"
 
 [requires]
 python_version = "3.6"

@@ -36,6 +36,11 @@
         </form>
 
         <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+
+        <hr>
+
+        <a href="{% url 'social:begin' 'github' %}">GitHub</a>
+        <a href="{% url 'social:begin' 'google-oauth2' %}">Google</a>
     </div>
 </section>
 {% endblock %}
