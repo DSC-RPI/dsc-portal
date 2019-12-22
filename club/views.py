@@ -11,7 +11,6 @@ from datetime import date
 
 def index(request):
     if request.user.is_authenticated:
-        messages.success(request, 'Nice')
         return render(request, 'club/index.html')
     else:
         return render(request, 'club/splash.html')

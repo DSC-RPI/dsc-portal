@@ -31,7 +31,8 @@
         <a href="?show_attendance_code=1">Show Attendance Code</a>
         {% endif %}
         {% else %}
-        <form id="attendance" class="box" action="">
+        <form id="attendance" method="POST" class="box">
+            {% csrf_token %}
             <label class="label" for="attendance-code">Verify Attendance</label>
             <p class="help">The attendance code will be released by the event organizer towards the end of the event. You must enter the code before the end of the event in order to be counted.</p>
             <div class="field has-addons">
@@ -42,9 +43,9 @@
                     </span>
                 </div>
                 <div class="control">
-                    <a class="button is-info">
+                    <button type="submit" class="button is-info">
                         Submit
-                    </a>
+                    </button>
                 </div>
             </div>
         </form>
