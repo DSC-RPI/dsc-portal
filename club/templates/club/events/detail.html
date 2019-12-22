@@ -21,8 +21,33 @@
 
         <p class="event-description">{{ event.description }}</p>
         <hr>
+        {% if user.is_staff %}
+        {% if show_attendance_code %}
+        <h3>{{ event.attendance_code }}</h3>
+        <a href="?show_attendance_code=0">Hide Attendance Code</a>
+        {% else %}
+        <a href="?show_attendance_code=1">Show Attendance Code</a>
+        {% endif %}
+        {% else %}
+        <form id="attendance" class="box" action="">
+            <label class="label" for="attendance-code">Verify Attendance</label>
+            <p class="help">The attendance code will be released by the event organizer towards the end of the event. You must enter the code before the end of the event in order to be counted.</p>
+            <div class="field has-addons">
+                <div class="control has-icons-left is-expanded">
+                    <input id="attendance-code" class="input" name="attendance-code" type="text" placeholder="Attendance code">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-key"></i>
+                    </span>
+                </div>
+                <div class="control">
+                    <a class="button is-info">
+                        Submit
+                    </a>
+                </div>
+            </div>
+        </form>
+        {% endif %}
         <div class="buttons">
-
             {% if user.is_authenticated %}
             {% if user.is_staff and not event.meeting_notes_id %}
             <form method="POST" onsubmit="return confirm('Generate meeting notes in the Google Drive?')">

@@ -79,8 +79,12 @@ def event_detail(request, event_id):
     if request.method == 'POST':
         if request.POST['create-document'] == 'meeting-notes':
             event.create_meeting_notes()
+        if request.POST['attendance-code']:
+            pass
+    
+    show_attendance_code = 'show_attendance_code' in request.GET and request.GET['show_attendance_code'] == '1'
 
-    return render(request, 'club/events/detail.html', {'event':event})
+    return render(request, 'club/events/detail.html', {'event':event, 'show_attendance_code':show_attendance_code})
 
 def project_index(request):
     '''

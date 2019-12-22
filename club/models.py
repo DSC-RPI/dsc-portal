@@ -3,6 +3,9 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
+from random import choice
+from string import ascii_uppercase
+
 from .google import docs_service, drive_service, calendar_service
 
 class Member(models.Model):
@@ -51,6 +54,8 @@ class Event(models.Model):
     end = models.DateTimeField(help_text='The exact end date and time of the event.')
 
     location = models.CharField(max_length=100, help_text='Where the event is being held.')
+
+    attendance_code = models.CharField(max_length=6, blank=True, null=True, help_text='Random attendance code for members to submit to verify their attendance.')
 
     # (optional) Link to slideshow
     presentation_link = models.URLField(blank=True, null=True, help_text='An optional link to presentation slides for the event. Most likely Google Slides.')
@@ -213,7 +218,10 @@ class Event(models.Model):
         else:
             instance.update_google_calendar_event()
         
-
+    def save(self, *args, **kwargs):
+        if not self.attendance_code:
+            self.attendance_code = ''.join(choice(ascii_uppercase) for i in range(6))
+        super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
         '''
