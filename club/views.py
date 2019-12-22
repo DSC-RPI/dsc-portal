@@ -94,8 +94,11 @@ def event_detail(request, event_id):
         if 'attendance-code' in request.POST:
             if request.POST['attendance-code'] == event.attendance_code:
                 # Member submitted correct attendance code
-                messages.success(request, 'Successfully recorded your attendance. Thanks for coming!')
-                # TODO: actually record attendance
+                if ongoing:
+                    messages.success(request, 'Successfully recorded your attendance. Thanks for coming!')
+                    # TODO: actually record attendance
+                else:
+                    messages.error(request, 'You can only submit an attendance code during the event! Please let a Core Team member know if you have an issue.')
             else:
                 # Member submitted incorrect code
                 messages.warning(request, 'Wrong attendance code. Please make sure you\'re on the right event and have typed in the code correctly.')
