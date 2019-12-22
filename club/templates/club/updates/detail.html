@@ -3,6 +3,8 @@
 {%block content %}
 <section class="section update-detail">
     <div class="container">
+        {% include 'club/includes/messages.html' %}
+
         {% if update.hidden %}
         <div class="notification is-warning"><strong>HIDDEN UPDATE</strong> This update is not public or listed on the
             updates page yet.</div>

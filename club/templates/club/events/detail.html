@@ -3,6 +3,8 @@
 {%block content %}
 <section class="section event-detail">
     <div class="container">
+        {% include 'club/includes/messages.html' %}
+
         {% if event.hidden %}
         <div class="notification is-warning"><strong>HIDDEN EVENT</strong> This event is not public or listed on the
             events page yet.</div>

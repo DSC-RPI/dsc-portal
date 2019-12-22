@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib import messages
 
 from .models import Event, Project, Update
 from .forms import UserAccountForm
@@ -10,6 +11,7 @@ from datetime import date
 
 def index(request):
     if request.user.is_authenticated:
+        messages.success(request, 'Nice')
         return render(request, 'club/index.html')
     else:
         return render(request, 'club/splash.html')
@@ -27,6 +29,8 @@ def user_account(request):
             request.user.first_name = form.cleaned_data['first_name']
             request.user.last_name = form.cleaned_data['last_name']
             request.user.save()
+            
+            messages.success(request, 'Successfully updated your profile!')
 
             return HttpResponseRedirect('/')
 
@@ -76,11 +80,18 @@ def event_detail(request, event_id):
     '''
     event = get_object_or_404(Event, pk=event_id)
 
+    # Handle form submissions
     if request.method == 'POST':
-        if request.POST['create-document'] == 'meeting-notes':
+        if 'create-document' in request.POST and request.POST['create-document'] == 'meeting-notes':
+            messages.success(request, 'Successfully created meeting notes document!')
             event.create_meeting_notes()
-        if request.POST['attendance-code']:
-            pass
+        if 'attendance-code' in request.POST:
+            if request.POST['attendance-code'] == event.attendance_code:
+                # Member submitted correct attendance code
+                messages.success(request, 'Successfully recorded your attendance. Thanks for coming!')
+            else:
+                # Member submitted incorrect code
+                messages.warning(request, 'Wrong attendance code. Please make sure you\'re on the right event and have typed in the code correctly.')
     
     show_attendance_code = 'show_attendance_code' in request.GET and request.GET['show_attendance_code'] == '1'
 
