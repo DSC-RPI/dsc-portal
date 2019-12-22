@@ -26,14 +26,13 @@ def user_account(request):
         if form.is_valid():
             request.user.first_name = form.cleaned_data['first_name']
             request.user.last_name = form.cleaned_data['last_name']
-            request.user.email = form.cleaned_data['email']
             request.user.save()
 
             return HttpResponseRedirect('/')
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        form = UserAccountForm({'first_name':request.user.first_name,'last_name':request.user.last_name,'email':request.user.email})
+        form = UserAccountForm({'first_name':request.user.first_name,'last_name':request.user.last_name})
 
     return render(request, 'registration/account.html', {'form':form})
 

@@ -6,10 +6,9 @@ class UserAccountForm(ModelForm):
     class Meta:
         model = User
 
-        fields = ('first_name', 'last_name', 'email')
+        fields = ('first_name', 'last_name')
 
         widgets = {
             'first_name': TextInput(attrs={'class': 'input'}),
             'last_name': TextInput(attrs={'class': 'input'}),
-            'email': EmailInput(attrs={'class': 'input'}),
         }
