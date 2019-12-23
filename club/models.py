@@ -346,7 +346,7 @@ class RoadmapMilestone(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return 'Milestone: ' + self.title + ' by ' + self.deadline
+        return 'Milestone: ' + self.title + ' by ' + str(self.deadline)
     
     def passed_deadline(self):
         return timezone.now() > self.deadline
