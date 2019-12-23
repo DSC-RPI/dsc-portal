@@ -1,0 +1,51 @@
+{% extends "club/base.html" %}
+{% block head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-timeline@3.0.4/dist/css/bulma-timeline.min.css">
+{% endblock %}
+<!-- https://wikiki.github.io/components/timeline/ -->
+{% block content %}
+<section class="section">
+    <div class="container">
+        {% include 'club/includes/messages.html' %}
+
+        <h1 class="title">DSC {{ school_name_short }} Roadmap</h1>
+
+        <div class="columns">
+            <div class="column">
+                <div class="timeline is-centered roadmap">
+                    <header class="timeline-header">
+                        <span class="tag is-medium is-primary">Start of Semester</span>
+                        <!-- TODO: semester title -->
+                    </header>
+        
+                    {% for milestone in roadmap_milestones %}
+                    <div class="timeline-item {% if milestone.complete %}is-primary{% endif %}">
+                        <div class="timeline-marker {% if milestone.complete %}is-primary{% endif %}"></div>
+                        <div class="timeline-content">
+                            <p class="heading">{{ milestone.deadline }}</p>
+                            <p><a href="?milestone_id={{ milestone.id }}">{{ milestone.title }}</a></p>
+                        </div>
+                      </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {% if selected_milestone %}
+            <div class="column">
+                <div class="box content">
+                    <h1>{{ selected_milestone.title }}</h1>
+
+                    <p>{{ selected_milestone.description }}</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <hr>
+
+        <div class="buttons">
+            <a href="#" class="button is-link">Generate Document</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

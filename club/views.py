@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 
-from .models import Event, Project, Update, EventAttendance
+from .models import Event, Project, Update, EventAttendance, RoadmapMilestone
 from .forms import UserAccountForm
 from django.utils import timezone
 from django.db import IntegrityError
@@ -155,3 +155,12 @@ def update_detail(request, update_id):
 def member_index(request):
     members = User.objects.all()
     return render(request, 'club/members/index.html', {'members':members})
+
+
+def roadmap_index(request):
+    roadmap_milestones = RoadmapMilestone.objects.all().order_by('deadline')
+    selected_milestone = None
+    if 'milestone_id' in request.GET:
+        selected_milestone = RoadmapMilestone.objects.get(pk=request.GET['milestone_id'])
+
+    return render(request, 'club/roadmap/index.html', {'roadmap_milestones':roadmap_milestones, 'selected_milestone':selected_milestone})
