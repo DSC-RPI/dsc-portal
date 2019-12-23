@@ -9,8 +9,31 @@ from string import ascii_uppercase
 from .google import docs_service, drive_service, calendar_service
 
 class Member(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    
+    '''
+    Member represents a club member, an extension of the base user model.
+    This holds club member info such as school grade and dietary restrictions.
+    '''
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
+    GRADE_TYPES = [
+        ('Fr', 'Freshman'),
+        ('So', 'Sophomore'),
+        ('Ju', 'Junior'),
+        ('Se', 'Senior'),
+        ('G', 'Graduate'),
+        ('F', 'Faculty')
+    ]
+    grade = models.CharField(max_length=2, blank=True, null=True, choices=GRADE_TYPES, help_text='The grade of the student (or faculty status)')
+    # dietary_restrictions = ???
+    # TODO: make an tag system for dietary restrictions to easily query
+
+    @classmethod
+    def post_user_save(cls, sender, instance, created, *args, **kwargs):
+        try:
+            has_member = instance.member is not None
+        except:
+            instance.member = Member()
+            instance.member.save()
+post_save.connect(Member.post_user_save, sender=settings.AUTH_USER_MODEL)
 
 class Event(models.Model):
     '''Events represent one-time club meetings.'''
