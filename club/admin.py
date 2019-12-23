@@ -2,10 +2,11 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import Member, Event, Project, Update
+from .models import Member, Event, EventAttendance, Project, Update
 
 admin.site.register(Member)
 admin.site.register(Event)
+admin.site.register(EventAttendance)
 admin.site.register(Project)
 admin.site.register(Update)
 

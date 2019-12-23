@@ -26,14 +26,9 @@
         <p class="event-description">{{ event.description }}</p>
         <hr>
         {% if user.is_staff %}
-        {% if show_attendance_code %}
-        <h3>{{ event.attendance_code }}</h3>
-        <a href="?show_attendance_code=0">Hide Attendance Code</a>
-        {% else %}
-        <a href="?show_attendance_code=1">Show Attendance Code</a>
-        {% endif %}
         <details class="box" id="view-attendance">
             <summary>Attendance</summary>
+            <h3 class="subtitle">{{ event.attendance_code }}</h3>
             {% for mark in event.attendance.all %}
                 <li>{{ mark }}</li>
             {% endfor %}
@@ -42,6 +37,10 @@
         <form id="submit-attendance" method="POST" class="box">
             {% csrf_token %}
             <label class="label" for="attendance-code">Verify Attendance</label>
+            
+            {% if attendance_submitted %}
+            <p class="help">You have been verified!</p>
+            {% else %}
             <p class="help">The attendance code will be released by the event organizer towards the end of the event. You must enter the code before the end of the event in order to be counted.</p>
             <fieldset {% if not ongoing %}disabled{% endif %}>
                 <div class="field has-addons">
@@ -58,6 +57,7 @@
                     </div>
                 </div>
             </fieldset>
+            {% endif %}
         </form>
         <hr>
         {% endif %}

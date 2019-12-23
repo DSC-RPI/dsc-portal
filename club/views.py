@@ -74,17 +74,18 @@ def event_detail(request, event_id):
         An instance of :model:`club.Event`.
     ``ongoing``
         Whether the event is ongoing at the moment.
+    ``attendance_submitted``
+        Whether the current user has verified their attendance at this event.
     ``past``
         Whether the event ended in the past.
-    ``show_attendance_code``
-        Whether or not to show the event attendance code (for Core Team members).
-
+    
     **Template:**
 
     :template:`club/events/detail.html`
     '''
     event = get_object_or_404(Event, pk=event_id)
     ongoing = event.start <= timezone.now() <= event.end
+    attendance_submitted = event.attendance.filter(user=request.user).exists()
     past = event.end < timezone.now()
 
     # Handle form submissions
@@ -108,9 +109,7 @@ def event_detail(request, event_id):
                 # Member submitted incorrect code
                 messages.warning(request, 'Wrong attendance code. Please make sure you\'re on the right event and have typed in the code correctly.')
     
-    show_attendance_code = 'show_attendance_code' in request.GET and request.GET['show_attendance_code'] == '1'
-
-    return render(request, 'club/events/detail.html', {'event':event, 'ongoing':ongoing, 'past':past, 'show_attendance_code':show_attendance_code})
+    return render(request, 'club/events/detail.html', {'event':event, 'attendance_submitted':attendance_submitted, 'ongoing':ongoing, 'past':past})
 
 def project_index(request):
     '''
