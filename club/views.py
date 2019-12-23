@@ -4,9 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 
-from .models import Event, Project, Update
+from .models import Event, Project, Update, EventAttendance
 from .forms import UserAccountForm
 from django.utils import timezone
+from django.db import IntegrityError
 
 def index(request):
     if request.user.is_authenticated:
@@ -95,8 +96,12 @@ def event_detail(request, event_id):
             if request.POST['attendance-code'] == event.attendance_code:
                 # Member submitted correct attendance code
                 if ongoing:
-                    messages.success(request, 'Successfully recorded your attendance. Thanks for coming!')
-                    # TODO: actually record attendance
+                    event_attendance = EventAttendance(user=request.user, event=event)
+                    try:
+                        event_attendance.save()
+                        messages.success(request, 'Successfully recorded your attendance. Thanks for coming!')
+                    except IntegrityError:
+                        messages.warning(request, 'You already submitted your attendance code for this event!')
                 else:
                     messages.error(request, 'You can only submit an attendance code during the event! Please let a Core Team member know if you have an issue.')
             else:

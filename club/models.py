@@ -267,6 +267,16 @@ class Event(models.Model):
         return f'{self.title}: {self.get_event_type_display()} on {self.start.strftime("%m/%d/%Y")}'
 post_save.connect(Event.post_save, sender=Event)
 
+class EventAttendance(models.Model):
+    '''Represents a verifed attendance of one user to one event.'''
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, on_delete=models.CASCADE, related_name='attendance')
+    event = models.ForeignKey(Event, null=False, on_delete=models.CASCADE, related_name='attendance')
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'event'], name='unique user-event')
+        ]
+
 class Project(models.Model):
     '''Project represents a tech-based solution.'''
 
