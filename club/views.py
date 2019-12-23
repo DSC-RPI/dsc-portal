@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, staff_member_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 
@@ -156,7 +156,7 @@ def member_index(request):
     members = User.objects.all()
     return render(request, 'club/members/index.html', {'members':members})
 
-
+@staff_member_required
 def roadmap_index(request):
     roadmap_milestones = RoadmapMilestone.objects.all().order_by('deadline')
     selected_milestone = None
