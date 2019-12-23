@@ -9,6 +9,21 @@ from string import ascii_uppercase
 from .google import docs_service, drive_service, calendar_service
 from django.utils import timezone
 
+class SchoolYear(models.Model):
+    '''A SchoolYear represents a full year of school...'''
+    start_date = models.DateField(help_text='The first day of the school year.')
+    end_date = models.DateField(help_text='The last day of the school year.')
+
+    def is_ongoing(self):
+        return self.start_date <= timezone.now().date <= self.end_date
+    
+    @property
+    def title(self):
+        return f'{self.start_date.month}/{str(self.start_date.year)[2:]}-{self.end_date.month}/{str(self.end_date.year)[2:]}'
+
+    def __str__(self):
+        return f'School Year {self.title}'
+
 class Member(models.Model):
     '''
     Member represents a club member, an extension of the base user model.
