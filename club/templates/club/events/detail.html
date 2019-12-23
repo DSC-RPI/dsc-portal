@@ -32,8 +32,14 @@
         {% else %}
         <a href="?show_attendance_code=1">Show Attendance Code</a>
         {% endif %}
+        <details class="box" id="view-attendance">
+            <summary>Attendance</summary>
+            {% for mark in event.attendance.all %}
+                <li>{{ mark }}</li>
+            {% endfor %}
+        </details>
         {% elif not past %}
-        <form id="attendance" method="POST" class="box">
+        <form id="submit-attendance" method="POST" class="box">
             {% csrf_token %}
             <label class="label" for="attendance-code">Verify Attendance</label>
             <p class="help">The attendance code will be released by the event organizer towards the end of the event. You must enter the code before the end of the event in order to be counted.</p>
@@ -53,6 +59,7 @@
                 </div>
             </fieldset>
         </form>
+        <hr>
         {% endif %}
         
         <div class="buttons">

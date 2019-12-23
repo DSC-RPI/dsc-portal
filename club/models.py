@@ -272,6 +272,9 @@ class EventAttendance(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, on_delete=models.CASCADE, related_name='attendance')
     event = models.ForeignKey(Event, null=False, on_delete=models.CASCADE, related_name='attendance')
 
+    def __str__(self):
+        return self.user.get_full_name()
+
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['user', 'event'], name='unique user-event')
