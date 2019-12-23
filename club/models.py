@@ -7,6 +7,7 @@ from random import choice
 from string import ascii_uppercase
 
 from .google import docs_service, drive_service, calendar_service
+from django.utils import timezone
 
 class Member(models.Model):
     '''
@@ -328,3 +329,24 @@ class UpdateComment(models.Model):
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+class RoadmapMilestone(models.Model):
+    '''A RoadmapItem represents a reachable milestone for the club.'''
+
+    title = models.CharField(max_length=200, help_text='The title of the milestone')
+
+    description = models.TextField(max_length=10000, help_text='The description of the milestone and what it fully involves.')
+
+    deadline = models.DateField(help_text='When this milestone should be reached at the latest.')
+
+    complete = models.BooleanField(default=False, help_text='Whether this milestone has been achieved yet.')
+
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return 'Milestone: ' + self.title + ' by ' + self.deadline
+    
+    def passed_deadline(self):
+        return timezone.now() > self.deadline
