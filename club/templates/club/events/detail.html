@@ -25,6 +25,7 @@
 
         <p class="event-description">{{ event.description }}</p>
         <hr>
+        {% if user.is_authenticated %}
         {% if user.is_staff %}
         <div class="columns">
             <div class="column">
@@ -73,6 +74,7 @@
         </form>
         <hr>
         {% endif %}
+        {% endif %}
         
         <div class="buttons">
             {% if user.is_authenticated %}
@@ -94,6 +96,9 @@
                 </span>
                 <span>Not Coming</span>
             </button> -->
+            {% if not user.is_staff and not rsvped %}
+            <button class="button">RSVP</button>
+            {% endif %}
             {% endif %}
             <a href="{% url 'events' %}" class="button is-link">
                 <span class="icon">

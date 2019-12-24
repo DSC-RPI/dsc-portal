@@ -81,6 +81,8 @@ def event_detail(request, event_id):
         Whether the event is ongoing at the moment.
     ``attendance_submitted``
         Whether the current user has verified their attendance at this event.
+    ``rsvped``
+        Whether the current user has RSVPed for the event.
     ``past``
         Whether the event ended in the past.
     
@@ -90,11 +92,16 @@ def event_detail(request, event_id):
     '''
     event = get_object_or_404(Event, pk=event_id)
     ongoing = event.start <= timezone.now() <= event.end
-    attendance_submitted = event.attendance.filter(user=request.user).exists()
+    if request.user.is_authenticated:
+        attendance_submitted = event.attendance.filter(user=request.user).exists()
+        rsvped = event.rsvps.filter(user=request.user).exists()
+    else:
+        attendance_submitted = False
+        rsvped = False
     past = event.end < timezone.now()
 
     # Handle form submissions
-    if request.method == 'POST':
+    if request.user.is_authenticated and request.method == 'POST':
         if 'create-document' in request.POST and request.POST['create-document'] == 'meeting-notes':
             messages.success(request, 'Successfully created meeting notes document!')
             event.create_meeting_notes()
@@ -114,7 +121,15 @@ def event_detail(request, event_id):
                 # Member submitted incorrect code
                 messages.warning(request, 'Wrong attendance code. Please make sure you\'re on the right event and have typed in the code correctly.')
     
-    return render(request, 'club/events/detail.html', {'event':event, 'attendance_submitted':attendance_submitted, 'ongoing':ongoing, 'past':past})
+    context = {
+        'event':event,
+        'rsvped': rsvped,
+        'attendance_submitted': attendance_submitted,
+        'ongoing':ongoing,
+        'past':past
+    }
+
+    return render(request, 'club/events/detail.html', context)
 
 def project_index(request):
     '''
