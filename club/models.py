@@ -180,7 +180,7 @@ class Event(models.Model):
             return
 
         # This will be the document name
-        name = self.start.strftime("[%y/%m/%d] DSC RPI Meeting Notes")
+        name = self.start.strftime("[%y/%m/%d] DSC " + settings.SCHOOL_NAME_SHORT + " Meeting Notes")
 
         document = drive_service.files().copy(fileId=settings.GOOGLE_DRIVE_MEETING_NOTES_TEMPLATE_ID, body={
             'name': name,  # Name document

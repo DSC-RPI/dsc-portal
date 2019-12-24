@@ -27,16 +27,16 @@ GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ['ENV'] == 'development'
 
-ALLOWED_HOSTS = ['127.0.0.1', 'www.dsc-rpi.club']
+ALLOWED_HOSTS = ['127.0.0.1', os.environ['WEBSITE']]
 
 # DSC GOOGLE ACCOUNT
 GOOGLE_ACCOUNT = os.environ['GOOGLE_ACCOUNT']
 
 # SCHOOL INFO
-SCHOOL_NAME = 'Rensselaer Polytechnic Institute'
-SCHOOL_NAME_SHORT = 'RPI'
-INSTAGRAM_LINK = '#'
-FACEBOOK_LINK = 'https://www.facebook.com/Developer-Student-Club-RPI-116239323105529'
+SCHOOL_NAME = os.environ['SCHOOL_NAME']
+SCHOOL_NAME_SHORT = os.environ['SCHOOL_NAME_SHORT']
+INSTAGRAM_LINK = os.environ['INSTAGRAM_LINK']
+FACEBOOK_LINK = os.environ['FACEBOOK_LINK']
 GITHUB_LINK = 'https://github.com/DSC-RPI/dsc-portal'
 
 # Application definition
@@ -174,7 +174,7 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
-DOMAIN = 'https://dsc-rpi.club/'
+DOMAIN = 'https://' + os.environ['WEBSITE']
 
 # Google
 GOOGLE_SERVICE_ACCOUNT_FILE = os.environ['GOOGLE_APPLICATION_CREDENTIALS']
