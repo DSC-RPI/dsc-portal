@@ -302,6 +302,17 @@ class EventAttendance(models.Model):
             models.UniqueConstraint(fields=['user', 'event'], name='unique user-event')
         ]
 
+class EventRSVP(models.Model):
+    ''''''
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, on_delete=models.CASCADE, related_name='rsvps')
+    event = models.ForeignKey(Event, null=False, on_delete=models.CASCADE, related_name='rsvps')
+    message = models.CharField(max_length=200, help_text='(optional) A condition for RSVPing', blank=True, null=True)
+
+    def is_conditional(self):
+        return self.message is not None
+
+    def __str__(self):
+        return f''
 class Project(models.Model):
     '''Project represents a tech-based solution.'''
 

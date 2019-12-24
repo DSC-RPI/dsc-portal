@@ -2,11 +2,12 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import SchoolYear, Member, Event, EventAttendance, Project, Update, RoadmapMilestone
+from .models import SchoolYear, Member, Event, EventRSVP, EventAttendance, Project, Update, RoadmapMilestone
 
 admin.site.register(SchoolYear)
 admin.site.register(Member)
 admin.site.register(Event)
+admin.site.register(EventRSVP)
 admin.site.register(EventAttendance)
 admin.site.register(Project)
 admin.site.register(Update)
