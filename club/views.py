@@ -7,7 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django.contrib import messages
 
-from .models import Event, Project, Update, EventAttendance, RoadmapMilestone
+from .models import Event, Project, Update, EventAttendance, EventRSVP, RoadmapMilestone
 from .forms import UserAccountForm
 from django.utils import timezone
 from django.db import IntegrityError
@@ -120,7 +120,17 @@ def event_detail(request, event_id):
             else:
                 # Member submitted incorrect code
                 messages.warning(request, 'Wrong attendance code. Please make sure you\'re on the right event and have typed in the code correctly.')
-    
+        if 'rsvp' in request.POST:
+            # RSVP user
+            rsvp = EventRSVP(user=request.user, event=event)
+            if 'rsvp-message' in request.POST:
+                rsvp.message = request.POST['rsvp-message']
+            rsvp.save()
+            rsvped = True
+        elif 'unrsvp' in request.POST:
+            # TODO: remove RSVP
+            pass
+
     context = {
         'event':event,
         'rsvped': rsvped,

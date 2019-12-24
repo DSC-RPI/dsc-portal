@@ -97,7 +97,18 @@
                 <span>Not Coming</span>
             </button> -->
             {% if not user.is_staff and not rsvped %}
-            <button class="button">RSVP</button>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="rsvp">
+                <input type="text" class="input" name="rsvp-message" id="rsvp-message">
+                <button type="submit" class="button">RSVP</button>
+            </form>
+            {% else %}
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="unrsvp">
+                <button type="submit" class="button">unRSVP</button>
+            </form>
             {% endif %}
             {% endif %}
             <a href="{% url 'events' %}" class="button is-link">
