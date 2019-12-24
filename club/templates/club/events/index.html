@@ -42,6 +42,13 @@
                             {{ event.location }}
                         </a>
                         <span class="event-date-time">{{ event.start }} - {{ event.end }}</span>
+
+                        {% if user.is_staff %}
+                        <div class="tags">
+                            <span class="tag is-dark">{{ event.rsvps.count }} RSVPs</span>
+                            <span class="tag is-info">{{ event.attendance.count }} attendees</span>
+                        </div>
+                        {% endif %}
                     </div>
                     <!-- <a class="button is-primary" >View</a> -->
                 </div>
@@ -70,8 +77,9 @@
                     <th>When</th>
                     <th>Type</th>
                     <th>Title</th>
-                    <th>Meeting Notes</th>
-                    <th></th>
+                    {% if user.is_staff %}
+                    <th>Attendance</th>
+                    {% endif %}
                     <th></th>
                 </tr>
             </thead>
@@ -81,20 +89,9 @@
                     <td>{{ event.start }}</td>
                     <td>{{ event.get_event_type_display }}</td>
                     <td>{{ event.title }}</td>
-                    <td>
-                        {% if event.meeting_notes_id %}
-                        <a href="{{ event.meeting_notes_link }}" target="_blank" class="event-meeting-notes">
-                            <span class="icon">
-                                <i class="fas fa-file-alt"></i>
-                            </span>
-                            <span>Meeting Notes</span>
-                        </a>
-                        {% else %}
-                        <span class="has-text-grey">-</span>
-                        {% endif %}
-                    </td>
-                    <td>{% if event.tagline %}{{ event.tagline }}{% else %}<span
-                            class="has-text-grey">-</span>{% endif %}</td>
+                    {% if user.is_staff %}
+                    <td>{{ event.attendance.count }}</td>
+                    {% endif %}
                     <td>
                         <a href="{% url 'event_detail' event.id %}" class="button is-small is-pulled-right">View</a>
                     </td>
