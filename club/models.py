@@ -312,7 +312,8 @@ class EventRSVP(models.Model):
         return self.message is not None
 
     def __str__(self):
-        return f''
+        return self.user.get_full_name() + (f' ({self.message})' if self.message else '')
+
 class Project(models.Model):
     '''Project represents a tech-based solution.'''
 

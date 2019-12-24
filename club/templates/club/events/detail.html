@@ -26,13 +26,25 @@
         <p class="event-description">{{ event.description }}</p>
         <hr>
         {% if user.is_staff %}
-        <details class="box" id="view-attendance">
-            <summary>Attendance</summary>
-            <h3 class="subtitle">{{ event.attendance_code }}</h3>
-            {% for mark in event.attendance.all %}
-                <li>{{ mark }}</li>
-            {% endfor %}
-        </details>
+        <div class="columns">
+            <div class="column">
+                <details class="box" id="view-rsvps">
+                    <summary>RSVPs</summary>
+                    {% for rsvp in event.rsvps.all %}
+                        <li>{{ rsvp }}</li>
+                    {% endfor %}
+                </details>
+            </div>
+            <div class="column">
+                <details class="box" id="view-attendance">
+                    <summary>Attendance</summary>
+                    <h3 class="subtitle">{{ event.attendance_code }}</h3>
+                    {% for mark in event.attendance.all %}
+                        <li>{{ mark }}</li>
+                    {% endfor %}
+                </details>
+            </div>
+        </div>        
         {% elif not past %}
         <form id="submit-attendance" method="POST" class="box">
             {% csrf_token %}
