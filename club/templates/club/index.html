@@ -6,6 +6,16 @@
         {% include 'club/includes/messages.html' %}
 
         <h1>Welcome!</h1>
+
+        {% if ongoing_event %}
+        <div class="box">
+            <h2 class="subtitle">Ongoing Event</h2>
+            <h1 class="title">{{ ongoing_event.title }}</h1>
+            {% if ongoing_event.tagline %}<span>{{ ongoing_event.tagline }}</span>{% endif %}
+
+            <a href="{% url 'event_detail' ongoing_event.id %}" class="button is-link">View</a>
+        </div>
+        {% endif %}
     </div>
 </section>
 {% endblock %}

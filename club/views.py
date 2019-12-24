@@ -14,7 +14,14 @@ from django.db import IntegrityError
 
 def index(request):
     if request.user.is_authenticated:
-        return render(request, 'club/index.html')
+        now = timezone.now()
+        # Find ongoing event
+        try:
+            ongoing_event = Event.objects.get(start__lte=now, end__gte=now, hidden=False)
+        except ObjectDoesNotExist:
+            ongoing_event = None
+
+        return render(request, 'club/index.html', {'ongoing_event': ongoing_event})
     else:
         return render(request, 'club/splash.html')
 
