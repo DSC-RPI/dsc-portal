@@ -21,6 +21,11 @@ class SchoolYear(models.Model):
     def title(self):
         return f'{self.start_date.month}/{str(self.start_date.year)[2:]}-{self.end_date.month}/{str(self.end_date.year)[2:]}'
 
+    @classmethod
+    def get_current_school_year(cls):
+        now = timezone.now().date
+        return SchoolYear.objects.get(start_date__gte=now, end_date__gte=now)
+
     def __str__(self):
         return f'School Year {self.title}'
 
@@ -253,7 +258,8 @@ class Event(models.Model):
         We either create or update the Google Calendar event for it.
         '''
         if created:
-            instance.create_google_calendar_event()
+            if instance.visibility == 'P' or instance.visibility == 'M':
+                instance.create_google_calendar_event()
         else:
             instance.update_google_calendar_event()
         
