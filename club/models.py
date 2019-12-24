@@ -15,7 +15,7 @@ class SchoolYear(models.Model):
     end_date = models.DateField(help_text='The last day of the school year.')
 
     def is_ongoing(self):
-        return self.start_date <= timezone.now().date <= self.end_date
+        return self.start_date <= timezone.now().date() <= self.end_date
     
     @property
     def title(self):
@@ -23,7 +23,7 @@ class SchoolYear(models.Model):
 
     @classmethod
     def get_current_school_year(cls):
-        now = timezone.now().date
+        now = timezone.now().date()
         return SchoolYear.objects.get(start_date__gte=now, end_date__gte=now)
 
     def __str__(self):

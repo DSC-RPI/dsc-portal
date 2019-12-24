@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
+from django.core.exceptions import ObjectDoesNotExist
 
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -59,12 +60,14 @@ def event_index(request):
 
     :template:`club/events/index.html`
     '''
-    today = timezone.now().date()
+    now = timezone.now()
+    today = now.date()
 
-    upcoming_events = Event.objects.filter(start__gt=today, hidden=False).order_by('start')
+    ongoing_events = Event.objects.filter(start__lte=now, end__gte=now, hidden=False)
+    upcoming_events = Event.objects.filter(start__gte=today, hidden=False).order_by('start')
     past_events = Event.objects.filter(end__lt=today, hidden=False).order_by('created_at')
 
-    return render(request, 'club/events/index.html', {'upcoming_events':upcoming_events, 'past_events':past_events})
+    return render(request, 'club/events/index.html', {'ongoing_events':ongoing_events, 'upcoming_events':upcoming_events, 'past_events':past_events})
 
 def event_detail(request, event_id):
     '''
@@ -160,7 +163,11 @@ def member_index(request):
 
 @staff_member_required
 def roadmap_index(request):
-    roadmap_milestones = RoadmapMilestone.objects.all().order_by('deadline')
+    try:
+        roadmap_milestones = RoadmapMilestone.objects.all().order_by('deadline')
+    except DoesNotExist:
+        roadmap_milestones = []
+
     selected_milestone = None
     if 'milestone_id' in request.GET:
         selected_milestone = RoadmapMilestone.objects.get(pk=request.GET['milestone_id'])
