@@ -97,8 +97,9 @@ def event_detail(request, event_id):
 
     :template:`club/events/detail.html`
     '''
+    now = timezone.now()
     event = get_object_or_404(Event, pk=event_id)
-    ongoing = event.start <= timezone.now() <= event.end
+    ongoing = event.start <= now <= event.end
     if request.user.is_authenticated:
         attendance_submitted = event.attendance.filter(user=request.user).exists()
         show_rsvp_form = 'rsvp' in request.GET and request.GET['rsvp'] == '1'
@@ -106,7 +107,8 @@ def event_detail(request, event_id):
     else:
         attendance_submitted = False
         rsvped = False
-    past = event.end < timezone.now()
+    started = event.start < now
+    past = event.end < now
 
     # Handle form submissions
     if request.user.is_authenticated and request.method == 'POST':
@@ -129,15 +131,25 @@ def event_detail(request, event_id):
                 # Member submitted incorrect code
                 messages.warning(request, 'Wrong attendance code. Please make sure you\'re on the right event and have typed in the code correctly.')
         if 'rsvp' in request.POST:
-            # RSVP user
-            rsvp = EventRSVP(user=request.user, event=event)
-            if 'rsvp-message' in request.POST:
-                rsvp.message = request.POST['rsvp-message']
-            rsvp.save()
-            rsvped = True
+            if started:
+                messages.error(request, 'The event has already started (and possibly finished!). You cannot RSVP.')
+            else:
+                # RSVP user
+                rsvp = EventRSVP(user=request.user, event=event)
+                if 'rsvp-message' in request.POST:
+                    rsvp.message = request.POST['rsvp-message']
+                rsvp.save()
+                rsvped = True
         elif 'unrsvp' in request.POST:
-            # TODO: remove RSVP
-            pass
+            if started:
+                messages.error(request, 'The event already started (and possibly finished!). You cannot remove your RSVP.')
+            else:
+                try:
+                    EventRSVP.objects.get(user=request.user, event=event).delete()
+                    messages.success(request, 'You successfully removed your RSVP.')
+                    rsvped = False
+                except ObjectDoesNotExist:
+                    messages.error(request, 'Failed to find your RSVP to remove... You should be good.')
 
     context = {
         'event': event,
@@ -145,6 +157,7 @@ def event_detail(request, event_id):
         'rsvped': rsvped,
         'attendance_submitted': attendance_submitted,
         'ongoing':ongoing,
+        'started':started,
         'past':past
     }
 
