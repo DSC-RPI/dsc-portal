@@ -26,7 +26,8 @@ def index(request):
         return render(request, 'club/splash.html')
 
 def about(request):
-    return render(request, 'club/about.html')
+    core_team = User.objects.filter(is_staff=True)
+    return render(request, 'club/about.html', {'core_team':core_team})
 
 def user_account(request):
     # if this is a POST request we need to process the form data
