@@ -1,0 +1,25 @@
+{% extends "club/base.html" %}
+{% block content %}
+<section class="section">
+    <div class="container">
+        <h2 class="title">Core Team</h2>
+        <h3 class="subtitle">Welcome, leader!</h3>
+
+        <p class="has-text-grey has-text-centered">For now this page will be ugly. Once we determine what info
+            to keep here we can work on tidying it up.
+        </p>
+        
+        <hr>
+        <div class="columns">
+            <div class="column">
+                <div class="box links">
+                    <h3 class="subtitle is-size-4">Quicklinks</h3>
+                    <ul>
+                        <li><a target="_blank" href="https://drive.google.com/drive/u/1/folders/{{ google_drive_folder_id }}">Club Google Drive</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

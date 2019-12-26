@@ -9,5 +9,6 @@ credentials = service_account.Credentials.from_service_account_file(
     SERVICE_ACCOUNT_FILE, scopes=SCOPES)
 
 docs_service = build('docs', 'v1', credentials=credentials)
+slides_service = build('slides', 'v1', credentials=credentials)
 drive_service = build('drive', 'v3', credentials=credentials)
 calendar_service = build('calendar', 'v3', credentials=credentials)

@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.conf import settings
 
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -222,3 +223,7 @@ def roadmap_index(request):
         selected_milestone = RoadmapMilestone.objects.get(pk=request.GET['milestone_id'])
 
     return render(request, 'club/roadmap/index.html', {'roadmap_milestones':roadmap_milestones, 'selected_milestone':selected_milestone})
+
+@staff_member_required
+def core_team(request):
+    return render(request, 'club/core_team/index.html', {'google_drive_folder_id':settings.GOOGLE_DRIVE_FOLDER_ID})
