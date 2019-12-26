@@ -101,6 +101,7 @@ def event_detail(request, event_id):
     now = timezone.now()
     event = get_object_or_404(Event, pk=event_id)
     ongoing = event.start <= now <= event.end
+    show_rsvp_form = False
     if request.user.is_authenticated:
         attendance_submitted = event.attendance.filter(user=request.user).exists()
         show_rsvp_form = 'rsvp' in request.GET and request.GET['rsvp'] == '1'
