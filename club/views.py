@@ -1,3 +1,4 @@
+import os
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -227,3 +228,7 @@ def roadmap_index(request):
 @staff_member_required
 def core_team(request):
     return render(request, 'club/core_team/index.html', {'google_drive_folder_id':settings.GOOGLE_DRIVE_FOLDER_ID})
+
+@staff_member_required
+def social_media(request):
+    return render(request, 'club/core_team/social_media.html', {'twitter_username':os.environ['TWITTER_USERNAME']})
