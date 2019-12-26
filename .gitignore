@@ -124,3 +124,4 @@ dmypy.json
 service_account.json
 staticfiles/
 !./staticfiles/.gitkeep
+vscode/
