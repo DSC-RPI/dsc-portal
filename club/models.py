@@ -101,7 +101,7 @@ class Event(models.Model):
 
     attendance_code = models.CharField(max_length=6, blank=True, null=True, help_text='Random attendance code for members to submit to verify their attendance.')
 
-    presentation_id = models.URLField(max_length=300, blank=True, null=True, help_text='(optional) The ID of the Google Slides slideshow.')
+    slideshow_id = models.CharField(max_length=300, blank=True, null=True, help_text='(optional) The ID of the Google Slides slideshow.')
 
     thumbnail_link = models.URLField(blank=True, null=True, help_text='An optional link to an image to show for the event. If a slideshow is associated with the event, it will automatically use the slide thumbnail.')
 
@@ -114,8 +114,8 @@ class Event(models.Model):
 
     @property
     def slideshow_link(self):
-        '''A direct link to the Google Doc meeting notes generated for the event.'''
-        return 'https://docs.google.com/presentation/d/' + self.presentation_id
+        '''A direct link to the Google Slides slideshow generated or chosen for the event.'''
+        return 'https://docs.google.com/presentation/d/' + self.slideshow_id
 
     calendar_event_id = models.CharField(max_length=300, blank=True, null=True, help_text='The Google Calendar event ID')
 

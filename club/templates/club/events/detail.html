@@ -22,6 +22,14 @@
             <span>Meeting Notes</span>
         </a>
         {% endif %}
+        {% if event.slideshow_id %}
+        <a href="{{ event.slideshow_link }}" target="_blank" class="event-slideshow">
+            <span class="icon">
+                <i class="fas fa-file-alt"></i>
+            </span>
+            <span>Slide Show</span>
+        </a>
+        {% endif %}
 
         <p class="event-description">{{ event.description }}</p>
         <hr>
