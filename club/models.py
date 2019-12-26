@@ -6,7 +6,7 @@ from django.db.models.signals import post_save
 from random import choice
 from string import ascii_uppercase
 
-from .google import docs_service, drive_service, calendar_service
+from .google import docs_service, drive_service, slides_service, calendar_service
 from django.utils import timezone
 
 class SchoolYear(models.Model):
@@ -103,7 +103,7 @@ class Event(models.Model):
 
     slideshow_id = models.CharField(max_length=300, blank=True, null=True, help_text='(optional) The ID of the Google Slides slideshow.')
 
-    thumbnail_link = models.URLField(blank=True, null=True, help_text='An optional link to an image to show for the event. If a slideshow is associated with the event, it will automatically use the slide thumbnail.')
+    thumbnail_link = models.URLField(max_length=500, blank=True, null=True, help_text='An optional link to an image to show for the event. If a slideshow is associated with the event, it will automatically use the slide thumbnail.')
 
     meeting_notes_id = models.CharField(max_length=300, blank=True, null=True, help_text='The ID of the Google Docs meeting notes. This is most likely to an auto-generated Google Docs.')
     
@@ -255,6 +255,16 @@ class Event(models.Model):
             return
         drive_service.files().delete(fileId=self.meeting_notes_id).execute()
 
+    def generate_thumbnail_link(self):
+        '''Generates a thumbnail from the first page of the slideshow.'''
+        # Get slideshow
+        slideshow = slides_service.presentations().get(presentationId=self.slideshow_id).execute()
+        # Get ID of first page
+        first_page = slideshow.get('slides')[0]
+
+        thumbnail = slides_service.presentations().pages().getThumbnail(presentationId=self.slideshow_id, pageObjectId=first_page.get('objectId')).execute()
+        self.thumbnail_link = thumbnail.get('contentUrl')
+
     @classmethod
     def post_save(cls, sender, instance, created, *args, **kwargs):
         '''
@@ -271,6 +281,9 @@ class Event(models.Model):
     def save(self, *args, **kwargs):
         if not self.attendance_code:
             self.attendance_code = ''.join(choice(ascii_uppercase) for i in range(6))
+        if self.slideshow_id != None and not self.thumbnail_link:
+            self.generate_thumbnail_link()
+
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
