@@ -1,23 +1,45 @@
 {% extends "club/base.html" %}
+{% block head %}
+<style>
+    #splash-video {
+        width: 100%;
+        height: 250px;
+    }
+</style>
+{% endblock %}
 {% load static %}
 
 {% block content %}
-<section class="section">
-    <img src="{% static 'club/img/DSC-Homepage-Banner-2.png' %}" alt="DSC Banner">
+<section class="hero is-dark">
+    <div class="hero-body">
+        <div class="container">
+            <div class="columns is-vcentered">
+                <div class="column has-text-centered">
+                    <h1 class="title is-spaced is-size-1-desktop is-size-2-tablet is-size-3-mobile">Developer Student Clubs RPI</h1>
+                    <h2 class="subtitle is-size-4-desktop">Helping students bridge the gap between <span class="has-text-primary">theory</span> and <span class="has-text-primary">practice</span></h2>
+                </div>
+    
+                <div class="column is-5">
+                    <iframe id="splash-video" src="https://www.youtube.com/embed/DcN_hcHXR_0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 <section class="section">
     <div class="container">
         <div class="columns has-text-centered">
             <div class="column is-one-third">
-                <h3 class="title">Thing 1</h3>
+                <h3 class="title">Connect</h3>
+                <p>Meet other students on campus interested in developer technologies. All are welcome, including those with diverse backgrounds and different majors.</p>
             </div>
             <div class="column is-one-third">
-                <h3 class="title">Thing 2</h3>
-
+                <h3 class="title">Learn</h3>
+                <p>Learn about a wide range of technical topics where new skills are gained through hands-on workshops, in-person training and project building activities.</p>
             </div>
             <div class="column is-one-third">
-                <h3 class="title">Thing 3</h3>
-
+                <h3 class="title">Grow</h3>
+                <p>Apply your new learnings and connections to build great solutions for local problems. Advance your skills, career and network. Give back to your community by helping others learn as well.</p>
             </div>
         </div>
     </div>
