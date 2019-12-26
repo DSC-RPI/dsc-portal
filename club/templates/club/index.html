@@ -5,17 +5,29 @@
     <div class="container">
         {% include 'club/includes/messages.html' %}
 
-        <h1>Welcome!</h1>
+        <h1 class="title is-size-1">Welcome back, {{ user.first_name }}!</h1>
 
-        {% if ongoing_event %}
-        <div class="box">
-            <h2 class="subtitle">Ongoing Event</h2>
-            <h1 class="title">{{ ongoing_event.title }}</h1>
-            {% if ongoing_event.tagline %}<span>{{ ongoing_event.tagline }}</span>{% endif %}
+        <div class="columns">
+            {% if ongoing_event %}
+            <div class="column">
+                <div class="box has-background-warning">
+                    <h2 class="subtitle">Ongoing Event</h2>
+                    <h1 class="title">{{ ongoing_event.title }}</h1>
+                    {% if ongoing_event.tagline %}<span>{{ ongoing_event.tagline }}</span>{% endif %}
 
-            <a href="{% url 'event_detail' ongoing_event.id %}" class="button is-link">View</a>
+                    <a href="{% url 'event_detail' ongoing_event.id %}" class="button is-link">View</a>
+                </div>
+            </div>
+            {% endif %}
+            <div class="column">
+                <div class="box">
+                    <h3 class="subtitle">Your Recent Activity</h3>
+                    <ul>
+                        <li class="has-text-grey">No recent activity.</li>
+                    </ul>
+                </div>
+            </div>
         </div>
-        {% endif %}
     </div>
 </section>
 {% endblock %}
