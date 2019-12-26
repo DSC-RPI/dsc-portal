@@ -21,8 +21,12 @@
                 {% for event in upcoming_events %}
                 <div class="box media event-summary">
                     <div class="media-left">
-                        <p class="image is-128x128">
-                            <img src="https://bulma.io/images/placeholders/128x128.png">
+                        <p class="image is-128x128" style="display: flex; align-items: center;">
+                            {% if event.thumbnail_link %}
+                            <a title="Event slideshow" target="_blank" href="{{ event.slideshow_link }}">
+                                <img alt="Thumbail for event slideshow" src="{{ event.thumbnail_link }}">
+                            </a>
+                            {% endif %}
                         </p>
                     </div>
                     <div class="media-body">

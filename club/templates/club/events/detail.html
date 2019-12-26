@@ -1,5 +1,11 @@
 {% extends "club/base.html" %}
-
+{% block head %}
+<style>
+    .slideshow-thumbnail {
+        height: 200px;
+    }
+</style>
+{% endblock %}
 {%block content %}
 <section class="section event-detail">
     <div class="container">
@@ -9,7 +15,7 @@
         <div class="notification is-warning"><strong>HIDDEN EVENT</strong> This event is not public or listed on the
             events page yet.</div>
         {% endif %}
-        
+
         <h1 class="title event-title">{{ event.title }}</h1>
         <h2 class="subtitle has-text-grey">
             {% if ongoing %}Ongoing{% endif %} {{ event.get_event_type_display }}
@@ -22,16 +28,28 @@
             <span>Meeting Notes</span>
         </a>
         {% endif %}
-        {% if event.slideshow_id %}
-        <a href="{{ event.slideshow_link }}" target="_blank" class="event-slideshow">
-            <span class="icon">
-                <i class="fas fa-file-alt"></i>
-            </span>
-            <span>Slide Show</span>
-        </a>
-        {% endif %}
+        <div class="columns">
+            <div class="column">
+                <div class="content">
+                    <blockquote>
+                        <p class="event-description">{{ event.description }}</p>
+                    </blockquote>
 
-        <p class="event-description">{{ event.description }}</p>
+                </div>
+            </div>
+            {% if event.slideshow_id %}
+            <div class="column is-4">
+
+                <a title="Event slideshow" target="_blank" href="{{ event.slideshow_link }}">
+
+                    <figure class="image">
+                        <img class=" slideshow-thumbnail" src="{{ event.thumbnail_link }}"
+                            alt="Thumbnail of event slideshow">
+                    </figure>
+                </a>
+            </div>
+            {% endif %}
+        </div>
         <hr>
         {% if user.is_authenticated %}
         {% if user.is_staff %}
@@ -41,7 +59,7 @@
         <hr>
         {% endif %}
         {% endif %}
-        
+
         <div class="buttons">
             {% if user.is_authenticated %}
             {% if user.is_staff and not event.meeting_notes_id %}
