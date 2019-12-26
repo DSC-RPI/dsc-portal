@@ -101,6 +101,7 @@ def event_detail(request, event_id):
     ongoing = event.start <= timezone.now() <= event.end
     if request.user.is_authenticated:
         attendance_submitted = event.attendance.filter(user=request.user).exists()
+        show_rsvp_form = 'rsvp' in request.GET and request.GET['rsvp'] == '1'
         rsvped = event.rsvps.filter(user=request.user).exists()
     else:
         attendance_submitted = False
@@ -139,7 +140,8 @@ def event_detail(request, event_id):
             pass
 
     context = {
-        'event':event,
+        'event': event,
+        'show_rsvp_form': show_rsvp_form,
         'rsvped': rsvped,
         'attendance_submitted': attendance_submitted,
         'ongoing':ongoing,

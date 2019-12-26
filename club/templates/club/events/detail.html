@@ -27,51 +27,9 @@
         <hr>
         {% if user.is_authenticated %}
         {% if user.is_staff %}
-        <div class="columns">
-            <div class="column">
-                <details class="box" id="view-rsvps">
-                    <summary>RSVPs</summary>
-                    {% for rsvp in event.rsvps.all %}
-                        <li>{{ rsvp }}</li>
-                    {% endfor %}
-                </details>
-            </div>
-            <div class="column">
-                <details class="box" id="view-attendance">
-                    <summary>Attendance</summary>
-                    <h3 class="subtitle">{{ event.attendance_code }}</h3>
-                    {% for mark in event.attendance.all %}
-                        <li>{{ mark }}</li>
-                    {% endfor %}
-                </details>
-            </div>
-        </div>        
+        {% include "club/events/includes/event_staff_actions.html" %}
         {% elif not past %}
-        <form id="submit-attendance" method="POST" class="box">
-            {% csrf_token %}
-            <label class="label" for="attendance-code">Verify Attendance</label>
-            
-            {% if attendance_submitted %}
-            <p class="help">You have been verified!</p>
-            {% else %}
-            <p class="help">The attendance code will be released by the event organizer towards the end of the event. You must enter the code before the end of the event in order to be counted.</p>
-            <fieldset {% if not ongoing %}disabled{% endif %}>
-                <div class="field has-addons">
-                    <div class="control has-icons-left is-expanded is-disabled">
-                        <input id="attendance-code" class="input" name="attendance-code" type="text" placeholder="Attendance code">
-                        <span class="icon is-small is-left">
-                            <i class="fas fa-key"></i>
-                        </span>
-                    </div>
-                    <div class="control">
-                        <button type="submit" class="button is-info">
-                            Submit
-                        </button>
-                    </div>
-                </div>
-            </fieldset>
-            {% endif %}
-        </form>
+        {% include "club/events/includes/event_attendance_form.html" %}
         <hr>
         {% endif %}
         {% endif %}
@@ -97,12 +55,10 @@
                 <span>Not Coming</span>
             </button> -->
             {% if not user.is_staff and not rsvped %}
-            <form method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="rsvp">
-                <input type="text" class="input" name="rsvp-message" id="rsvp-message">
-                <button type="submit" class="button">RSVP</button>
-            </form>
+            <a href="?rsvp=1" class="button is-link">RSVP</a>
+            {% if show_rsvp_form %}
+            {% include "club/events/includes/event_rsvp_modal.html" %}
+            {% endif %}
             {% else %}
             <form method="POST">
                 {% csrf_token %}

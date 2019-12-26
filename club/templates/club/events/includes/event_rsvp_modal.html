@@ -1,0 +1,29 @@
+<div class="modal event-rsvp-modal is-active">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">RSVP for {{ event.title }}</p>
+        </header>
+        <section class="modal-card-body">
+            <form method="POST" id="rsvp-form">
+                {% csrf_token %}
+                <input type="hidden" name="rsvp">
+                <div class="field">
+                    <label for="rsvp-message" class="label">Message</label>
+                    <input type="text" class="input" name="rsvp-message" id="rsvp-message" placeholder="(optional) Is there any condition where you won't be able to make it?">
+                </div>
+                
+            </form>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success" type="submit" form="rsvp-form">
+              <span class="icon">
+                <i class="fas fa-calendar-alt"></i>
+              </span>
+              <span>RSVP</span>
+          </button>
+          <a href="?rsvp=0" class="button">Cancel</a>
+        </footer>
+      </div>
+    <a href="?rsvp=0" class="modal-close is-large" aria-label="close"></a>
+  </div>
