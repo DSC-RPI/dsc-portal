@@ -78,7 +78,7 @@
                     <th>Type</th>
                     <th>Title</th>
                     {% if user.is_staff %}
-                    <th>Attendance</th>
+                    <th>Attendance/RSVPs</th>
                     {% endif %}
                     <th></th>
                 </tr>
@@ -90,7 +90,7 @@
                     <td>{{ event.get_event_type_display }}</td>
                     <td>{{ event.title }}</td>
                     {% if user.is_staff %}
-                    <td>{{ event.attendance.count }}</td>
+                    <td>{{ event.attendance.count }}/{{ event.rsvps.count }}</td>
                     {% endif %}
                     <td>
                         <a href="{% url 'event_detail' event.id %}" class="button is-small is-pulled-right">View</a>
