@@ -215,7 +215,7 @@ def member_index(request):
 def roadmap_index(request):
     try:
         roadmap_milestones = RoadmapMilestone.objects.all().order_by('deadline')
-    except DoesNotExist:
+    except ObjectDoesNotExist:
         roadmap_milestones = []
 
     selected_milestone = None

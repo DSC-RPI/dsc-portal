@@ -1,7 +1,6 @@
 {% load static %}
 <header>
-    <nav class="navbar is-dark"
-        role="navigation" aria-label="main navigation">
+    <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="/">
                 <img class="dsc-logomark" src="{% static 'club/img/google_developers_logomark_color.png' %}"
@@ -65,6 +64,28 @@
                     </span>
                     <span>Updates</span>
                 </a>
+
+                {% if user.is_staff %}
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">
+                        <span class="icon">
+                            <i class="fas fa-crown"></i>
+                        </span>
+                        <span>Core Team</span>
+                    </a>
+
+                    <div class="navbar-dropdown">
+                        <a href="{% url 'core_team' %}" class="navbar-item">
+                            Overview
+                        </a>
+                        <hr class="navbar-divider">
+                        </hr>
+                        <a href="{% url 'roadmap_index' %}" class="navbar-item">
+                            Club Roadmap
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
             </div>
 
             <div class="navbar-end">
@@ -114,7 +135,7 @@
             </div>
         </div>
     </nav>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Get all "navbar-burger" elements
@@ -123,20 +144,20 @@
             // Check if there are any navbar burgers
             if ($navbarBurgers.length > 0) {
 
-            // Add a click event on each of them
-            $navbarBurgers.forEach( el => {
-                el.addEventListener('click', () => {
+                // Add a click event on each of them
+                $navbarBurgers.forEach(el => {
+                    el.addEventListener('click', () => {
 
-                // Get the target from the "data-target" attribute
-                const target = el.dataset.target;
-                const $target = document.getElementById(target);
+                        // Get the target from the "data-target" attribute
+                        const target = el.dataset.target;
+                        const $target = document.getElementById(target);
 
-                // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-                el.classList.toggle('is-active');
-                $target.classList.toggle('is-active');
+                        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                        el.classList.toggle('is-active');
+                        $target.classList.toggle('is-active');
 
+                    });
                 });
-            });
             }
         });
     </script>
