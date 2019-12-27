@@ -126,9 +126,6 @@ def event_detail(request, event_id):
 
     # Handle form submissions
     if request.user.is_authenticated and request.method == 'POST':
-        if 'create-document' in request.POST and request.POST['create-document'] == 'meeting-notes':
-            messages.success(request, 'Successfully created meeting notes document!')
-            event.create_meeting_notes()
         if 'attendance-code' in request.POST:
             if request.POST['attendance-code'] == event.attendance_code:
                 # Member submitted correct attendance code
@@ -144,7 +141,7 @@ def event_detail(request, event_id):
             else:
                 # Member submitted incorrect code
                 messages.warning(request, 'Wrong attendance code. Please make sure you\'re on the right event and have typed in the code correctly.')
-        if 'rsvp' in request.POST:
+        elif 'rsvp' in request.POST:
             if started:
                 messages.error(request, 'The event has already started (and possibly finished!). You cannot RSVP.')
             else:
@@ -164,6 +161,18 @@ def event_detail(request, event_id):
                     rsvped = False
                 except ObjectDoesNotExist:
                     messages.error(request, 'Failed to find your RSVP to remove... You should be good.')
+        
+    
+    # Staff actions
+    if request.user.is_staff and request.method == 'POST':
+        if 'create-document' in request.POST and request.POST['create-document'] == 'meeting-notes':
+                messages.success(request, 'Successfully created meeting notes document!')
+                event.create_meeting_notes()
+        elif 'slideshow-id' in request.POST:
+            event.slideshow_id = request.POST['slideshow-id']
+            event.save()
+            messages.success(request, 'Successfully selected slideshow for event.')
+            show_slideshows = False
 
     context = {
         'event': event,
