@@ -14,6 +14,8 @@ from .forms import UserAccountForm
 from django.utils import timezone
 from django.db import IntegrityError
 
+from .twitter_api import tweet
+
 def index(request):
     if request.user.is_authenticated:
         now = timezone.now()
@@ -231,4 +233,7 @@ def core_team(request):
 
 @staff_member_required
 def social_media(request):
+    if 'tweet' in request.POST:
+        sent_tweet = tweet(request.POST['tweet'])
+        messages.success(request, 'Successfully tweeted!')
     return render(request, 'club/core_team/social_media.html', {'twitter_username':os.environ['TWITTER_USERNAME']})

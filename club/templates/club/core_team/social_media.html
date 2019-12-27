@@ -2,6 +2,8 @@
 {% block content %}
 <section class="section">
     <div class="container">
+        {% include 'club/includes/messages.html' %}
+        
         <h2 class="title">Social Media Management</h2>
         
         <div class="columns is-multiline">
@@ -9,10 +11,13 @@
                 <div class="box">
                     <a class="subtitle" tareget="_blank" href="https://twitter.com/{{ twitter_username }}">Twitter</a>
                     <span class="has-text-grey">@{{ twitter_username }}</span>
-                    <div class="field">
-                        <input type="text" class="input" name="tweet">
-                        <button type="submit">Tweet</button>
-                    </div>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="field">
+                            <input type="text" class="input" name="tweet">
+                            <button class="button" type="submit">Tweet</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
