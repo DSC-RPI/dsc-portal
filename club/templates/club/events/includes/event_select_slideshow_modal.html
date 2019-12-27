@@ -1,0 +1,35 @@
+<div class="modal select-slideshow-modal is-active">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Select Slideshow for {{ event.title }}</p>
+        </header>
+        <section class="modal-card-body">
+            <form method="POST" id="select-slideshow-form">
+                {% csrf_token %}
+                <input type="hidden" name="rsvp">
+                <div class="field">
+                    <label for="slideshow-id" class="label">Slideshow</label>
+                    <div class="select">
+                        <select name="slideshow-id" id="slideshow-id">
+                            {% for slideshow in slideshows %}
+                            <option value="{{ slideshow.id }}">{{ slideshow.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+            </form>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success" type="submit" form="select-slideshow-form">
+              <span class="icon">
+                <i class="fas fa-check"></i>
+              </span>
+              <span>Select</span>
+          </button>
+          <a href="?select-slideshow=0" class="button">Cancel</a>
+        </footer>
+      </div>
+    <a href="?select-slideshow=0" class="modal-close is-large" aria-label="close"></a>
+  </div>

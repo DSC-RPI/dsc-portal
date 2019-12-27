@@ -49,6 +49,9 @@
                 </a>
             </div>
             {% endif %}
+            {% if show_slideshows %}
+            {% include "club/events/includes/event_select_slideshow_modal.html" %}
+            {% endif %}
         </div>
         <hr>
         {% if user.is_authenticated %}

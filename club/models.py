@@ -6,7 +6,7 @@ from django.db.models.signals import post_save
 from random import choice
 from string import ascii_uppercase
 
-from .google import docs_service, drive_service, slides_service, calendar_service
+from .google_api import docs_service, drive_service, slides_service, calendar_service
 from django.utils import timezone
 
 class SchoolYear(models.Model):

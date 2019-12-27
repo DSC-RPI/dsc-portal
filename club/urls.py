@@ -9,9 +9,9 @@ urlpatterns = [
     path('updates/', views.update_index, name='updates'),
     path('updates/<int:update_id>', views.update_detail, name='update_detail'),
     path('events/<int:event_id>', views.event_detail, name='event_detail'),
-    path('roadmap', views.roadmap_index, name='roadmap_index'),
     path('members/', views.member_index, name='members'),
     path('core-team/', views.core_team, name='core_team'),
-    path('social-media', views.social_media, name='social_media'),
+    path('core-team/roadmap', views.roadmap_index, name='roadmap_index'),
+    path('core-team/social-media', views.social_media, name='social_media'),
     path('account/', views.user_account, name='user_account')
 ]

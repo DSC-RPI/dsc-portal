@@ -14,6 +14,8 @@ from .forms import UserAccountForm
 from django.utils import timezone
 from django.db import IntegrityError
 
+from .google_api import drive_service
+
 from .twitter_api import tweet
 
 def index(request):
@@ -113,6 +115,12 @@ def event_detail(request, event_id):
     else:
         attendance_submitted = False
         rsvped = False
+
+    show_slideshows = 'select-slideshow' in request.GET and request.GET['select-slideshow'] == '1'
+    slideshows = []
+    if show_slideshows:
+        slideshows = drive_service.files().list(corpora='user', q=f"'{settings.GOOGLE_DRIVE_SLIDE_DECKS_FOLDER_ID}' in parents").execute().get('files')
+    
     started = event.start < now
     past = event.end < now
 
@@ -164,7 +172,9 @@ def event_detail(request, event_id):
         'attendance_submitted': attendance_submitted,
         'ongoing':ongoing,
         'started':started,
-        'past':past
+        'past':past,
+        'show_slideshows': show_slideshows,
+        'slideshows': slideshows
     }
 
     return render(request, 'club/events/detail.html', context)
@@ -214,6 +224,11 @@ def member_index(request):
     members = User.objects.all()
     return render(request, 'club/members/index.html', {'members':members})
 
+
+@staff_member_required
+def core_team(request):
+    return render(request, 'club/core_team/index.html', {'google_drive_folder_id':settings.GOOGLE_DRIVE_FOLDER_ID})
+
 @staff_member_required
 def roadmap_index(request):
     try:
@@ -228,12 +243,10 @@ def roadmap_index(request):
     return render(request, 'club/roadmap/index.html', {'roadmap_milestones':roadmap_milestones, 'selected_milestone':selected_milestone})
 
 @staff_member_required
-def core_team(request):
-    return render(request, 'club/core_team/index.html', {'google_drive_folder_id':settings.GOOGLE_DRIVE_FOLDER_ID})
-
-@staff_member_required
 def social_media(request):
     if 'tweet' in request.POST:
         sent_tweet = tweet(request.POST['tweet'])
         messages.success(request, 'Successfully tweeted!')
+    if 'google' in request.GET:
+        print(slideshows)
     return render(request, 'club/core_team/social_media.html', {'twitter_username':os.environ['TWITTER_USERNAME']})
