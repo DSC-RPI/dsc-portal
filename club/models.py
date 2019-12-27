@@ -255,7 +255,7 @@ class Event(models.Model):
             return
         drive_service.files().delete(fileId=self.meeting_notes_id).execute()
 
-    def generate_thumbnail_link(self):
+    def get_thumbnail_link(self):
         '''Generates a thumbnail from the first page of the slideshow.'''
         # Get slideshow
         slideshow = slides_service.presentations().get(presentationId=self.slideshow_id).execute()
@@ -282,7 +282,7 @@ class Event(models.Model):
         if not self.attendance_code:
             self.attendance_code = ''.join(choice(ascii_uppercase) for i in range(6))
         if self.slideshow_id != None and not self.thumbnail_link:
-            self.generate_thumbnail_link()
+            self.get_thumbnail_link()
 
         super().save(*args, **kwargs)
 

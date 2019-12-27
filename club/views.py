@@ -171,8 +171,10 @@ def event_detail(request, event_id):
         elif 'slideshow-id' in request.POST:
             if request.POST['slideshow-id'] == 'none':
                 event.slideshow_id = None
+                event.thumbnail_link = None
             else:
                 event.slideshow_id = request.POST['slideshow-id']
+                event.get_thumbnail_link()
             event.save()
             messages.success(request, 'Successfully selected slideshow for event.')
             show_slideshows = False
@@ -259,6 +261,4 @@ def social_media(request):
     if 'tweet' in request.POST:
         sent_tweet = tweet(request.POST['tweet'])
         messages.success(request, 'Successfully tweeted!')
-    if 'google' in request.GET:
-        print(slideshows)
     return render(request, 'club/core_team/social_media.html', {'twitter_username':os.environ['TWITTER_USERNAME']})
