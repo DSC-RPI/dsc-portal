@@ -169,7 +169,10 @@ def event_detail(request, event_id):
                 messages.success(request, 'Successfully created meeting notes document!')
                 event.create_meeting_notes()
         elif 'slideshow-id' in request.POST:
-            event.slideshow_id = request.POST['slideshow-id']
+            if request.POST['slideshow-id'] == 'none':
+                event.slideshow_id = None
+            else:
+                event.slideshow_id = request.POST['slideshow-id']
             event.save()
             messages.success(request, 'Successfully selected slideshow for event.')
             show_slideshows = False
