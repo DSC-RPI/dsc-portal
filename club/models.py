@@ -265,6 +265,15 @@ class Event(models.Model):
         thumbnail = slides_service.presentations().pages().getThumbnail(presentationId=self.slideshow_id, pageObjectId=first_page.get('objectId')).execute()
         self.thumbnail_link = thumbnail.get('contentUrl')
 
+    def generate_slideshow(self):
+        # Get proper template
+
+        # Create slideshow
+
+        # Share publicly
+        
+        pass
+
     @classmethod
     def post_save(cls, sender, instance, created, *args, **kwargs):
         '''

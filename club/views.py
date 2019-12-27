@@ -164,7 +164,6 @@ def event_detail(request, event_id):
                     rsvped = False
                 except ObjectDoesNotExist:
                     messages.error(request, 'Failed to find your RSVP to remove... You should be good.')
-        
     
     # Staff actions
     if request.user.is_staff and request.method == 'POST':
