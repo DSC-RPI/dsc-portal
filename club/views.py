@@ -144,6 +144,9 @@ def event_detail(request, event_id):
         elif 'rsvp' in request.POST:
             if started:
                 messages.error(request, 'The event has already started (and possibly finished!). You cannot RSVP.')
+            elif rsvped:
+                # Already RSVPed!
+                messages.warning(request, 'You are already RSVPed!')
             else:
                 # RSVP user
                 rsvp = EventRSVP(user=request.user, event=event)
