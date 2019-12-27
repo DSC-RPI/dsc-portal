@@ -39,10 +39,13 @@
             </div>
             {% if event.slideshow_id %}
             <div class="column is-4">
-
                 <a title="Event slideshow" target="_blank" href="{{ event.slideshow_link }}">
-
-                    <figure class="image">
+                    <figure class="image" style="position: relative;">
+                        <a title="Change slideshow" href="?select-slideshow=1" class="button" style="position: absolute; top: 2px; right: 2px;">
+                            <span class="icon">
+                                <i class="fas fa-pencil-alt"></i>
+                            </span>
+                        </a>
                         <img class=" slideshow-thumbnail" src="{{ event.thumbnail_link }}"
                             alt="Thumbnail of event slideshow">
                     </figure>
