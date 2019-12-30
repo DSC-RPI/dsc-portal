@@ -1,3 +1,5 @@
+import requests
+
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -284,6 +286,8 @@ class Event(models.Model):
         if created:
             if instance.visibility == 'P' or instance.visibility == 'M':
                 instance.create_google_calendar_event()
+                # message = f'New event scheduled **{instance.title}**'
+                # r = requests.post('https://hooks.slack.com/services/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', data={'text':message})
         else:
             instance.update_google_calendar_event()
         
