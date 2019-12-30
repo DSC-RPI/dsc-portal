@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from google.oauth2 import service_account
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -31,6 +32,7 @@ ALLOWED_HOSTS = ['127.0.0.1', os.environ['WEBSITE']]
 
 # DSC GOOGLE ACCOUNT
 GOOGLE_ACCOUNT = os.environ['GOOGLE_ACCOUNT']
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 
 # SCHOOL INFO
 SCHOOL_NAME = os.environ['SCHOOL_NAME']
@@ -183,3 +185,8 @@ GOOGLE_DRIVE_MEETING_NOTES_FOLDER_ID = os.environ['GOOGLE_DRIVE_MEETING_NOTES_FO
 GOOGLE_DRIVE_MEETING_NOTES_TEMPLATE_ID = os.environ['GOOGLE_DRIVE_MEETING_NOTES_TEMPLATE_ID']
 GOOGLE_DRIVE_SLIDE_DECKS_FOLDER_ID = os.environ['GOOGLE_DRIVE_SLIDE_DECKS_FOLDER_ID']
 GOOGLE_CALENDAR_ID = os.environ['GOOGLE_CALENDAR_ID']
+GS_PROJECT_ID = os.environ['GS_PROJECT_ID']
+GS_BUCKET_NAME = os.environ['GS_BUCKET_NAME']
+GS_DEFAULT_ACL = 'publicRead'
+GS_SCOPES = ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/devstorage.full_control']
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(GOOGLE_SERVICE_ACCOUNT_FILE, scopes=GS_SCOPES)

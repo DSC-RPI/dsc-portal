@@ -37,6 +37,9 @@ class Member(models.Model):
     This holds club member info such as school grade and dietary restrictions.
     '''
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
+
+    profile_image = models.ImageField(blank=True, null=True, upload_to='')
+
     GRADE_TYPES = [
         ('Fr', 'Freshman'),
         ('So', 'Sophomore'),
@@ -48,6 +51,8 @@ class Member(models.Model):
     grade = models.CharField(max_length=2, blank=True, null=True, choices=GRADE_TYPES, help_text='The grade of the student (or faculty status)')
     # dietary_restrictions = ???
     # TODO: make an tag system for dietary restrictions to easily query
+
+    bio = models.TextField
 
     @classmethod
     def post_user_save(cls, sender, instance, created, *args, **kwargs):

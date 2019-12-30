@@ -16,6 +16,8 @@ docutils = "*"
 python-twitter = "*"
 social-auth-app-django = "*"
 requests = "*"
+django-storages = {extras = ["google"],version = "*"}
+pillow = "*"
 
 [requires]
 python_version = "3.6"

@@ -121,7 +121,7 @@ dmypy.json
 
 .sass-cache/
 .env
-service_account.json
 staticfiles/
 !./staticfiles/.gitkeep
 .vscode/settings.json
+*.json

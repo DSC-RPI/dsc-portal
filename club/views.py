@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 
 from .models import Event, Project, Update, EventAttendance, EventRSVP, RoadmapMilestone
-from .forms import UserAccountForm
+from .forms import MemberAccountForm
 from django.utils import timezone
 from django.db import IntegrityError
 
@@ -39,20 +39,28 @@ def user_account(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
-        form = UserAccountForm(request.POST)
+        form = MemberAccountForm(request.POST, request.FILES)
         # check whether it's valid:
         if form.is_valid():
             request.user.first_name = form.cleaned_data['first_name']
             request.user.last_name = form.cleaned_data['last_name']
+            request.user.member.grade = form.cleaned_data['grade']
+            print(request.FILES)
+            if 'profile_image' in request.FILES:
+                messages.warning(request, 'Uploaded profile image!')
+                profile_image = request.FILES['profile_image']
+                request.user.member.profile_image.save(profile_image.name, profile_image)
             request.user.save()
+            request.user.member.save()
             
             messages.success(request, 'Successfully updated your profile!')
 
             return HttpResponseRedirect('/')
-
+        else:
+            messages.error(request, 'Form is invalid for some reason...')
     # if a GET (or any other method) we'll create a blank form
     else:
-        form = UserAccountForm({'first_name':request.user.first_name,'last_name':request.user.last_name})
+        form = MemberAccountForm({'first_name':request.user.first_name,'last_name':request.user.last_name,'grade':request.user.member.grade})
 
     return render(request, 'registration/account.html', {'form':form})
 
@@ -264,3 +272,10 @@ def social_media(request):
         sent_tweet = tweet(request.POST['tweet'])
         messages.success(request, 'Successfully tweeted!')
     return render(request, 'club/core_team/social_media.html', {'twitter_username':os.environ['TWITTER_USERNAME']})
+
+@login_required
+def profile_image(request):
+    try:
+        profile_image = request.FILES['profile-image'] 
+    except:
+        pass
