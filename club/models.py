@@ -52,7 +52,7 @@ class Member(models.Model):
     # dietary_restrictions = ???
     # TODO: make an tag system for dietary restrictions to easily query
 
-    bio = models.TextField
+    bio = models.TextField(max_length=2000, blank=True, null=True, help_text='A short bio about the member which will be public.')
 
     @classmethod
     def post_user_save(cls, sender, instance, created, *args, **kwargs):

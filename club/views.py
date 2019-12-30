@@ -18,12 +18,14 @@ from .google_api import drive_service
 
 from .twitter_api import tweet
 
+
 def index(request):
     if request.user.is_authenticated:
         now = timezone.now()
         # Find ongoing event
         try:
-            ongoing_event = Event.objects.get(start__lte=now, end__gte=now, hidden=False)
+            ongoing_event = Event.objects.get(
+                start__lte=now, end__gte=now, hidden=False)
         except ObjectDoesNotExist:
             ongoing_event = None
 
@@ -31,9 +33,11 @@ def index(request):
     else:
         return render(request, 'club/splash.html')
 
+
 def about(request):
     core_team = User.objects.filter(is_staff=True)
-    return render(request, 'club/about.html', {'core_team':core_team})
+    return render(request, 'club/about.html', {'core_team': core_team})
+
 
 def user_account(request):
     # if this is a POST request we need to process the form data
@@ -45,14 +49,16 @@ def user_account(request):
             request.user.first_name = form.cleaned_data['first_name']
             request.user.last_name = form.cleaned_data['last_name']
             request.user.member.grade = form.cleaned_data['grade']
-            print(request.FILES)
+            request.user.member.bio = form.cleaned_data['bio']
+
             if 'profile_image' in request.FILES:
                 messages.warning(request, 'Uploaded profile image!')
                 profile_image = request.FILES['profile_image']
-                request.user.member.profile_image.save(profile_image.name, profile_image)
+                request.user.member.profile_image.save(
+                    profile_image.name, profile_image)
             request.user.save()
             request.user.member.save()
-            
+
             messages.success(request, 'Successfully updated your profile!')
 
             return HttpResponseRedirect('/')
@@ -60,11 +66,19 @@ def user_account(request):
             messages.error(request, 'Form is invalid for some reason...')
     # if a GET (or any other method) we'll create a blank form
     else:
-        form = MemberAccountForm({'first_name':request.user.first_name,'last_name':request.user.last_name,'grade':request.user.member.grade})
+        form_data = {
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name,
+            'grade': request.user.member.grade,
+            'bio': request.user.member.bio
+        }
+        form = MemberAccountForm(form_data)
 
-    return render(request, 'registration/account.html', {'form':form})
+    return render(request, 'registration/account.html', {'form': form})
 
 # EVENTS
+
+
 def event_index(request):
     '''
     Display upcoming and past Events. Also shows a Google Calendar widget displaying all
@@ -74,7 +88,7 @@ def event_index(request):
 
     ``upcoming_events``
         A list of all non-hidden :model:`club.Event` that start on or after the current day.
-    
+
     ``past_events``
         A list of all non-hidden :model:`club.Event` that ended before the current day. 
 
@@ -85,11 +99,15 @@ def event_index(request):
     now = timezone.now()
     today = now.date()
 
-    ongoing_events = Event.objects.filter(start__lte=now, end__gte=now, hidden=False)
-    upcoming_events = Event.objects.filter(start__gte=today, hidden=False).order_by('start')
-    past_events = Event.objects.filter(end__lt=today, hidden=False).order_by('created_at')
+    ongoing_events = Event.objects.filter(
+        start__lte=now, end__gte=now, hidden=False)
+    upcoming_events = Event.objects.filter(
+        start__gte=today, hidden=False).order_by('start')
+    past_events = Event.objects.filter(
+        end__lt=today, hidden=False).order_by('created_at')
 
-    return render(request, 'club/events/index.html', {'ongoing_events':ongoing_events, 'upcoming_events':upcoming_events, 'past_events':past_events})
+    return render(request, 'club/events/index.html', {'ongoing_events': ongoing_events, 'upcoming_events': upcoming_events, 'past_events': past_events})
+
 
 def event_detail(request, event_id):
     '''
@@ -107,17 +125,22 @@ def event_detail(request, event_id):
         Whether the current user has RSVPed for the event.
     ``past``
         Whether the event ended in the past.
-    
+
     **Template:**
 
     :template:`club/events/detail.html`
     '''
+
+    # Context variables
     now = timezone.now()
     event = get_object_or_404(Event, pk=event_id)
     ongoing = event.start <= now <= event.end
     show_rsvp_form = False
+
+    # Make sure user is logged in to allow attendance, rsvping, etc.
     if request.user.is_authenticated:
-        attendance_submitted = event.attendance.filter(user=request.user).exists()
+        attendance_submitted = event.attendance.filter(
+            user=request.user).exists()
         show_rsvp_form = 'rsvp' in request.GET and request.GET['rsvp'] == '1'
         rsvped = event.rsvps.filter(user=request.user).exists()
     else:
@@ -127,8 +150,9 @@ def event_detail(request, event_id):
     show_slideshows = 'select-slideshow' in request.GET and request.GET['select-slideshow'] == '1'
     slideshows = []
     if show_slideshows:
-        slideshows = drive_service.files().list(corpora='user', q=f"'{settings.GOOGLE_DRIVE_SLIDE_DECKS_FOLDER_ID}' in parents").execute().get('files')
-    
+        slideshows = drive_service.files().list(corpora='user',
+                                                q=f"'{settings.GOOGLE_DRIVE_SLIDE_DECKS_FOLDER_ID}' in parents").execute().get('files')
+
     started = event.start < now
     past = event.end < now
 
@@ -138,20 +162,26 @@ def event_detail(request, event_id):
             if request.POST['attendance-code'] == event.attendance_code:
                 # Member submitted correct attendance code
                 if ongoing:
-                    event_attendance = EventAttendance(user=request.user, event=event)
+                    event_attendance = EventAttendance(
+                        user=request.user, event=event)
                     try:
                         event_attendance.save()
-                        messages.success(request, 'Successfully recorded your attendance. Thanks for coming!')
+                        messages.success(
+                            request, 'Successfully recorded your attendance. Thanks for coming!')
                     except IntegrityError:
-                        messages.warning(request, 'You already submitted your attendance code for this event!')
+                        messages.warning(
+                            request, 'You already submitted your attendance code for this event!')
                 else:
-                    messages.error(request, 'You can only submit an attendance code during the event! Please let a Core Team member know if you have an issue.')
+                    messages.error(
+                        request, 'You can only submit an attendance code during the event! Please let a Core Team member know if you have an issue.')
             else:
                 # Member submitted incorrect code
-                messages.warning(request, 'Wrong attendance code. Please make sure you\'re on the right event and have typed in the code correctly.')
+                messages.warning(
+                    request, 'Wrong attendance code. Please make sure you\'re on the right event and have typed in the code correctly.')
         elif 'rsvp' in request.POST:
             if started:
-                messages.error(request, 'The event has already started (and possibly finished!). You cannot RSVP.')
+                messages.error(
+                    request, 'The event has already started (and possibly finished!). You cannot RSVP.')
             elif rsvped:
                 # Already RSVPed!
                 messages.warning(request, 'You are already RSVPed!')
@@ -164,20 +194,25 @@ def event_detail(request, event_id):
                 rsvped = True
         elif 'unrsvp' in request.POST:
             if started:
-                messages.error(request, 'The event already started (and possibly finished!). You cannot remove your RSVP.')
+                messages.error(
+                    request, 'The event already started (and possibly finished!). You cannot remove your RSVP.')
             else:
                 try:
-                    EventRSVP.objects.get(user=request.user, event=event).delete()
-                    messages.success(request, 'You successfully removed your RSVP.')
+                    EventRSVP.objects.get(
+                        user=request.user, event=event).delete()
+                    messages.success(
+                        request, 'You successfully removed your RSVP.')
                     rsvped = False
                 except ObjectDoesNotExist:
-                    messages.error(request, 'Failed to find your RSVP to remove... You should be good.')
-    
+                    messages.error(
+                        request, 'Failed to find your RSVP to remove... You should be good.')
+
     # Staff actions
     if request.user.is_staff and request.method == 'POST':
         if 'create-document' in request.POST and request.POST['create-document'] == 'meeting-notes':
-                messages.success(request, 'Successfully created meeting notes document!')
-                event.create_meeting_notes()
+            messages.success(
+                request, 'Successfully created meeting notes document!')
+            event.create_meeting_notes()
         elif 'slideshow-id' in request.POST:
             if request.POST['slideshow-id'] == 'none':
                 event.slideshow_id = None
@@ -186,7 +221,8 @@ def event_detail(request, event_id):
                 event.slideshow_id = request.POST['slideshow-id']
                 event.get_thumbnail_link()
             event.save()
-            messages.success(request, 'Successfully selected slideshow for event.')
+            messages.success(
+                request, 'Successfully selected slideshow for event.')
             show_slideshows = False
 
     context = {
@@ -194,14 +230,15 @@ def event_detail(request, event_id):
         'show_rsvp_form': show_rsvp_form,
         'rsvped': rsvped,
         'attendance_submitted': attendance_submitted,
-        'ongoing':ongoing,
-        'started':started,
-        'past':past,
+        'ongoing': ongoing,
+        'started': started,
+        'past': past,
         'show_slideshows': show_slideshows,
         'slideshows': slideshows
     }
 
     return render(request, 'club/events/detail.html', context)
+
 
 def project_index(request):
     '''
@@ -211,14 +248,15 @@ def project_index(request):
 
     ``projects``
         A list of all projects, ordered by most recently updated.
-    
+
     **Template:**
 
     :template:`club/projects/index.html`
     '''
     projects = Project.objects.all().order_by('updated_at')
 
-    return render(request, 'club/projects/index.html', {'projects':projects})
+    return render(request, 'club/projects/index.html', {'projects': projects})
+
 
 def update_index(request):
     '''
@@ -228,7 +266,8 @@ def update_index(request):
         ``updates`` List of all non-hidden updates ordered by creation date
     '''
     updates = Update.objects.filter(hidden=False).order_by('created_at')
-    return render(request, 'club/updates/index.html', {'updates':updates})
+    return render(request, 'club/updates/index.html', {'updates': updates})
+
 
 def update_detail(request, update_id):
     '''
@@ -241,17 +280,19 @@ def update_detail(request, update_id):
     :template:'club/updates/detail.html'
     '''
     update = get_object_or_404(Update, pk=update_id)
-    return render(request, 'club/updates/detail.html', {'update':update})
+    return render(request, 'club/updates/detail.html', {'update': update})
+
 
 @login_required
 def member_index(request):
     members = User.objects.all()
-    return render(request, 'club/members/index.html', {'members':members})
+    return render(request, 'club/members/index.html', {'members': members})
 
 
 @staff_member_required
 def core_team(request):
-    return render(request, 'club/core_team/index.html', {'google_drive_folder_id':settings.GOOGLE_DRIVE_FOLDER_ID})
+    return render(request, 'club/core_team/index.html', {'google_drive_folder_id': settings.GOOGLE_DRIVE_FOLDER_ID})
+
 
 @staff_member_required
 def roadmap_index(request):
@@ -262,20 +303,23 @@ def roadmap_index(request):
 
     selected_milestone = None
     if 'milestone_id' in request.GET:
-        selected_milestone = RoadmapMilestone.objects.get(pk=request.GET['milestone_id'])
+        selected_milestone = RoadmapMilestone.objects.get(
+            pk=request.GET['milestone_id'])
 
-    return render(request, 'club/roadmap/index.html', {'roadmap_milestones':roadmap_milestones, 'selected_milestone':selected_milestone})
+    return render(request, 'club/roadmap/index.html', {'roadmap_milestones': roadmap_milestones, 'selected_milestone': selected_milestone})
+
 
 @staff_member_required
 def social_media(request):
     if 'tweet' in request.POST:
         sent_tweet = tweet(request.POST['tweet'])
         messages.success(request, 'Successfully tweeted!')
-    return render(request, 'club/core_team/social_media.html', {'twitter_username':os.environ['TWITTER_USERNAME']})
+    return render(request, 'club/core_team/social_media.html', {'twitter_username': os.environ['TWITTER_USERNAME']})
+
 
 @login_required
 def profile_image(request):
     try:
-        profile_image = request.FILES['profile-image'] 
+        profile_image = request.FILES['profile-image']
     except:
         pass
