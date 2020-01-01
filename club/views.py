@@ -313,7 +313,7 @@ def roadmap_index(request):
 def social_media(request):
     if 'tweet' in request.POST:
         sent_tweet = tweet(request.POST['tweet'])
-        messages.success(request, 'Successfully tweeted!')
+        messages.success(request, f'Successfully tweeted! <a target="_blank" href="https://www.twitter.com/{sent_tweet.user.screen_name}/status/{sent_tweet.id}">Link to tweet</a>')
     return render(request, 'club/core_team/social_media.html', {'twitter_username': os.environ['TWITTER_USERNAME']})
 
 
