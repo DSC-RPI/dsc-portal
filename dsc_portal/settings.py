@@ -190,3 +190,5 @@ GS_BUCKET_NAME = os.environ['GS_BUCKET_NAME']
 GS_DEFAULT_ACL = 'publicRead'
 GS_SCOPES = ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/devstorage.full_control']
 GS_CREDENTIALS = service_account.Credentials.from_service_account_file(GOOGLE_SERVICE_ACCOUNT_FILE, scopes=GS_SCOPES)
+
+FACEBOOK_ACCESS_TOKEN = os.environ['FACEBOOK_ACCESS_TOKEN']

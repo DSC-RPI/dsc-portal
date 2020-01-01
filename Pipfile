@@ -19,6 +19,7 @@ social-auth-app-django = "*"
 requests = "*"
 django-storages = {extras = ["google"],version = "*"}
 pillow = "*"
+facebook-sdk = "*"
 
 [requires]
 python_version = "3.6"
