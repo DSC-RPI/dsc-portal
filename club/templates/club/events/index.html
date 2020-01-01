@@ -83,6 +83,7 @@
                     <th>Title</th>
                     {% if user.is_staff %}
                     <th>Attendance/RSVPs</th>
+                    <th>Reviewed?</th>
                     {% endif %}
                     <th></th>
                 </tr>
@@ -95,6 +96,15 @@
                     <td>{{ event.title }}</td>
                     {% if user.is_staff %}
                     <td>{{ event.attendance.count }}/{{ event.rsvps.count }}</td>
+                    <td>
+                        <span class="icon">
+                            {% if event.review %}
+                            <i class="fas fa-check has-text-success"></i>
+                            {% else %}
+                            <i class="fas fa-times has-text-danger"></i>
+                            {% endif %}
+                        </span>
+                    </td>
                     {% endif %}
                     <td>
                         <a href="{% url 'event_detail' event.id %}" class="button is-small is-pulled-right">View</a>
