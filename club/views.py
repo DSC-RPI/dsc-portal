@@ -9,7 +9,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib import messages
 
-from .models import Event, Project, Update, EventAttendance, EventRSVP, RoadmapMilestone
+from .models import Member, Event, Project, Update, EventAttendance, EventRSVP, RoadmapMilestone
 from .forms import MemberAccountForm
 from django.utils import timezone
 from django.db import IntegrityError
@@ -285,8 +285,14 @@ def update_detail(request, update_id):
 
 @login_required
 def member_index(request):
-    members = User.objects.all()
+    members = Member.objects.all()
     return render(request, 'club/members/index.html', {'members': members})
+
+
+@login_required
+def member_detail(request, member_id):
+    member = get_object_or_404(Member, pk=member_id)
+    return render(request, 'club/members/detail.html', {'member': member})
 
 
 @staff_member_required
@@ -313,7 +319,8 @@ def roadmap_index(request):
 def social_media(request):
     if 'tweet' in request.POST:
         sent_tweet = tweet(request.POST['tweet'])
-        messages.success(request, f'Successfully tweeted! <a target="_blank" href="https://www.twitter.com/{sent_tweet.user.screen_name}/status/{sent_tweet.id}">Link to tweet</a>')
+        messages.success(
+            request, f'Successfully tweeted! <a target="_blank" href="https://www.twitter.com/{sent_tweet.user.screen_name}/status/{sent_tweet.id}">Link to tweet</a>')
     return render(request, 'club/core_team/social_media.html', {'twitter_username': os.environ['TWITTER_USERNAME']})
 
 
