@@ -224,6 +224,11 @@ def event_detail(request, event_id):
             messages.success(
                 request, 'Successfully selected slideshow for event.')
             show_slideshows = False
+        elif 'review' in request.POST:
+            event.review = request.POST['review']
+            messages.success(
+                request, 'Successfully saved event review!')
+            event.save()
 
     context = {
         'event': event,

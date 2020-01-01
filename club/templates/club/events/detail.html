@@ -6,7 +6,7 @@
     }
 </style>
 {% endblock %}
-{%block content %}
+{% block content %}
 <section class="section event-detail">
     <div class="container">
         {% include 'club/includes/messages.html' %}
@@ -63,8 +63,20 @@
         {% include "club/events/includes/event_staff_actions.html" %}
         {% elif not past %}
         {% include "club/events/includes/event_attendance_form.html" %}
-        <hr>
         {% endif %}
+
+        {% if user.is_staff and started %}
+        <hr>
+        <h2 class="subtitle">Event Review</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <textarea class="input" name="review" id="event-review"
+                placeholder="How did the event go? In particular, what issues did you face? How can you avoid similar mistakes in the future? How was feedback?">{% if event.review %}{{ event.review }}{% endif %}</textarea>
+            <button type="submit" class="button is-success">{% if event.review %}Update{% else %}Save{% endif %}
+                Review</button>
+        </form>
+        {% endif %}
+        <hr>
         {% endif %}
 
         <div class="buttons">
@@ -90,11 +102,11 @@
             </a>
             {% endif %}
             <!-- <button class="button is-light">
-                <span class="icon">
-                    <i class="far fa-calendar"></i>
-                </span>
-                <span>Not Coming</span>
-            </button> -->
+                    <span class="icon">
+                        <i class="far fa-calendar"></i>
+                    </span>
+                    <span>Not Coming</span>
+                </button> -->
             {% if not started %}
             {% if not user.is_staff and not rsvped %}
             <a href="?rsvp=1" class="button is-link">RSVP</a>

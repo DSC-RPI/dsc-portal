@@ -36,3 +36,11 @@ main .notifications {
   0%,100% { opacity: 0.1 }
   50% { opacity: 1 }
 }
+
+textarea {
+    width: 100%;
+    min-width: 100%; 
+    max-width: 100%; 
+    min-height: 100px;
+    max-height: 400px;
+}
