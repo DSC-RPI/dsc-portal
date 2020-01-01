@@ -1,0 +1,44 @@
+{% extends "club/base.html" %}
+
+{% block content %}
+<section class="section member-index">
+    <div class="container">
+        {% include 'club/includes/messages.html' %}
+        <!-- 
+        <h3 class="subtitle"></h3>
+        <h1 class="title"></h1> -->
+
+        <div class="columns is-centered">
+            <div class="column is-3">
+                <figure class="image" style="width: 100%;">
+                    <img src="https://bulma.io/images/placeholders/128x128.png">
+                </figure>
+                <h1 style="font-size: 24px" class="title member-full-name">{{ member.user.get_full_name }}</h1>
+                <h3 class="subtitle">{% if member.user.is_staff %}Core Team Member{% else %}Club Member{% endif %}</h3>
+            </div>
+            <div class="column is-7">
+                <h4 class="subtitle">About {{ member.user.first_name }}</h4>
+                <div class="content">
+                    {% if member.bio %}
+                    <p>{{ member.bio }}</p>
+                    {% else %}
+                    <p class="has-text-grey">{{ member.user.first_name }} hasn't written a bio yet!</p>
+                    {% endif %}
+                </div>
+                <hr>
+                <h4 class="subtitle">{{ member.user.first_name }}'s Attendance</h4>
+                <div class="content">
+                    <ul>
+                        {% for attendance in member.user.attendance.all %}
+                        <li><a href="{% url 'event_detail' attendance.event.id %}">{{ attendance.event }}</a></li>
+                        {% empty %}
+                        <li class="has-text-grey">{{ member.user.first_name }} hasn't attended any events yet!</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <hr>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
