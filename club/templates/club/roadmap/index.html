@@ -9,12 +9,11 @@
         {% include 'club/includes/messages.html' %}
 
         <h1 class="title">DSC {{ school_name_short }} Roadmap</h1>
-
         <div class="columns">
             <div class="column">
                 <div class="timeline is-centered roadmap">
                     <header class="timeline-header">
-                        <span class="tag is-medium is-primary">Start of Semester</span>
+                        <span class="tag is-medium is-primary">Start of School Year</span>
                         <!-- TODO: semester title -->
                     </header>
         
@@ -22,11 +21,15 @@
                     <div class="timeline-item {% if milestone.complete %}is-primary{% endif %}">
                         <div class="timeline-marker {% if milestone.complete %}is-primary{% endif %}"></div>
                         <div class="timeline-content">
-                            <p class="heading">{{ milestone.deadline }}</p>
+                            <p class="heading">by {{ milestone.deadline }}</p>
                             <p><a href="?milestone_id={{ milestone.id }}">{{ milestone.title }}</a></p>
                         </div>
                       </div>
                     {% endfor %}
+                    <header class="timeline-header">
+                        <span class="tag is-medium is-primary">End of School Year</span>
+                        <!-- TODO: semester title -->
+                    </header>
                 </div>
             </div>
 
