@@ -100,6 +100,8 @@ class Event(models.Model):
     # Required event description
     description = models.CharField(max_length=5000, help_text='Long descriptionf of the event. Supports Markdown.')
 
+    review = models.TextField(max_length=10000, blank=True, null=True, help_text='A review after the event concludes covering how the event went, turn out, issues faced, etc. for future leaders to read and take into account.')
+
     # Date and time range of event
     start = models.DateTimeField(help_text='The exact start date and time of the event.')
     end = models.DateTimeField(help_text='The exact end date and time of the event.')
