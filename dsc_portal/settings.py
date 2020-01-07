@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 from google.oauth2 import service_account
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -192,3 +193,7 @@ GS_SCOPES = ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.co
 GS_CREDENTIALS = service_account.Credentials.from_service_account_file(GOOGLE_SERVICE_ACCOUNT_FILE, scopes=GS_SCOPES)
 
 FACEBOOK_ACCESS_TOKEN = os.environ['FACEBOOK_ACCESS_TOKEN']
+
+# Activate Django-Heroku.
+# https://devcenter.heroku.com/articles/django-app-configuration
+django_heroku.settings(locals())

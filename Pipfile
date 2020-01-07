@@ -20,6 +20,7 @@ django-storages = {extras = ["google"],version = "*"}
 pillow = "*"
 facebook-sdk = "*"
 gunicorn = "*"
+django-heroku = "*"
 
 [requires]
 python_version = "3.6"
