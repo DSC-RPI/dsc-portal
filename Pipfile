@@ -21,6 +21,7 @@ pillow = "*"
 facebook-sdk = "*"
 gunicorn = "*"
 django-heroku = "*"
+whitenoise = "*"
 
 [requires]
 python_version = "3.6"
