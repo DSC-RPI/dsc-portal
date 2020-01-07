@@ -12,7 +12,6 @@ google = "*"
 google-api-python-client = "*"
 google-auth-httplib2 = "*"
 google-auth-oauthlib = "*"
-whitenoise = "*"
 docutils = "*"
 python-twitter = "*"
 social-auth-app-django = "*"
@@ -20,6 +19,7 @@ requests = "*"
 django-storages = {extras = ["google"],version = "*"}
 pillow = "*"
 facebook-sdk = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.6"
