@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import json
 from google.oauth2 import service_account
 import django_heroku
 
@@ -197,7 +198,7 @@ GS_PROJECT_ID = os.environ['GS_PROJECT_ID']
 GS_BUCKET_NAME = os.environ['GS_BUCKET_NAME']
 GS_DEFAULT_ACL = 'publicRead'
 GS_SCOPES = ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/devstorage.full_control']
-GS_CREDENTIALS = service_account.Credentials.from_service_account_file(GOOGLE_SERVICE_ACCOUNT_FILE, scopes=GS_SCOPES)
+GS_CREDENTIALS = service_account.Credentials.from_service_account_info(json.loads(os.environ['GOOGLE_SERVICE_ACCOUNT_JSON']), scopes=GS_SCOPES)
 
 FACEBOOK_ACCESS_TOKEN = os.environ['FACEBOOK_ACCESS_TOKEN']
 
