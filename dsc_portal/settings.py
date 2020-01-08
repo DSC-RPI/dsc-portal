@@ -46,7 +46,29 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.admindocs',
     'social_django',
-    'club'
+    'club',
+    'markdown_filter'
+]
+
+MARKDOWN_FILTER_WHITELIST_TAGS = [
+    'a',
+    'b',
+    'strong',
+    'em',
+    'i',
+    'br',
+    'hr',
+    'ol',
+    'ul',
+    'li',
+    'u',
+    'p',
+    'code',
+    'h1',
+    'h2',
+    'h3',
+    'h4',
+    'img'
 ]
 
 MIDDLEWARE = [

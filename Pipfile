@@ -23,6 +23,7 @@ gunicorn = "*"
 django-heroku = "*"
 whitenoise = "*"
 dj-database-url = "*"
+django-markdown-filter = "*"
 
 [requires]
 python_version = "3.6"

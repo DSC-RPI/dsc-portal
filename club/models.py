@@ -98,7 +98,7 @@ class Event(models.Model):
     tagline = models.CharField(max_length=200, blank=True, null=True, help_text='An optional tagline that will be displayed with the event title if it exists.')
     
     # Required event description
-    description = models.CharField(max_length=5000, help_text='Long descriptionf of the event. Supports Markdown.')
+    description = models.TextField(max_length=10000, help_text='Long descriptionf of the event. Supports Markdown.')
 
     review = models.TextField(max_length=10000, blank=True, null=True, help_text='A review after the event concludes covering how the event went, turn out, issues faced, etc. for future leaders to read and take into account.')
 
