@@ -32,16 +32,7 @@ DEBUG = os.environ['ENV'] == 'development'
 
 ALLOWED_HOSTS = ['127.0.0.1', os.environ['WEBSITE']]
 
-# DSC GOOGLE ACCOUNT
-GOOGLE_ACCOUNT = os.environ['GOOGLE_ACCOUNT']
 DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-
-# SCHOOL INFO
-SCHOOL_NAME = os.environ['SCHOOL_NAME']
-SCHOOL_NAME_SHORT = os.environ['SCHOOL_NAME_SHORT']
-INSTAGRAM_LINK = os.environ['INSTAGRAM_LINK']
-FACEBOOK_LINK = os.environ['FACEBOOK_LINK']
-GITHUB_LINK = 'https://github.com/DSC-RPI/dsc-portal'
 
 # Application definition
 
@@ -186,6 +177,20 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
 DOMAIN = 'https://' + os.environ['WEBSITE']
+
+
+# DSC GOOGLE ACCOUNT
+GOOGLE_ACCOUNT = os.environ['GOOGLE_ACCOUNT']
+
+# SCHOOL INFO
+SCHOOL_NAME = os.environ['SCHOOL_NAME']
+SCHOOL_NAME_SHORT = os.environ['SCHOOL_NAME_SHORT']
+
+# SOCIAL MEDIA PAGES
+INSTAGRAM_USERNAME = os.environ['INSTAGRAM_USERNAME']
+TWITTER_USERNAME = os.environ['TWITTER_USERNAME']
+FACEBOOK_LINK = os.environ['FACEBOOK_LINK']
+GITHUB_LINK = 'https://github.com/DSC-RPI/dsc-portal'
 
 # Google
 GOOGLE_SERVICE_ACCOUNT_FILE = os.environ['GOOGLE_APPLICATION_CREDENTIALS']
