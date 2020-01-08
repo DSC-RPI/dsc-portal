@@ -32,7 +32,10 @@ def index(request):
         return render(request, 'club/index.html', {'ongoing_event': ongoing_event})
     else:
         core_team = User.objects.filter(is_staff=True)
-        return render(request, 'club/splash.html', {'core_team': core_team})
+        today = timezone.now().date()
+        closest_event = upcoming_events = Event.objects.filter(
+            start__gte=today, hidden=False).order_by('start').first()
+        return render(request, 'club/splash.html', {'core_team': core_team, 'closest_event':closest_event})
 
 
 # def about(request):
