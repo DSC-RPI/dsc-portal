@@ -1,8 +1,14 @@
 {% extends "club/base.html" %}
+{% load markdown_filter %}
 {% block head %}
 <style>
     .slideshow-thumbnail {
         height: 200px;
+    }
+
+    .is-sticky {
+        position: sticky;
+        top: 20px;
     }
 </style>
 {% endblock %}
@@ -32,30 +38,33 @@
             <div class="column">
                 <div class="content">
                     <blockquote>
-                        <p class="event-description">{{ event.description }}</p>
+                        <p class="event-description">{{ event.description|markdown_filter|safe }}</p>
                     </blockquote>
 
                 </div>
             </div>
             <div class="column is-4">
-                {% include "club/events/includes/event_info.html" %}
+                <div class="is-sticky">
 
-                {% if event.slideshow_id %}
-                <figure style="position: relative" class="image">
-                    {% if user.is_staff %}
-                    <a title="Change slideshow" href="?select-slideshow=1" class="button"
-                        style="position: absolute; top: 2px; right: 2px;">
-                        <span class="icon">
-                            <i class="fas fa-pencil-alt"></i>
-                        </span>
-                    </a>
+                    {% include "club/events/includes/event_info.html" %}
+
+                    {% if event.slideshow_id %}
+                    <figure style="position: relative" class="image">
+                        {% if user.is_staff %}
+                        <a title="Change slideshow" href="?select-slideshow=1" class="button"
+                            style="position: absolute; top: 2px; right: 2px;">
+                            <span class="icon">
+                                <i class="fas fa-pencil-alt"></i>
+                            </span>
+                        </a>
+                        {% endif %}
+                        <a target="_blank" href="{{ event.slideshow_link }}">
+                            <img class=" slideshow-thumbnail" src="{{ event.thumbnail_link }}"
+                                alt="Thumbnail of event slideshow">
+                        </a>
+                    </figure>
                     {% endif %}
-                    <a target="_blank" href="{{ event.slideshow_link }}">
-                        <img class=" slideshow-thumbnail" src="{{ event.thumbnail_link }}"
-                            alt="Thumbnail of event slideshow">
-                    </a>
-                </figure>
-                {% endif %}
+                </div>
 
             </div>
             {% if show_slideshows %}
