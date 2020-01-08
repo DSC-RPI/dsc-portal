@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+}
+
 header .navbar-brand b {
     margin-left: 5px;
 }
@@ -7,7 +11,7 @@ header span.icon {
     margin-right: 0px !important;
 } */
 
-main section h1.title > a, main section h2.subtitle > a, main section h3.subtitle > a {
+main section h1.title>a, main section h2.subtitle>a, main section h3.subtitle>a {
     text-decoration: none;
     color: inherit;
     position: relative;
@@ -15,7 +19,7 @@ main section h1.title > a, main section h2.subtitle > a, main section h3.subtitl
 
 /* For section titles with anchor links, add a '#' on hover to the left */
 
-main section h1.title > a:hover::before, main section h2.subtitle > a:hover::before, main section h3.subtitle > a:hover::before {
+main section h1.title>a:hover::before, main section h2.subtitle>a:hover::before, main section h3.subtitle>a:hover::before {
     content: '#';
     position: absolute;
     left: -23px;
@@ -33,19 +37,24 @@ main .notifications {
 }
 
 @keyframes fade {
-  0%,100% { opacity: 0.1 }
-  50% { opacity: 1 }
+    0%, 100% {
+        opacity: 0.1
+    }
+    50% {
+        opacity: 1
+    }
 }
 
 textarea {
     width: 100%;
-    min-width: 100%; 
-    max-width: 100%; 
+    min-width: 100%;
+    max-width: 100%;
     min-height: 100px;
     max-height: 400px;
 }
 
 /* The icons for email and other social media profiles. */
+
 footer .links {
     font-size: 1.5em;
     margin-top: 1em;
@@ -53,4 +62,15 @@ footer .links {
 
 footer .links a {
     margin: 0.25em;
+}
+
+#particles {
+    position: relative;
+}
+
+.particles-js-canvas-el {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
 }
