@@ -37,8 +37,10 @@
 
                 </div>
             </div>
-            {% if event.slideshow_id %}
             <div class="column is-4">
+                {% include "club/events/includes/event_info.html" %}
+
+                {% if event.slideshow_id %}
                 <figure style="position: relative" class="image">
                     {% if user.is_staff %}
                     <a title="Change slideshow" href="?select-slideshow=1" class="button"
@@ -53,8 +55,9 @@
                             alt="Thumbnail of event slideshow">
                     </a>
                 </figure>
+                {% endif %}
+
             </div>
-            {% endif %}
             {% if show_slideshows %}
             {% include "club/events/includes/event_select_slideshow_modal.html" %}
             {% endif %}

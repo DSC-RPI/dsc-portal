@@ -1,0 +1,19 @@
+<div class="event-details box">
+    <div class="event-time is-flex" title="When the event is being held">
+        <span class="icon">
+            <i class="far fa-clock"></i>
+        </span>
+        <p>
+            <span>{{ event.start|date:"l F j" }}</span>
+            <br>
+            <span class="has-text-grey">{{ event.start|date:"g:i a" }} - {{ event.end|date:"g:i a" }}</span>
+        </p>
+    </div>
+    <br>
+    <div class="event-location is-flex" title="Where the event is being held">
+        <span class="icon">
+            <i class="fas fa-map-marker-alt"></i>
+        </span>
+        <span><a target="_blank" href="https://maps.google.com/?q={{ event.location|urlencode }}">{{ event.location }}</a></span>
+    </div>
+</div>
