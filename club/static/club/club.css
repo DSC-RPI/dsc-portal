@@ -44,3 +44,13 @@ textarea {
     min-height: 100px;
     max-height: 400px;
 }
+
+/* The icons for email and other social media profiles. */
+footer .links {
+    font-size: 1.5em;
+    margin-top: 1em;
+}
+
+footer .links a {
+    margin: 0.25em;
+}
