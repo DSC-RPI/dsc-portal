@@ -147,11 +147,12 @@ def event_detail(request, event_id):
             user=request.user).exists()
         show_rsvp_form = 'rsvp' in request.GET and request.GET['rsvp'] == '1'
         rsvped = event.rsvps.filter(user=request.user).exists()
+        show_slideshows = 'select-slideshow' in request.GET and request.GET['select-slideshow'] == '1'
     else:
         attendance_submitted = False
         rsvped = False
+        show_slideshows = False
 
-    show_slideshows = 'select-slideshow' in request.GET and request.GET['select-slideshow'] == '1'
     slideshows = []
     if show_slideshows:
         slideshows = drive_service.files().list(corpora='user',

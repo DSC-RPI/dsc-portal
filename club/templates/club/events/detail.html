@@ -40,12 +40,14 @@
             {% if event.slideshow_id %}
             <div class="column is-4">
                 <figure style="position: relative" class="image">
+                    {% if user.is_staff %}
                     <a title="Change slideshow" href="?select-slideshow=1" class="button"
                         style="position: absolute; top: 2px; right: 2px;">
                         <span class="icon">
                             <i class="fas fa-pencil-alt"></i>
                         </span>
                     </a>
+                    {% endif %}
                     <a target="_blank" href="{{ event.slideshow_link }}">
                         <img class=" slideshow-thumbnail" src="{{ event.thumbnail_link }}"
                             alt="Thumbnail of event slideshow">
