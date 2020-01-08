@@ -35,19 +35,18 @@
             <input type="hidden" name="next" value="{{ next }}">
         </form>
 
-        <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+        <!-- <p><a href="{% url 'password_reset' %}">Lost password?</a></p> -->
 
-        <div class="columns">
-            <div class="column">
-                <a href="#" class="button is-large">
-                    <span class="icon"></span>
-                    <span>Login with Google</span>
-                </a>
-            </div>
-        </div>
-
-        <a href="{% url 'social:begin' 'github' %}">GitHub</a>
-        <a href="{% url 'social:begin' 'google-oauth2' %}">Google</a>
+        <!-- <a class="button is-large is-primary" href="{% url 'social:begin' 'github' %}">
+            <span>Login with GitHub</span>
+        </a> -->
+        <hr>
+        <a class="button is-large is-primary" href="{% url 'social:begin' 'google-oauth2' %}">
+            <span>Login with</span>
+            <span class="icon">
+                <i class="fab fa-google"></i>
+            </span>
+        </a>
     </div>
 </section>
 {% endblock %}
