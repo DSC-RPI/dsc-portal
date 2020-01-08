@@ -126,12 +126,13 @@
                     </div>
                 </div>
                 {% else %}
-                <a class="navbar-item" href="{% url 'social:begin' 'google-oauth2' %}">
-                    Login
-                </a>
+
                 <div class="navbar-item">
-                    <a class="button is-primary" href="#">
-                        <strong>Join</strong>
+                    <a class="button is-primary" href="{% url 'social:begin' 'google-oauth2' %}">
+                        <span>Login with</span>
+                    <span class="icon">
+                        <i class="fab fa-google"></i>
+                    </span>
                     </a>
                 </div>
                 {% endif %}
