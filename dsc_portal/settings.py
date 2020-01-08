@@ -115,6 +115,7 @@ if os.environ['ENV'] != 'development':
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
 LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
