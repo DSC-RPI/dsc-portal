@@ -31,12 +31,13 @@ def index(request):
 
         return render(request, 'club/index.html', {'ongoing_event': ongoing_event})
     else:
-        return render(request, 'club/splash.html')
+        core_team = User.objects.filter(is_staff=True)
+        return render(request, 'club/splash.html', {'core_team': core_team})
 
 
-def about(request):
-    core_team = User.objects.filter(is_staff=True)
-    return render(request, 'club/about.html', {'core_team': core_team})
+# def about(request):
+#     core_team = User.objects.filter(is_staff=True)
+#     return render(request, 'club/about.html', {'core_team': core_team})
 
 
 def user_account(request):
