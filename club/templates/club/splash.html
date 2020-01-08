@@ -49,4 +49,72 @@
         </p>
     </div>
 </section>
+
+<section id="core-team" class="hero is-warning">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">
+                <a href="#core-team">The Core Team</a>
+            </h1>
+            <p class="subtitle">The club's Core Team members oversee the club, organize and promote our events, manage our social media! Interested? 
+                <a href="#">Apply to be a Core Team Member</a>
+            </p>
+        </div>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <div class="columns is-multiline">
+
+            {% for member in core_team %}
+            <!-- Core Team Member Column -->
+            <div class="column is-half">
+                <div class="box core-team-member">
+                    <div class="media">
+                        <div class="media-left">
+                            <p class="image is-64x64">
+                                <img class="is-rounded" src="https://bulma.io/images/placeholders/128x128.png">
+                            </p>
+                        </div>
+                        <div class="media-content">
+                            <h2 class="title is-size-5">{{ member.get_full_name }}</h2>
+                            <h3 class="subtitle">[ROLE]</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="has-text-grey has-text-centered">No Core Team members have been selected yet!</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+<section id="contact" class="hero is-info">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">
+                <a href="#contact">Contact Us</a>
+            </h1>
+        </div>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <div class="columns has-text-centered">
+            <div class="column">
+                <p>
+                    The <strong>Core Team</strong> (club leadership team) can be reached directly at <a href="mailto:developerstudentclubsrpi@gmail.com">developerstudentclubsrpi@gmail.com</a>
+                </p>
+            </div>
+
+            <div class="column">
+                <p>
+                    The current lead <strong>Frank Matranga</strong> can be reached directly at <a href="mailto:matraf@rpi.edu">matraf@rpi.edu</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}

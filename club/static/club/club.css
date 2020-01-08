@@ -7,7 +7,7 @@ header span.icon {
     margin-right: 0px !important;
 } */
 
-main section .title > a, main section .subtitle > a {
+main section h1.title > a, main section h2.subtitle > a, main section h3.subtitle > a {
     text-decoration: none;
     color: inherit;
     position: relative;
@@ -15,10 +15,10 @@ main section .title > a, main section .subtitle > a {
 
 /* For section titles with anchor links, add a '#' on hover to the left */
 
-main section .title > a:hover::before, main section .subtitle > a:hover::before {
+main section h1.title > a:hover::before, main section h2.subtitle > a:hover::before, main section h3.subtitle > a:hover::before {
     content: '#';
     position: absolute;
-    left: -20px;
+    left: -23px;
     color: #444;
 }
 
