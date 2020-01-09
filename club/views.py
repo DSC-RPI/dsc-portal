@@ -112,7 +112,7 @@ def event_index(request):
     past_events = Event.objects.filter(
         end__lt=today, hidden=False).order_by('created_at')
 
-    return render(request, 'club/events/index.html', {'ongoing_events': ongoing_events, 'upcoming_events': upcoming_events, 'past_events': past_events})
+    return render(request, 'club/events/index.html', {'ongoing_events': ongoing_events, 'upcoming_events': upcoming_events, 'past_events': past_events, 'google_calendar_id': settings.GOOGLE_CALENDAR_ID})
 
 
 def event_detail(request, event_id):
