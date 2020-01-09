@@ -9,7 +9,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib import messages
 
-from .models import Member, Question, Event, Project, Update, EventAttendance, EventRSVP, RoadmapMilestone
+from .models import Member, FAQ, Event, Project, Update, EventAttendance, EventRSVP, RoadmapMilestone
 from .forms import MemberAccountForm
 from django.utils import timezone
 from django.db import IntegrityError
@@ -37,9 +37,17 @@ def index(request):
             start__gte=today, hidden=False).order_by('start').first()
         return render(request, 'club/splash.html', {'core_team': core_team, 'closest_event':closest_event})
 
-def qanda(request):
-    questions = Question.objects.all()
-    return render(request, 'club/qanda.html', {'questions':questions})
+def faq(request):
+    '''
+    Displays *answered* Frequently Asked Questions and allows anyone to submit questions of their own.
+    '''
+    if request.method == 'POST' and 'new-question' in request.POST:
+        new_faq = FAQ(question=request.POST['new-question'])
+        new_faq.save()
+        messages.success(request, 'Submitted your question! If a Core Team member answers it, it will show up here.')
+
+    faqs = FAQ.objects.filter(answer__isnull=False)
+    return render(request, 'club/faq.html', {'faqs':faqs})
 
 # def about(request):
 #     core_team = User.objects.filter(is_staff=True)

@@ -1,0 +1,42 @@
+{% extends "club/base.html" %}
+{% block content %}
+<section class="section">
+    <div class="container">
+        {% include 'club/includes/messages.html' %}
+        
+        <h2 class="title">DSC Frequently Asked Questions</h2>
+        <h3 class="subtitle">Submit your own questions below!</h3>
+
+        <div class="columns questions is-multiline">
+            {% for faq in faqs %}
+            <div class="column is-half question" id="{{ faq.id }}">
+                <div class="box">
+                    <strong><a href="#{{ faq.id }}">{{ faq.question }}</a></strong>
+                    <p>{{ faq.answer }}</p>
+                </div>
+            </div>
+            {% empty %}
+            <div class="column">
+                <p class="has-text-grey">No questions have been answered yet!</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <hr>
+        <form method="POST" id="new-question-form">
+            {% csrf_token %}
+
+            <label for="new-question" class="label">Ask a Question</label>
+            <div class="field has-addons">
+                <div class="control is-expanded">
+                    <input type="text" class="input" id="new-question" name="new-question" minlength="5" maxlength="400" required>
+                </div>
+                <div class="control">
+                    <button class="button" type="submit">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+{% endblock %}

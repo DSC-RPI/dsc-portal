@@ -424,10 +424,10 @@ class RoadmapMilestone(models.Model):
     def passed_deadline(self):
         return timezone.now() > self.deadline
 
-class Question(models.Model):
-    '''Represents a question and answer for the Q&A page.'''
+class FAQ(models.Model):
+    '''Represents a question and answer for the FAQ page.'''
     question = models.CharField(max_length=400, help_text='The question.')
-    answer = models.TextField(max_length=2000, help_text='The answer.')
+    answer = models.TextField(blank=True, null=True, max_length=2000, help_text='The answer.')
 
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
