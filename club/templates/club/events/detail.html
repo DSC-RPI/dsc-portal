@@ -90,6 +90,13 @@
             <button type="submit" class="button is-success">{% if event.review %}Update{% else %}Save{% endif %}
                 Review</button>
         </form>
+        {% elif user.is_staff and event.event_type == 'SJ' %}
+        <a target="_blank" href="https://bit.ly/csj_19" class="button is-link">
+            <span class="icon">
+                <i class="fas fa-cloud"></i>
+            </span>
+            <span>Register Cloud Study Jam</span>
+        </a>
         {% endif %}
         <hr>
         {% endif %}
