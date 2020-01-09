@@ -19,14 +19,14 @@
         <div id="top-navbar" class="navbar-menu">
             <div class="navbar-start">
                 {% if user.is_authenticated %}
-                <a href="{% url 'index' %}" class="navbar-item" title="See your dashboard.">
+                <a href="{% url 'index' %}" class="navbar-item {% if '/' == request.path_info %}is-active{% endif %}" title="See your dashboard.">
                     <span class="icon">
                         <i class="fas fa-home"></i>
                     </span>
                     <span>Home</span>
                 </a>
                 {% else %}
-                <a href="{% url 'faq' %}" class="navbar-item" title="View and submit frequently asked questions about the club.">
+                <a href="{% url 'faq' %}" class="navbar-item {% if 'faq' in request.path_info %}is-active{% endif %}" title="View and submit frequently asked questions about the club.">
                     <span class="icon">
                         <i class="fas fa-question"></i>
                     </span>
@@ -34,7 +34,7 @@
                 </a>
                 {% endif %}
 
-                <a href="{% url 'events' %}" class="navbar-item" title="See the events being held.">
+                <a href="{% url 'events' %}" class="navbar-item {% if 'events' in request.path_info %}is-active{% endif %}" title="See the events being held.">
                     <span class="icon">
                         <i class="fas fa-calendar-alt"></i>
                     </span>
@@ -42,7 +42,7 @@
                 </a>
 
                 {% if user.is_authenticated %}
-                <a href="{% url 'members' %}" class="navbar-item" title="View the club's members.">
+                <a href="{% url 'members' %}" class="navbar-item {% if 'members' in request.path_info %}is-active{% endif %}" title="View the club's members.">
                     <span class="icon">
                         <i class="fas fa-users"></i>
                     </span>
@@ -50,7 +50,7 @@
                 </a>
                 {% endif %}
 
-                <a href="{% url 'projects' %}" class="navbar-item"
+                <a href="{% url 'projects' %}" class="navbar-item {% if 'projects' in request.path_info %}is-active{% endif %}"
                     title="Check out the projects DSC University has been working on!">
                     <span class="icon">
                         <i class="fas fa-archive"></i>
@@ -58,7 +58,7 @@
                     <span>Projects</span>
                 </a>
 
-                <a href="{% url 'updates' %}" class="navbar-item" title="Find out what's been going on!">
+                <a href="{% url 'updates' %}" class="navbar-item {% if 'updates' in request.path_info %}is-active{% endif %}" title="Find out what's been going on!">
                     <span class="icon">
                         <i class="fas fa-newspaper"></i>
                     </span>
@@ -67,7 +67,7 @@
 
                 {% if user.is_staff %}
                 <div class="navbar-item has-dropdown is-hoverable">
-                    <a class="navbar-link">
+                    <a class="navbar-link {% if 'core-team' in request.path_info %}is-active{% endif %}">
                         <span class="icon">
                             <i class="fas fa-crown"></i>
                         </span>
@@ -75,15 +75,15 @@
                     </a>
 
                     <div class="navbar-dropdown">
-                        <a href="{% url 'core_team' %}" class="navbar-item">
+                        <a href="{% url 'core_team' %}" class="navbar-item {% if '/core-team/' == request.path_info %}is-active{% endif %}">
                             Overview
                         </a>
                         <hr class="navbar-divider">
                         </hr>
-                        <a href="{% url 'roadmap' %}" class="navbar-item">
+                        <a href="{% url 'roadmap' %}" class="navbar-item {% if '/core-team/roadmap' in request.path_info %}is-active{% endif %}">
                             Club Roadmap
                         </a>
-                        <a href="{% url 'social_media' %}" class="navbar-item">
+                        <a href="{% url 'social_media' %}" class="navbar-item {% if '/core-team/social-media' in request.path_info %}is-active{% endif %}">
                             Social Media
                         </a>
                     </div>
@@ -110,7 +110,7 @@
                             <span>Administration</span>
                         </a>
                         {% endif %}
-                        <a href="{% url 'user_account' %}" class="navbar-item">
+                        <a href="{% url 'user_account' %}" class="navbar-item {% if '/account' in request.path_info %}is-active{% endif %}">
                             <span class="icon">
                                 <i class="fas fa-edit"></i>
                             </span>
