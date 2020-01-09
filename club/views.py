@@ -9,7 +9,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib import messages
 
-from .models import Member, Event, Project, Update, EventAttendance, EventRSVP, RoadmapMilestone
+from .models import Member, Question, Event, Project, Update, EventAttendance, EventRSVP, RoadmapMilestone
 from .forms import MemberAccountForm
 from django.utils import timezone
 from django.db import IntegrityError
@@ -37,6 +37,9 @@ def index(request):
             start__gte=today, hidden=False).order_by('start').first()
         return render(request, 'club/splash.html', {'core_team': core_team, 'closest_event':closest_event})
 
+def qanda(request):
+    questions = Question.objects.all()
+    return render(request, 'club/qanda.html', {'questions':questions})
 
 # def about(request):
 #     core_team = User.objects.filter(is_staff=True)

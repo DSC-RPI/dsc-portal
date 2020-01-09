@@ -427,7 +427,7 @@ class RoadmapMilestone(models.Model):
 class Question(models.Model):
     '''Represents a question and answer for the Q&A page.'''
     question = models.CharField(max_length=400, help_text='The question.')
-    answer = models.CharField(max_length=400, help_text='The question.')
+    answer = models.TextField(max_length=2000, help_text='The answer.')
 
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
