@@ -25,6 +25,13 @@
                     </span>
                     <span>Home</span>
                 </a>
+                {% else %}
+                <a href="{% url 'faq' %}" class="navbar-item" title="View and submit frequently asked questions about the club.">
+                    <span class="icon">
+                        <i class="fas fa-question"></i>
+                    </span>
+                    <span>FAQ</span>
+                </a>
                 {% endif %}
 
                 <a href="{% url 'events' %}" class="navbar-item" title="See the events being held.">
