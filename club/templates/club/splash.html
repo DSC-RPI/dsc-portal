@@ -1,6 +1,20 @@
 {% extends "club/base.html" %}
 {% block head %}
 <style>
+    @media only screen and (min-width: 768px) {
+        .full-height {
+            height: 95vh;
+            display: flex;
+            flex-direction: column;
+        }
+    }
+
+    .hero-body,
+    .hero-body .container,
+    .hero-body .columns {
+        height: 100%;
+    }
+
     .event-types .box {
         position: relative;
     }
@@ -29,179 +43,184 @@
 {% load static %}
 
 {% block content %}
-<section class="hero is-dark">
-    <div class="hero-body">
-        <div class="container">
-            <div class="columns is-vcentered">
-                <div class="column has-text-centered">
-                    <h1 class="title is-spaced is-size-1-desktop is-size-2-tablet is-size-3-mobile">Developer Student
-                        Clubs RPI</h1>
-                    <h2 class="subtitle is-size-4-desktop">Helping </span> {{ school_name_short }} students bridge the
-                        gap between <span class="has-text-primary">theory</span> and <span
-                            class="has-text-primary">practice</span></h2>
-                </div>
-
-                <div class="column is-5">
-                    <div class="box">
-                        <h2 class="subtitle has-text-dark">Next Event</h2>
-                        {% if closest_event %}
-                        <p>
-                            {{ closest_event }}
-                            <a href="{% url 'event_detail' closest_event.id %}">View</a>
-                        </p>
-                        {% else %}
-                        <p class="has-text-grey">There are no upcoming events... Check back soon!</p>
-                        {% endif %}
+<div class="full-height">
+    <section class="hero is-dark" style="flex: 1">
+        <div class="hero-body">
+            <div class="container">
+                <div class="columns is-vcentered">
+                    <div class="column">
+                        <h1 class="title is-spaced is-size-1-desktop is-size-2-tablet is-size-3-mobile">Developer
+                            Student
+                            Clubs RPI</h1>
+                        <h2 class="subtitle is-size-4-desktop">Bridging the gap between <span
+                                class="has-text-warning">theory</span> and <span
+                                class="has-text-warning">practice</span></h2>
                     </div>
-                    <!-- <iframe id="splash-video" src="https://www.youtube.com/embed/DcN_hcHXR_0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+
+                    <div class="column is-5">
+                        <div class="box">
+                            <h2 class="subtitle has-text-dark">Next Event</h2>
+                            {% if closest_event %}
+                            <p>
+                                {{ closest_event }}
+                                <a href="{% url 'event_detail' closest_event.id %}">View</a>
+                            </p>
+                            {% else %}
+                            <p class="has-text-grey">There are no upcoming events... Check back soon!</p>
+                            {% endif %}
+                        </div>
+                        <!-- <iframe id="splash-video" src="https://www.youtube.com/embed/DcN_hcHXR_0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-<section id="particles" class="section">
-    <div class="container">
-        <div class="columns has-text-centered">
-            <div class="column is-one-third">
-                <h3 class="title">Connect</h3>
-                <p>Meet other students on campus interested in developer technologies. All are welcome, including those
-                    with diverse backgrounds and different majors.</p>
+    </section>
+    <section id="particles" class="section">
+        <div class="container">
+            <div class="columns has-text-centered">
+                <div class="column is-one-third">
+                    <h3 class="title">Connect</h3>
+                    <p>Meet other students on campus interested in developer technologies. All are welcome, including
+                        those
+                        with diverse backgrounds and different majors.</p>
+                </div>
+                <div class="column is-one-third">
+                    <h3 class="title">Learn</h3>
+                    <p>Learn about a wide range of technical topics where new skills are gained through hands-on
+                        workshops,
+                        in-person training and project building activities.</p>
+                </div>
+                <div class="column is-one-third">
+                    <h3 class="title">Grow</h3>
+                    <p>Apply your new learnings and connections to build great solutions for local problems. Advance
+                        your
+                        skills, career and network. Give back to your community by helping others learn as well.</p>
+                </div>
             </div>
-            <div class="column is-one-third">
-                <h3 class="title">Learn</h3>
-                <p>Learn about a wide range of technical topics where new skills are gained through hands-on workshops,
-                    in-person training and project building activities.</p>
-            </div>
-            <div class="column is-one-third">
-                <h3 class="title">Grow</h3>
-                <p>Apply your new learnings and connections to build great solutions for local problems. Advance your
-                    skills, career and network. Give back to your community by helping others learn as well.</p>
-            </div>
-        </div>
 
-        <br>
-        <p class="has-text-centered">
-            <a href="#what-we-do" class="button is-large is-outlined is-link">Learn More</a>
-        </p>
-    </div>
-</section>
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-<script>
-    // Thanks to https://www.dsccsusm.org/
-    const particlesObj = {
-        "particles": {
-            "number": {
-                "value": 10,
-                "density": {
-                    "enable": true,
-                    "value_area": 1200
-                }
-            },
-            "color": {
-                "value": ["#DB4437", "#0F9D58", "#4285F4", "#F4B400"]
-            },
-            "shape": {
-                "type": "circle",
-                "stroke": {
-                    "width": 0,
-                    "color": "#000"
-                },
-                "image": {
-                    "src": "img/github.svg",
-                    "width": 100,
-                    "height": 100
-                }
-            },
-            "opacity": {
-                "value": 1,
-                "random": false,
-                "anim": {
-                    "enable": false,
-                    "speed": 1,
-                    "opacity_min": 1,
-                    "sync": false
-                }
-            },
-            "size": {
-                "value": 70,
-                "random": true,
-                "anim": {
-                    "enable": true,
-                    "speed": 10,
-                    "size_min": 20,
-                    "sync": false
-                }
-            },
-            "line_linked": {
-                "enable": false,
-                "distance": 200,
-                "color": "#000000",
-                "opacity": 1,
-                "width": 2
-            },
-            "move": {
-                "enable": true,
-                "speed": 9,
-                "direction": "none",
-                "random": true,
-                "straight": false,
-                "out_mode": "out",
-                "bounce": false,
-                "attract": {
-                    "enable": true,
-                    "rotateX": 600,
-                    "rotateY": 1200
-                }
-            }
-        },
-        "interactivity": {
-            "detect_on": "canvas",
-            "events": {
-                "onhover": {
-                    "enable": false,
-                    "mode": "grab"
-                },
-                "onclick": {
-                    "enable": false,
-                    "mode": "push"
-                },
-                "resize": true
-            },
-            "modes": {
-                "grab": {
-                    "distance": 400,
-                    "line_linked": {
-                        "opacity": 1
+            <p class="has-text-centered">
+                <a href="#what-we-do" class="button is-large is-outlined is-link">Learn More</a>
+            </p>
+        </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        // Thanks to https://www.dsccsusm.org/
+        const particlesObj = {
+            "particles": {
+                "number": {
+                    "value": 10,
+                    "density": {
+                        "enable": true,
+                        "value_area": 1200
                     }
                 },
-                "bubble": {
-                    "distance": 400,
-                    "size": 40,
-                    "duration": 2,
-                    "opacity": 8,
-                    "speed": 3
+                "color": {
+                    "value": ["#DB4437", "#0F9D58", "#4285F4", "#F4B400"]
                 },
-                "repulse": {
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000"
+                    },
+                    "image": {
+                        "src": "img/github.svg",
+                        "width": 100,
+                        "height": 100
+                    }
+                },
+                "opacity": {
+                    "value": 1,
+                    "random": false,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 70,
+                    "random": true,
+                    "anim": {
+                        "enable": true,
+                        "speed": 10,
+                        "size_min": 20,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": false,
                     "distance": 200,
-                    "duration": 0.4
+                    "color": "#000000",
+                    "opacity": 1,
+                    "width": 2
                 },
-                "push": {
-                    "particles_nb": 4
-                },
-                "remove": {
-                    "particles_nb": 2
+                "move": {
+                    "enable": true,
+                    "speed": 9,
+                    "direction": "none",
+                    "random": true,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": true,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
                 }
-            }
-        },
-        "retina_detect": true
-    };
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": false,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": false,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 400,
+                        "line_linked": {
+                            "opacity": 1
+                        }
+                    },
+                    "bubble": {
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 200,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        };
 
-    // XMLHttpRequest doesn't allow CORS, so to work around it we need to pass it a data URI
-    const jsonUri = "data:text/plain;base64," + window.btoa(JSON.stringify(particlesObj));
-    particlesJS.load('particles', jsonUri, function () {
-        console.log('callback - particles.js config loaded');
-    });
-</script>
+        // XMLHttpRequest doesn't allow CORS, so to work around it we need to pass it a data URI
+        const jsonUri = "data:text/plain;base64," + window.btoa(JSON.stringify(particlesObj));
+        particlesJS.load('particles', jsonUri, function () {
+            console.log('callback - particles.js config loaded');
+        });
+    </script>
+</div>
 
 <section id="what-we-do" class="hero is-success">
     <div class="hero-body">
