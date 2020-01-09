@@ -11,6 +11,10 @@ header span.icon {
     margin-right: 0px !important;
 } */
 
+main {
+    padding-top: 50px;
+}
+
 main section h1.title>a, main section h2.subtitle>a, main section h3.subtitle>a {
     text-decoration: none;
     color: inherit;
