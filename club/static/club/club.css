@@ -63,14 +63,3 @@ footer .links {
 footer .links a {
     margin: 0.25em;
 }
-
-#particles {
-    position: relative;
-}
-
-.particles-js-canvas-el {
-    position: absolute;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-}

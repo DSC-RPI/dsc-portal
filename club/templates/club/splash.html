@@ -1,21 +1,28 @@
 {% extends "club/base.html" %}
 {% block head %}
 <style>
-    #splash-video {
-        width: 100%;
-        height: 250px;
-    }
-
     .event-types .box {
         position: relative;
     }
 
     .background-icon {
         position: absolute;
-        font-size: 8em;
+        font-size: 6em;
         right: 20px;
         bottom: 20px;
         opacity: 0.1;
+    }
+
+    #particles {
+        position: relative;
+    }
+
+    .particles-js-canvas-el {
+        position: absolute;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: -1;
     }
 </style>
 {% endblock %}
@@ -72,7 +79,7 @@
             </div>
         </div>
 
-        <hr>
+        <br>
         <p class="has-text-centered">
             <a href="#what-we-do" class="button is-large is-outlined is-link">Learn More</a>
         </p>
@@ -202,42 +209,50 @@
             <h1 class="title">
                 <a href="#what-we-do">What We Do</a>
             </h1>
-            <p class="subtitle">DSC events can take many forms - from just a few people getting together to watch some
-                videos, to large
-                gatherings with demos, tech talks, hackathons and conferences. We work on various technical domains and
-                work
-                to make use of Google Technologies to empower the community around us.</p>
+            <p class="subtitle">DSC events take many forms - workshops, speaker sessions, etc. They are held roughly
+                once a month. RSVPs and attendance are tracked through this site!</p>
         </div>
     </div>
 </section>
 <section class="section">
     <div class="event-types container">
-        <div class="columns">
-            <div class="column">
+        <div class="columns is-multiline">
+            <div class="column is-one-quarter-fullhd is-half-desktop is-one-mobile is-full">
                 <div class="box">
                     <i class="background-icon fas fa-cloud"></i>
-                    <h2 class="subtitle">Cloud Jams</h2>
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nobis sint fugit magnam aspernatur
-                        repudiandae quas quis voluptatibus aut reprehenderit quaerat. Exercitationem neque et dolorum
-                        soluta amet ipsa totam, quas delectus.</p>
+                    <h2 class="subtitle">Study Jams</h2>
+                    <p>A Study Jam is a collective learning program designed to give students practical experience in
+                        Google Cloud Tools.
+                        Like-minded developers come together to hone their skills and further their cloud knowledge
+                        through interactive classrooms and hands-on labs. With around 700 Developer Student Clubs around
+                        the world, attendees can join a global community of eager-to-learn students.
+                    </p>
                 </div>
             </div>
-            <div class="column">
+            <div class="column is-one-quarter-fullhd is-half-desktop is-one-mobile is-full">
+                <div class="box">
+                    <i class="background-icon fas fa-toolbox"></i>
+                    <h2 class="subtitle">Hands-on Workshop</h2>
+                    <p>A Study Jam is a collective learning program designed to give students practical experience in
+                        Google Cloud Tools.
+                        Like-minded developers come together to hone their skills and further their cloud knowledge
+                        through interactive classrooms and hands-on labs. With around 700 Developer Student Clubs around
+                        the world, attendees can join a global community of eager-to-learn students.
+                    </p>
+                </div>
+            </div>
+            <div class="column is-one-quarter-fullhd is-half-desktop is-one-mobile is-full">
+                <div class="box">
+                    <i class="background-icon fas fa-users"></i>
+                    <h2 class="subtitle">Hackathon</h2>
+                    <p>An event where you break into teams and work on building a solution.</p>
+                </div>
+            </div>
+            <div class="column is-one-quarter-fullhd is-half-desktop is-one-mobile is-full">
                 <div class="box">
                     <i class="background-icon fas fa-comment"></i>
                     <h2 class="subtitle">Speaker Sessions</h2>
-                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Pariatur, at. Aliquid quaerat, quod
-                        quam adipisci eveniet corrupti natus doloremque blanditiis incidunt consequatur ex iure, cum
-                        culpa magni voluptates sunt repellendus.</p>
-                </div>
-            </div>
-            <div class="column">
-                <div class="box">
-                    <i class="background-icon fas fa-trophy"></i>
-                    <h2 class="subtitle">DSC Solution Challenge</h2>
-                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Expedita magni cupiditate perspiciatis
-                        perferendis placeat quibusdam soluta corporis, sint voluptatibus, doloremque temporibus iure
-                        quae fuga excepturi voluptatum fugiat vitae! Voluptate, necessitatibus?</p>
+                    <p>An event where a Core Team member or guest speaker cover technical content.</p>
                 </div>
             </div>
         </div>
