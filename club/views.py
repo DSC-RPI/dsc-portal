@@ -54,6 +54,7 @@ def user_account(request):
             request.user.last_name = form.cleaned_data['last_name']
             request.user.member.grade = form.cleaned_data['grade']
             request.user.member.bio = form.cleaned_data['bio']
+            request.user.member.school_username = form.cleaned_data['school_username']
 
             if 'profile_image' in request.FILES:
                 messages.warning(request, 'Uploaded profile image!')
@@ -73,6 +74,7 @@ def user_account(request):
         form_data = {
             'first_name': request.user.first_name,
             'last_name': request.user.last_name,
+            'school_username': request.user.member.school_username,
             'grade': request.user.member.grade,
             'bio': request.user.member.bio
         }

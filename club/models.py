@@ -38,6 +38,8 @@ class Member(models.Model):
     '''
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
 
+    school_username = models.CharField(max_length=100, blank=True, null=True, help_text='The username of the student/faculty member of the school.')
+
     profile_image = models.ImageField(blank=True, null=True, upload_to='')
 
     GRADE_TYPES = [
