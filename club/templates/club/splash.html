@@ -278,6 +278,26 @@
     </div>
 </section>
 
+<section id="join" class="hero is-danger">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">
+                <a href="#join">How to Join</a>
+            </h1>
+            <p class="subtitle">Simply log in!</p>
+        </div>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <p>
+            <a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a> to get started. Then <a href="{% url 'user_account' %}">fill out your profile</a> and enter your {{ school_name_short }} username.
+            You'll then be able to RSVP for events <span class="has-text-grey">(not required)</span> and you'll be added to the official mailing list to be notified of planned events!
+        </p>
+    </div>
+</section>
+
+
 <section id="core-team" class="hero is-warning">
     <div class="hero-body">
         <div class="container">
