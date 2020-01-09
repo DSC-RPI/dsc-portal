@@ -86,6 +86,7 @@
             {% csrf_token %}
             <textarea class="input" name="review" id="event-review"
                 placeholder="How did the event go? In particular, what issues did you face? How can you avoid similar mistakes in the future? How was feedback?">{% if event.review %}{{ event.review }}{% endif %}</textarea>
+            <a target="_blank" href="https://bit.ly/reportdsc" class="button">Submit Official Report Form</a>
             <button type="submit" class="button is-success">{% if event.review %}Update{% else %}Save{% endif %}
                 Review</button>
         </form>
