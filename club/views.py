@@ -18,6 +18,8 @@ from .google_api import drive_service
 
 from .twitter_api import tweet
 
+def verified_member_check(user):
+    return user.member.verified
 
 def index(request):
     if request.user.is_authenticated:
@@ -308,23 +310,29 @@ def update_detail(request, update_id):
 
 @login_required
 def member_index(request):
-    members = Member.objects.all()
+    # TODO: docstring
+    members = Member.verified_members.all()
     return render(request, 'club/members/index.html', {'members': members})
 
 
 @login_required
 def member_detail(request, member_id):
+    # TODO: docstring
     member = get_object_or_404(Member, pk=member_id)
+    if not member.verified:
+        messages.warning(request, 'This user has not yet verified their account!')
     return render(request, 'club/members/detail.html', {'member': member})
 
 
 @staff_member_required
 def core_team(request):
+    # TODO: docstring
     return render(request, 'club/core_team/index.html', {'google_drive_folder_id': settings.GOOGLE_DRIVE_FOLDER_ID})
 
 
 @staff_member_required
 def roadmap_index(request):
+    # TODO: docstring
     try:
         roadmap_milestones = RoadmapMilestone.objects.all().order_by('deadline')
     except ObjectDoesNotExist:
@@ -340,6 +348,7 @@ def roadmap_index(request):
 
 @staff_member_required
 def social_media(request):
+    # TODO: docstring
     if 'tweet' in request.POST:
         sent_tweet = tweet(request.POST['tweet'])
         messages.success(
