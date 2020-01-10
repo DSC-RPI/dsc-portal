@@ -1,4 +1,5 @@
 import os
+import random
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -67,7 +68,15 @@ def user_account(request):
             request.user.last_name = form.cleaned_data['last_name']
             request.user.member.grade = form.cleaned_data['grade']
             request.user.member.bio = form.cleaned_data['bio']
-            request.user.member.school_username = form.cleaned_data['school_username']
+            
+            if request.user.member.school_username != form.cleaned_data['school_username']:
+                # School username was set or changed! Start verification process.
+                request.user.member.school_username = form.cleaned_data['school_username']
+                request.user.member.verified = False
+                request.user.member.verification_code = ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for i in range(6))
+                request.user.member.email_school_account('Verify your Account', f'Your code is <code>{request.user.member.verification_code}</code>')
+                messages.warning(request, f'You must verify that you are <b>{request.user.member.school_username}</b>. You have been sent a verification link to your school email address.')
+
 
             if 'profile_image' in request.FILES:
                 messages.warning(request, 'Uploaded profile image!')
@@ -106,8 +115,10 @@ def verify_account(request):
         # Successfully verified user
         messages.success(request, f'Congratulations, you verified your account and are now an official <b>DSC {settings.SCHOOL_NAME_SHORT}</b> member!')
         request.user.member.verified = True
+        request.user.member.verification_code = None
         request.user.member.save()
     else:
+        # Wrong code!
         messages.warning(request, f'That was not the correct code! Please check the email again.')
 
     return HttpResponseRedirect('/account')

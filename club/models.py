@@ -67,6 +67,12 @@ class Member(models.Model):
 
     bio = models.TextField(max_length=2000, blank=True, null=True, help_text='A short bio about the member which will be public.')
 
+    def email(self, subject, message):
+        return send_email(subject, message, [self.user.email])
+
+    def email_school_account(self, subject, message):
+        return send_email(subject, message, [self.school_username + settings.SCHOOL_EMAIL_SUFFIX])
+
     @classmethod
     def post_user_save(cls, sender, instance, created, *args, **kwargs):
         if created:
