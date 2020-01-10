@@ -95,8 +95,24 @@ def user_account(request):
 
     return render(request, 'registration/account.html', {'form': form})
 
-# EVENTS
+@login_required
+def verify_account(request):
+    if not request.method == 'GET' or not 'code' in request.GET:
+        return HttpResponse(status=400)
+    
+    code = request.GET['code']
 
+    if code == request.user.member.verification_code:
+        # Successfully verified user
+        messages.success(request, f'Congratulations, you verified your account and are now an official <b>DSC {settings.SCHOOL_NAME_SHORT}</b> member!')
+        request.user.member.verified = True
+        request.user.member.save()
+    else:
+        messages.warning(request, f'That was not the correct code! Please check the email again.')
+
+    return HttpResponseRedirect('/account')
+
+# EVENTS
 
 def event_index(request):
     '''
