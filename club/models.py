@@ -4,7 +4,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
-from .email import send_email
+from .email import send_templated_email
 from random import choice
 from string import ascii_uppercase
 
@@ -46,6 +46,10 @@ class Member(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
 
     school_username = models.CharField(max_length=100, blank=True, null=True, help_text='The username of the student/faculty member of the school.')
+    
+    @property
+    def school_email(self):
+        return self.school_username + settings.SCHOOL_EMAIL_SUFFIX
 
     verification_code = models.CharField(blank=True, null=True, max_length=100, help_text='The randomly generated code sent to the user\'s school email to verify it.')
 
@@ -67,18 +71,17 @@ class Member(models.Model):
 
     bio = models.TextField(max_length=2000, blank=True, null=True, help_text='A short bio about the member which will be public.')
 
-    def email(self, subject, message):
-        return send_email(subject, message, [self.user.email])
-
-    def email_school_account(self, subject, message):
-        return send_email(subject, message, [self.school_username + settings.SCHOOL_EMAIL_SUFFIX])
-
     @classmethod
     def post_user_save(cls, sender, instance, created, *args, **kwargs):
         if created:
             # Send welcome email on first login (user creation)
-            # send_email('Welcome to DSC RP!', f'Welcome to the newly-formed <strong>Developer Student Clubs RPI</strong> chapter!.', [instance.email])
-            pass
+            data = {
+                'user': instance,
+                'website': settings.DOMAIN,
+                'school_name_short': settings.SCHOOL_NAME_SHORT
+            }
+            return send_templated_email('Welcome to DSC!', 'new_member', data, [instance.email])
+
 
         try:
             has_member = instance.member is not None
