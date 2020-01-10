@@ -234,34 +234,6 @@ def event_detail(request, event_id):
                 # Member submitted incorrect code
                 messages.warning(
                     request, 'Wrong attendance code. Please make sure you\'re on the right event and have typed in the code correctly.')
-        elif 'rsvp' in request.POST:
-            if started:
-                messages.error(
-                    request, 'The event has already started (and possibly finished!). You cannot RSVP.')
-            elif rsvp is not None:
-                # Already RSVPed!
-                messages.warning(request, 'You are already RSVPed!')
-            else:
-                # RSVP user
-                rsvp = EventRSVP(user=request.user, event=event)
-                if 'rsvp-message' in request.POST:
-                    rsvp.message = request.POST['rsvp-message']
-                rsvp.save()
-                messages.success(request, 'You have RSVPed for this event!')
-        elif 'unrsvp' in request.POST:
-            if started:
-                messages.error(
-                    request, 'The event already started (and possibly finished!). You cannot remove your RSVP.')
-            else:
-                try:
-                    EventRSVP.objects.get(
-                        user=request.user, event=event).delete()
-                    messages.success(
-                        request, 'You successfully removed your RSVP.')
-                except ObjectDoesNotExist:
-                    messages.error(
-                        request, 'Failed to find your RSVP to remove... You should be good.')
-        
         return HttpResponseRedirect(request.path_info)
     
     # Staff actions
@@ -304,6 +276,44 @@ def event_detail(request, event_id):
 
     return render(request, 'club/events/detail.html', context)
 
+@login_required
+def event_rsvp(request, event_id):
+    now = timezone.now()
+    event = get_object_or_404(Event, pk=event_id)
+    remove = 'remove' in request.GET and request.GET['remove'] == '1'
+
+    if request.method != 'POST':
+        return HttpResponseRedirect(f'/events/{event_id}?rsvp=1')
+
+    event_started = event.start < now
+
+    rsvp = event.rsvps.filter(user=request.user).first()
+
+    if request.user.is_staff:
+        messages.warning(request, 'Core Team members can\'t RSVP for events.')
+    elif rsvp:
+        # User is already RSVPed
+
+        if remove:
+            rsvp.delete()
+            messages.success(request, 'Your RSVP has been removed.')
+        else:
+            messages.warning(request, 'You have already RSVPed for this event.')
+    elif event_started:
+        # Event has started so no more RSVPs are accepted
+        messages.warning(request, 'This event has already started so you change your RSVP. You can still attend though!')
+    else:
+        # New RSVP
+        if remove:
+            messages.warning(request, 'We could not find your RSVP to remove. You should be fine...')
+        else:
+            rsvp = EventRSVP(user=request.user, event=event)
+            if 'rsvp-message' in request.POST:
+                rsvp.message = request.POST['rsvp-message']
+            rsvp.save()
+            messages.success(request, 'You have RSVPed for the event!')
+
+    return HttpResponseRedirect(f'/events/{event_id}')
 
 def project_index(request):
     '''

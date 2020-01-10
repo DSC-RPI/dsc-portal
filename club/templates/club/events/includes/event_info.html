@@ -33,7 +33,7 @@
             </p>
         </div>
         <div class="column">
-            <form method="POST" onsubmit="return confirm('Are you sure you want to take back your RSVP?')">
+            <form action="/events/{{ event.id }}/rsvp?remove=1" method="POST" onsubmit="return confirm('Are you sure you want to take back your RSVP?')">
                 {% csrf_token %}
                 <input type="hidden" name="unrsvp" value="1">
                 <button type="submit" class="button is-small is-pulled-right">unRSVP</button>
