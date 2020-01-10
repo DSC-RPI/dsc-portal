@@ -82,7 +82,7 @@ def user_account(request):
                     'website': settings.DOMAIN
                 }
                 send_templated_email('Verify School Account', 'verification_code', email_data, [request.user.member.school_email])
-                messages.warning(request, f'You must verify that you are <b>{request.user.member.school_username}</b>. You have been sent a verification link to your school email address.')
+                messages.warning(request, f'You must verify that you are <b>{request.user.member.school_username}</b>. You have been sent a verification link to your school email address. Please check spam if you cannot find it!')
 
 
             if 'profile_image' in request.FILES:
