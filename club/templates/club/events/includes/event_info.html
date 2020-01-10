@@ -18,15 +18,16 @@
                 href="https://maps.google.com/?q={{ event.location|urlencode }}">{{ event.location }}</a></span>
     </div>
     <hr>
-    
-    {% if event.has_started %}
-    
+
+    {% if event.is_ongoing %}
+
     {% if attendance_submitted %}
     <p class="has-text-grey is-size-7">Your attendance has been recorded.</p>
     {% elif event.is_ongoing %}
     <a href="{% url 'event_attendance' event.id %}" class="button is-primary">Submit Attendance Code</a>
     {% endif %}
-    {% elif rsvp %}
+
+    {% elif rsvp and not event.has_started %}
     <div class="columns is-vcentered">
         <div class="column is-narrow">
             <p class="has-text-grey is-size-7">
@@ -34,20 +35,29 @@
             </p>
         </div>
         <div class="column">
-            <form action="/events/{{ event.id }}/rsvp?remove=1" method="POST" onsubmit="return confirm('Are you sure you want to take back your RSVP?')">
+            <form action="/events/{{ event.id }}/rsvp?remove=1" method="POST"
+                onsubmit="return confirm('Are you sure you want to take back your RSVP?')">
                 {% csrf_token %}
                 <input type="hidden" name="unrsvp" value="1">
                 <button type="submit" class="button is-small is-pulled-right">unRSVP</button>
             </form>
         </div>
     </div>
-    {% elif not rsvp %}
-    {% if not event.has_started %}
+    {% elif not rsvp and not event.has_started %}
     <a href="{% url 'event_rsvp' event.id %}" class="button is-success">RSVP for Event</a>
-    {% endif %}
     {% endif %}
 
     {% if event.is_over %}
-    <p class="has-text-grey is-size-7">You did not RSVP for or attend this event.</p>
+    <p class="has-text-grey is-size-7">
+        {% if rsvp and attendance_submitted %}
+        You RSVPed and attended this event.
+        {% elif not rsvp and attendance_submitted %}
+        You did <b>not</b> RSVP but attended this event.
+        {% elif rsvp and not attendance_submitted %}
+        You did not RSVP nor attend this event.
+        {% else %}
+        You did not RSVP for or attend this event.
+        {% endif %}
+    </p>
     {% endif %}
 </div>

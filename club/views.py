@@ -278,6 +278,9 @@ def event_rsvp(request, event_id):
 
     if request.user.is_staff:
         messages.warning(request, 'Core Team members can\'t RSVP for events.')
+    elif event.has_started:
+        # Event has started so no more RSVPs are accepted
+        messages.warning(request, 'This event has already started so you change your RSVP. You can still attend though!')
     elif rsvp:
         # User is already RSVPed
         if remove:
@@ -285,9 +288,6 @@ def event_rsvp(request, event_id):
             messages.success(request, 'Your RSVP has been removed.')
         else:
             messages.warning(request, 'You have already RSVPed for this event.')
-    elif event.has_started:
-        # Event has started so no more RSVPs are accepted
-        messages.warning(request, 'This event has already started so you change your RSVP. You can still attend though!')
     else:
         # New RSVP
         if remove:
