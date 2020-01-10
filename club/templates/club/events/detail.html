@@ -10,6 +10,13 @@
         position: sticky;
         top: 70px;
     }
+
+    @media screen and (max-width: 768px) {
+        .is-reversed-mobile {
+            display: flex;
+            flex-direction: column-reverse;
+        }
+    }
 </style>
 {% endblock %}
 {% block content %}
@@ -34,7 +41,7 @@
             <span>Meeting Notes</span>
         </a>
         {% endif %}
-        <div class="columns">
+        <div class="columns is-reversed-mobile">
             <div class="column">
                 <div class="content">
                     <blockquote>
