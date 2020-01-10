@@ -4,7 +4,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
-
+from .email import send_email
 from random import choice
 from string import ascii_uppercase
 
@@ -67,6 +67,11 @@ class Member(models.Model):
 
     @classmethod
     def post_user_save(cls, sender, instance, created, *args, **kwargs):
+        if created:
+            # Send welcome email on first login (user creation)
+            # send_email('Welcome to DSC RP!', f'Welcome to the newly-formed <strong>Developer Student Clubs RPI</strong> chapter!.', [instance.email])
+            pass
+
         try:
             has_member = instance.member is not None
         except:
