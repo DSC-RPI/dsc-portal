@@ -22,7 +22,7 @@ from .google_api import drive_service
 from .twitter_api import tweet
 
 def verified_member_check(user):
-    return user.member.verified
+    return user.member.verified or user.is_staff
 
 def index(request):
     if request.user.is_authenticated:
@@ -54,10 +54,6 @@ def faq(request):
 
     faqs = FAQ.objects.filter(answer__isnull=False)
     return render(request, 'club/faq.html', {'faqs':faqs})
-
-# def about(request):
-#     core_team = User.objects.filter(is_staff=True)
-#     return render(request, 'club/about.html', {'core_team': core_team})
 
 @login_required
 def user_account(request):
@@ -102,6 +98,7 @@ def user_account(request):
     else:
         if 'resend-verification-email' in request.GET and request.GET['resend-verification-email'] == '1':
             # Resend verification email
+            # Regenerate verification code to prevent hijacking
             request.user.member.verification_code = ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for i in range(6))
             request.user.member.save()
             email_data = {
