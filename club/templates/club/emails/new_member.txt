@@ -1,0 +1,3 @@
+Welcome {{ user.first_name }} to DSC {{ school_name_short }}!
+
+To finish your registration, you must verify that you are a {{ school_name_short }}. Fill in your profile ({{ website }}/account) with your school username and you will receive a verification link.
