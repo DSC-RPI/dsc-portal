@@ -82,7 +82,7 @@
         {% if user.is_staff %}
         <hr>
         {% include "club/events/includes/event_staff_actions.html" %}
-        {% elif not past and rsvp and show_submit_attendance %}
+        {% elif ongoing and show_submit_attendance %}
         {% include "club/events/includes/event_attendance_modal.html" %}
         {% endif %}
 

@@ -364,7 +364,7 @@ class EventAttendance(models.Model):
     event = models.ForeignKey(Event, null=False, on_delete=models.CASCADE, related_name='attendance')
 
     def __str__(self):
-        return self.user.get_full_name()
+        return f'{self.event} attended by {self.user.get_full_name()}'
 
     class Meta:
         constraints = [
