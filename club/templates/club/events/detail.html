@@ -71,11 +71,11 @@
             {% include "club/events/includes/event_select_slideshow_modal.html" %}
             {% endif %}
         </div>
-        <hr>
         {% if user.is_authenticated %}
         {% if user.is_staff %}
+        <hr>
         {% include "club/events/includes/event_staff_actions.html" %}
-        {% elif not past %}
+        {% elif not past and rsvped %}
         {% include "club/events/includes/event_attendance_form.html" %}
         {% endif %}
 
@@ -129,19 +129,8 @@
                     </span>
                     <span>Not Coming</span>
                 </button> -->
-            {% if not started %}
-            {% if not user.is_staff and not rsvped %}
-            <a href="?rsvp=1" class="button is-link">RSVP</a>
-            {% if show_rsvp_form %}
+            {% if not started and not user.is_staff and not rsvp and show_rsvp_form %}
             {% include "club/events/includes/event_rsvp_modal.html" %}
-            {% endif %}
-            {% else %}
-            <form method="POST" onsubmit="return confirm('Are you sure you want to take back your RSVP?')">
-                {% csrf_token %}
-                <input type="hidden" name="unrsvp">
-                <button type="submit" class="button">unRSVP</button>
-            </form>
-            {% endif %}
             {% endif %}
             {% endif %}
             <a href="{% url 'events' %}" class="button is-link">

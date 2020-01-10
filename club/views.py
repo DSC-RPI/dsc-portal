@@ -174,8 +174,8 @@ def event_detail(request, event_id):
         Whether the event is ongoing at the moment.
     ``attendance_submitted``
         Whether the current user has verified their attendance at this event.
-    ``rsvped``
-        Whether the current user has RSVPed for the event.
+    ``rsvp``
+        The RSVP for the current user (if exists).
     ``past``
         Whether the event ended in the past.
 
@@ -195,11 +195,11 @@ def event_detail(request, event_id):
         attendance_submitted = event.attendance.filter(
             user=request.user).exists()
         show_rsvp_form = 'rsvp' in request.GET and request.GET['rsvp'] == '1'
-        rsvped = event.rsvps.filter(user=request.user).exists()
+        rsvp = event.rsvps.filter(user=request.user).first()
         show_slideshows = 'select-slideshow' in request.GET and request.GET['select-slideshow'] == '1'
     else:
         attendance_submitted = False
-        rsvped = False
+        rsvp = None
         show_slideshows = False
 
     slideshows = []
@@ -236,7 +236,7 @@ def event_detail(request, event_id):
             if started:
                 messages.error(
                     request, 'The event has already started (and possibly finished!). You cannot RSVP.')
-            elif rsvped:
+            elif rsvp is not None:
                 # Already RSVPed!
                 messages.warning(request, 'You are already RSVPed!')
             else:
@@ -290,7 +290,7 @@ def event_detail(request, event_id):
     context = {
         'event': event,
         'show_rsvp_form': show_rsvp_form,
-        'rsvped': rsvped,
+        'rsvp': rsvp,
         'attendance_submitted': attendance_submitted,
         'ongoing': ongoing,
         'started': started,
