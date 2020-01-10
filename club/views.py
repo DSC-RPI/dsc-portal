@@ -50,6 +50,7 @@ def faq(request):
         new_faq = FAQ(question=request.POST['new-question'])
         new_faq.save()
         messages.success(request, 'Submitted your question! If a Core Team member answers it, it will show up here.')
+        return HttpResponseRedirect(request.path_info)
 
     faqs = FAQ.objects.filter(answer__isnull=False)
     return render(request, 'club/faq.html', {'faqs':faqs})
@@ -94,10 +95,9 @@ def user_account(request):
             request.user.member.save()
 
             messages.success(request, 'Successfully updated your profile!')
-
-            return HttpResponseRedirect('/')
         else:
             messages.error(request, 'Form is invalid for some reason...')
+        return HttpResponseRedirect(request.path_info)
     # if a GET (or any other method) we'll create a blank form
     else:
         form_data = {
@@ -245,7 +245,7 @@ def event_detail(request, event_id):
                 if 'rsvp-message' in request.POST:
                     rsvp.message = request.POST['rsvp-message']
                 rsvp.save()
-                rsvped = True
+                messages.success(request, 'You have RSVPed for this event!')
         elif 'unrsvp' in request.POST:
             if started:
                 messages.error(
@@ -256,11 +256,12 @@ def event_detail(request, event_id):
                         user=request.user, event=event).delete()
                     messages.success(
                         request, 'You successfully removed your RSVP.')
-                    rsvped = False
                 except ObjectDoesNotExist:
                     messages.error(
                         request, 'Failed to find your RSVP to remove... You should be good.')
-
+        
+        return HttpResponseRedirect(request.path_info)
+    
     # Staff actions
     if request.user.is_staff and request.method == 'POST':
         if 'create-document' in request.POST and request.POST['create-document'] == 'meeting-notes':
@@ -283,6 +284,8 @@ def event_detail(request, event_id):
             messages.success(
                 request, 'Successfully saved event review!')
             event.save()
+        
+        return HttpResponseRedirect(request.path_info)
 
     context = {
         'event': event,
