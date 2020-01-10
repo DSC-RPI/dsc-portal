@@ -19,11 +19,12 @@
     </div>
     <hr>
     
-    {% if started %}
+    {% if event.has_started %}
+    
     {% if attendance_submitted %}
     <p class="has-text-grey is-size-7">Your attendance has been recorded.</p>
-    {% else %}
-    <a href="?submit-attendance=1" class="button is-primary">Submit Attendance Code</a>
+    {% elif event.is_ongoing %}
+    <a href="{% url 'event_attendance' event.id %}" class="button is-primary">Submit Attendance Code</a>
     {% endif %}
     {% elif rsvp %}
     <div class="columns is-vcentered">
@@ -41,12 +42,12 @@
         </div>
     </div>
     {% elif not rsvp %}
-    {% if started %}
-    <p class="has-text-grey is-size-7">
-        This event has already started so you can no longer RSVP. {% if not past %}<strong>You can still show up before it ends!</strong>{% endif %}
-    </p>
-    {% else %}
-    <a href="?rsvp=1" class="button is-success">RSVP for Event</a>
+    {% if not event.has_started %}
+    <a href="{% url 'event_rsvp' event.id %}" class="button is-success">RSVP for Event</a>
     {% endif %}
+    {% endif %}
+
+    {% if event.is_over %}
+    <p class="has-text-grey is-size-7">You did not RSVP for or attend this event.</p>
     {% endif %}
 </div>

@@ -31,7 +31,7 @@
 
         <h1 class="title event-title">{{ event.title }}</h1>
         <h2 class="subtitle has-text-grey">
-            {% if ongoing %}Ongoing{% endif %} {{ event.get_event_type_display }}
+            {% if event.is_ongoing %}Ongoing{% endif %} {{ event.get_event_type_display }}
         </h2>
         {% if event.meeting_notes_id %}
         <a href="{{ event.meeting_notes_link }}" target="_blank" class="event-meeting-notes">
@@ -82,11 +82,11 @@
         {% if user.is_staff %}
         <hr>
         {% include "club/events/includes/event_staff_actions.html" %}
-        {% elif ongoing and show_submit_attendance %}
+        {% elif event.is_ongoing and show_submit_attendance %}
         {% include "club/events/includes/event_attendance_modal.html" %}
         {% endif %}
 
-        {% if user.is_staff and started %}
+        {% if user.is_staff and event.has_started %}
         <hr>
         <h2 class="subtitle">Event Review</h2>
         <form method="POST">
@@ -130,13 +130,8 @@
                 <span>Select Slideshow</span>
             </a>
             {% endif %}
-            <!-- <button class="button is-light">
-                    <span class="icon">
-                        <i class="far fa-calendar"></i>
-                    </span>
-                    <span>Not Coming</span>
-                </button> -->
-            {% if not started and not user.is_staff and not rsvp and show_rsvp_form %}
+            
+            {% if not event.has_started and not user.is_staff and not rsvp and show_rsvp_form %}
             {% include "club/events/includes/event_rsvp_modal.html" %}
             {% endif %}
             {% endif %}

@@ -153,6 +153,21 @@ class Event(models.Model):
         '''A direct link to the Google Slides slideshow generated or chosen for the event.'''
         return 'https://docs.google.com/presentation/d/' + self.slideshow_id
 
+    @property
+    def has_started(self):
+        now = timezone.now()
+        return now >= self.start
+    
+    @property
+    def is_ongoing(self):
+        now = timezone.now()
+        return self.start <= now <= self.end
+    
+    @property
+    def is_over(self):
+        now = timezone.now()
+        return self.end < now
+
     calendar_event_id = models.CharField(max_length=300, blank=True, null=True, help_text='The Google Calendar event ID')
 
     # Timestamps

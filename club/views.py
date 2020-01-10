@@ -170,14 +170,10 @@ def event_detail(request, event_id):
 
     ``event``
         An instance of :model:`club.Event`.
-    ``ongoing``
-        Whether the event is ongoing at the moment.
     ``attendance_submitted``
         Whether the current user has verified their attendance at this event.
     ``rsvp``
         The RSVP for the current user (if exists).
-    ``past``
-        Whether the event ended in the past.
 
     **Template:**
 
@@ -187,7 +183,6 @@ def event_detail(request, event_id):
     # Context variables
     now = timezone.now()
     event = get_object_or_404(Event, pk=event_id)
-    ongoing = event.start <= now <= event.end
     show_rsvp_form = False
     show_submit_attendance = False
     
@@ -209,33 +204,6 @@ def event_detail(request, event_id):
         slideshows = drive_service.files().list(corpora='user',
                                                 q=f"'{settings.GOOGLE_DRIVE_SLIDE_DECKS_FOLDER_ID}' in parents").execute().get('files')
 
-    started = event.start < now
-    past = event.end < now
-
-    # Handle form submissions
-    if request.user.is_authenticated and request.method == 'POST':
-        if 'attendance-code' in request.POST:
-            if request.POST['attendance-code'] == event.attendance_code:
-                # Member submitted correct attendance code
-                if ongoing:
-                    event_attendance = EventAttendance(
-                        user=request.user, event=event)
-                    try:
-                        event_attendance.save()
-                        messages.success(
-                            request, 'Successfully recorded your attendance. Thanks for coming!')
-                    except IntegrityError:
-                        messages.warning(
-                            request, 'You already submitted your attendance code for this event!')
-                else:
-                    messages.error(
-                        request, 'You can only submit an attendance code during the event! Please let a Core Team member know if you have an issue.')
-            else:
-                # Member submitted incorrect code
-                messages.warning(
-                    request, 'Wrong attendance code. Please make sure you\'re on the right event and have typed in the code correctly.')
-        return HttpResponseRedirect(request.path_info)
-    
     # Staff actions
     if request.user.is_staff and request.method == 'POST':
         if 'create-document' in request.POST and request.POST['create-document'] == 'meeting-notes':
@@ -266,9 +234,6 @@ def event_detail(request, event_id):
         'show_rsvp_form': show_rsvp_form,
         'rsvp': rsvp,
         'attendance_submitted': attendance_submitted,
-        'ongoing': ongoing,
-        'started': started,
-        'past': past,
         'show_slideshows': show_slideshows,
         'show_submit_attendance': show_submit_attendance,
         'slideshows': slideshows
@@ -285,21 +250,18 @@ def event_rsvp(request, event_id):
     if request.method != 'POST':
         return HttpResponseRedirect(f'/events/{event_id}?rsvp=1')
 
-    event_started = event.start < now
-
     rsvp = event.rsvps.filter(user=request.user).first()
 
     if request.user.is_staff:
         messages.warning(request, 'Core Team members can\'t RSVP for events.')
     elif rsvp:
         # User is already RSVPed
-
         if remove:
             rsvp.delete()
             messages.success(request, 'Your RSVP has been removed.')
         else:
             messages.warning(request, 'You have already RSVPed for this event.')
-    elif event_started:
+    elif event.has_started:
         # Event has started so no more RSVPs are accepted
         messages.warning(request, 'This event has already started so you change your RSVP. You can still attend though!')
     else:
@@ -312,6 +274,35 @@ def event_rsvp(request, event_id):
                 rsvp.message = request.POST['rsvp-message']
             rsvp.save()
             messages.success(request, 'You have RSVPed for the event!')
+
+    return HttpResponseRedirect(f'/events/{event_id}')
+
+def event_attendance(request, event_id):
+    now = timezone.now()
+    event = get_object_or_404(Event, pk=event_id)
+
+    if request.method != 'POST':
+        return HttpResponseRedirect(f'/events/{event_id}?submit-attendance=1')
+    
+    if not event.is_ongoing:   
+        messages.warning(request, 'You can only submit the attendance code during the event. Reach out to a Core Team meber if you have issues.')
+        return HttpResponseRedirect(f'/events/{event_id}')
+
+    # All good, check submitted code
+
+    if 'attendance-code' not in request.POST or request.POST['attendance-code'] != event.attendance_code:
+        # Missing or invalid code
+        messages.warning(request, 'Wrong attendance code. Please make sure you\'re on the right event and have typed in the code correctly.')
+    else:
+        # Correct code, record their attendance!
+        event_attendance = EventAttendance(user=request.user, event=event)
+        try:
+            event_attendance.save()
+            messages.success(
+                request, 'Successfully recorded your attendance. Thanks for coming!')
+        except IntegrityError:
+            messages.warning(
+                request, 'You already submitted your attendance code for this event!')
 
     return HttpResponseRedirect(f'/events/{event_id}')
 

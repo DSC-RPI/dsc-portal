@@ -5,7 +5,7 @@
             <p class="modal-card-title">Submit Attendance Code for {{ event.title }}</p>
         </header>
         <section class="modal-card-body">
-            <form id="submit-attendance" method="POST">
+            <form action="{% url 'event_attendance' event.id %}" id="submit-attendance" method="POST" autocomplete="off">
                 {% csrf_token %}
                 
                 {% if attendance_submitted %}
@@ -13,7 +13,7 @@
                 {% else %}
                 <p class="help">The attendance code will be released by the event organizer towards the end of the
                     event. You must enter the code before the end of the event in order to be counted.</p>
-                <fieldset {% if not ongoing %}disabled{% endif %}>
+                <fieldset {% if not event.is_ongoing %}disabled{% endif %}>
                     <div class="field has-addons">
                         <div class="control has-icons-left is-expanded is-disabled">
                             <input id="attendance-code" class="input" name="attendance-code" type="text"
@@ -34,4 +34,5 @@
 
         </section>
     </div>
+    <a href="?submit-attendance=0" class="modal-close is-large" aria-label="close"></a>
 </div>
