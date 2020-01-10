@@ -7,6 +7,8 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 
+from .email import send_templated_email
+
 from django.contrib.auth.models import User
 from django.contrib import messages
 
@@ -74,7 +76,12 @@ def user_account(request):
                 request.user.member.school_username = form.cleaned_data['school_username']
                 request.user.member.verified = False
                 request.user.member.verification_code = ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for i in range(6))
-                request.user.member.email_school_account('Verify your Account', f'Your code is <code>{request.user.member.verification_code}</code>')
+                email_data = {
+                    'user': request.user,
+                    'verification_code': request.user.member.verification_code,
+                    'website': settings.DOMAIN
+                }
+                send_templated_email('Verify School Account', 'verification_code', email_data, [request.user.member.school_email])
                 messages.warning(request, f'You must verify that you are <b>{request.user.member.school_username}</b>. You have been sent a verification link to your school email address.')
 
 
