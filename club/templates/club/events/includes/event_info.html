@@ -29,22 +29,25 @@
 
     {% elif rsvp and not event.has_started %}
     <div class="columns is-vcentered">
-        <div class="column is-narrow">
+        <div class="column">
             <p class="has-text-grey is-size-7">
-                You are RSVPed for this event{% if rsvp.message %} ({{ rsvp.message }}){% endif %}.
+                You are RSVPed for this event{% if rsvp.message %}: <i>"{{ rsvp.message }}"</i>{% endif %}.
             </p>
         </div>
-        <div class="column">
+        <div class="column is-narrow">
             <form action="/events/{{ event.id }}/rsvp?remove=1" method="POST"
                 onsubmit="return confirm('Are you sure you want to take back your RSVP?')">
                 {% csrf_token %}
                 <input type="hidden" name="unrsvp" value="1">
-                <button type="submit" class="button is-small is-pulled-right">unRSVP</button>
+                <button type="submit" class="button is-small">Cancel RSVP</button>
             </form>
         </div>
     </div>
     {% elif not rsvp and not event.has_started %}
-    <a href="{% url 'event_rsvp' event.id %}" class="button is-success">RSVP for Event</a>
+    <a href="{% url 'event_rsvp' event.id %}" class="button is-primary">
+        <span class="icon"><i class="fas fa-calendar-alt"></i></span>
+        <span>RSVP for Event</span>
+    </a>
     {% endif %}
 
     {% if event.is_over %}
