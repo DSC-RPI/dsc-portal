@@ -7,6 +7,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 
+from .logger import logger
 from .email import send_templated_email
 
 from django.contrib.auth.models import User
@@ -50,6 +51,7 @@ def faq(request):
         new_faq = FAQ(question=request.POST['new-question'])
         new_faq.save()
         messages.success(request, 'Submitted your question! If a Core Team member answers it, it will show up here.')
+        logger.info(f'A new FAQ Question was submitted: "{new_faq.question}"')
         return HttpResponseRedirect(request.path_info)
 
     faqs = FAQ.objects.filter(answer__isnull=False)
@@ -90,6 +92,7 @@ def user_account(request):
             request.user.save()
             request.user.member.save()
 
+            logger.info(f'User {request.user} updated their profile.')
             messages.success(request, 'Successfully updated your profile!')
         else:
             messages.error(request, 'Form is invalid for some reason...')
@@ -107,10 +110,10 @@ def user_account(request):
                 'website': settings.DOMAIN
             }
             send_templated_email('Verify School Account', 'verification_code', email_data, [request.user.member.school_email])
+            logger.info(f'Resent school account verification email for user {request.user} to {request.user.member.school_email}')
             messages.info(request, f'Resent verification email to {request.user.member.school_email}.')
         elif not request.user.member.verified:
             messages.warning(request, 'Please verify your account to RSVP, submit attendance, etc. <a href="?resend-verification-email=1">Resend verification email</a>')
-        
         
         form_data = {
             'first_name': request.user.first_name,
@@ -132,10 +135,11 @@ def verify_account(request):
 
     if code == request.user.member.verification_code:
         # Successfully verified user
-        messages.success(request, f'Congratulations, you verified your account and are now an official <b>DSC {settings.SCHOOL_NAME_SHORT}</b> member!')
         request.user.member.verified = True
         request.user.member.verification_code = None
         request.user.member.save()
+        logger.info(f'User {request.user} verified their account.')
+        messages.success(request, f'Congratulations, you verified your account and are now an official <b>DSC {settings.SCHOOL_NAME_SHORT}</b> member!')
     else:
         # Wrong code!
         messages.warning(request, f'That was not the correct code! Please check the email again.')
@@ -285,6 +289,7 @@ def event_rsvp(request, event_id):
         # User is already RSVPed
         if remove:
             rsvp.delete()
+            logger.info(f'User {request.user} removed their RSVP for {event}')
             messages.success(request, 'Your RSVP has been removed.')
         else:
             messages.warning(request, 'You have already RSVPed for this event.')
@@ -297,6 +302,7 @@ def event_rsvp(request, event_id):
             if 'rsvp-message' in request.POST:
                 rsvp.message = request.POST['rsvp-message']
             rsvp.save()
+            logger.info(f'User {request.user} RSVPed for {event}')
             messages.success(request, 'You have RSVPed for the event!')
 
     return HttpResponseRedirect(f'/events/{event_id}')
