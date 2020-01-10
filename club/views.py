@@ -189,7 +189,8 @@ def event_detail(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     ongoing = event.start <= now <= event.end
     show_rsvp_form = False
-
+    show_submit_attendance = False
+    
     # Make sure user is logged in to allow attendance, rsvping, etc.
     if request.user.is_authenticated:
         attendance_submitted = event.attendance.filter(
@@ -197,6 +198,7 @@ def event_detail(request, event_id):
         show_rsvp_form = 'rsvp' in request.GET and request.GET['rsvp'] == '1'
         rsvp = event.rsvps.filter(user=request.user).first()
         show_slideshows = 'select-slideshow' in request.GET and request.GET['select-slideshow'] == '1'
+        show_submit_attendance = 'submit-attendance' in request.GET and request.GET['submit-attendance'] == '1'
     else:
         attendance_submitted = False
         rsvp = None
@@ -296,6 +298,7 @@ def event_detail(request, event_id):
         'started': started,
         'past': past,
         'show_slideshows': show_slideshows,
+        'show_submit_attendance': show_submit_attendance,
         'slideshows': slideshows
     }
 

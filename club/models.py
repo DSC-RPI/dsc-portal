@@ -323,7 +323,11 @@ class Event(models.Model):
                 # message = f'New event scheduled **{instance.title}**'
                 # r = requests.post('https://hooks.slack.com/services/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', data={'text':message})
         else:
-            instance.update_google_calendar_event()
+            try:
+                instance.update_google_calendar_event()
+            except:
+                # TODO: handle
+                pass
         
     def save(self, *args, **kwargs):
         if not self.attendance_code:

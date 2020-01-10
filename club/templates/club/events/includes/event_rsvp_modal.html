@@ -9,7 +9,8 @@
                 {% csrf_token %}
                 <input type="hidden" name="rsvp">
                 <div class="field">
-                    <label for="rsvp-message" class="label">Message</label>
+                  <p class="help">RSVPing for an event just lets the Core Team get a rough idea of the number of members to expect. It does <strong>not</strong> mean you must show up, and nothing will happen if you do not. Nonetheless, if you RSVP please make an effort to attend.</p>
+                    <label for="rsvp-message" class="label">Optional Message</label>
                     <input type="text" class="input" name="rsvp-message" id="rsvp-message" placeholder="(optional) Is there any condition where you won't be able to make it?">
                 </div>
                 
