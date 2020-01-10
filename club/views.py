@@ -1,5 +1,6 @@
 import os
 import random
+import requests
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -22,14 +23,17 @@ from .google_api import drive_service
 
 from .twitter_api import tweet
 
+
 def verified_member_check(user):
     return user.member.verified or user.is_staff
+
 
 def index(request):
     if request.user.is_authenticated:
         now = timezone.now()
 
-        upcoming_rsvps = filter(lambda rsvp: not rsvp.event.has_started, request.user.rsvps.all())
+        upcoming_rsvps = filter(
+            lambda rsvp: not rsvp.event.has_started, request.user.rsvps.all())
 
         # Find ongoing event
         try:
@@ -44,7 +48,8 @@ def index(request):
         today = timezone.now().date()
         closest_event = upcoming_events = Event.objects.filter(
             start__gte=today, hidden=False).order_by('start').first()
-        return render(request, 'club/splash.html', {'core_team': core_team, 'closest_event':closest_event})
+        return render(request, 'club/splash.html', {'core_team': core_team, 'closest_event': closest_event})
+
 
 def faq(request):
     '''
@@ -53,12 +58,14 @@ def faq(request):
     if request.method == 'POST' and 'new-question' in request.POST:
         new_faq = FAQ(question=request.POST['new-question'])
         new_faq.save()
-        messages.success(request, 'Submitted your question! If a Core Team member answers it, it will show up here.')
+        messages.success(
+            request, 'Submitted your question! If a Core Team member answers it, it will show up here.')
         logger.info(f'A new FAQ Question was submitted: "{new_faq.question}"')
         return HttpResponseRedirect(request.path_info)
 
     faqs = FAQ.objects.filter(answer__isnull=False)
-    return render(request, 'club/faq.html', {'faqs':faqs})
+    return render(request, 'club/faq.html', {'faqs': faqs})
+
 
 @login_required
 def user_account(request):
@@ -72,20 +79,22 @@ def user_account(request):
             request.user.last_name = form.cleaned_data['last_name']
             request.user.member.grade = form.cleaned_data['grade']
             request.user.member.bio = form.cleaned_data['bio']
-            
+
             if request.user.member.school_username != form.cleaned_data['school_username']:
                 # School username was set or changed! Start verification process.
                 request.user.member.school_username = form.cleaned_data['school_username']
                 request.user.member.verified = False
-                request.user.member.verification_code = ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for i in range(6))
+                request.user.member.verification_code = ''.join(
+                    random.choice('abcdefghijklmnopqrstuvwxyz') for i in range(6))
                 email_data = {
                     'user': request.user,
                     'verification_code': request.user.member.verification_code,
                     'website': settings.DOMAIN
                 }
-                send_templated_email('Verify School Account', 'verification_code', email_data, [request.user.member.school_email])
-                messages.warning(request, f'You must verify that you are <b>{request.user.member.school_username}</b>. You have been sent a verification link to your school email address. Please check spam if you cannot find it!')
-
+                send_templated_email('Verify School Account', 'verification_code', email_data, [
+                                     request.user.member.school_email])
+                messages.warning(
+                    request, f'You must verify that you are <b>{request.user.member.school_username}</b>. You have been sent a verification link to your school email address. Please check spam if you cannot find it!')
 
             if 'profile_image' in request.FILES:
                 messages.warning(request, 'Uploaded profile image!')
@@ -105,19 +114,24 @@ def user_account(request):
         if 'resend-verification-email' in request.GET and request.GET['resend-verification-email'] == '1':
             # Resend verification email
             # Regenerate verification code to prevent hijacking
-            request.user.member.verification_code = ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for i in range(6))
+            request.user.member.verification_code = ''.join(
+                random.choice('abcdefghijklmnopqrstuvwxyz') for i in range(6))
             request.user.member.save()
             email_data = {
                 'user': request.user,
                 'verification_code': request.user.member.verification_code,
                 'website': settings.DOMAIN
             }
-            send_templated_email('Verify School Account', 'verification_code', email_data, [request.user.member.school_email])
-            logger.info(f'Resent school account verification email for user {request.user} to {request.user.member.school_email}')
-            messages.info(request, f'Resent verification email to {request.user.member.school_email}.')
+            send_templated_email('Verify School Account', 'verification_code', email_data, [
+                                 request.user.member.school_email])
+            logger.info(
+                f'Resent school account verification email for user {request.user} to {request.user.member.school_email}')
+            messages.info(
+                request, f'Resent verification email to {request.user.member.school_email}.')
         elif not request.user.member.verified:
-            messages.warning(request, 'Please verify your account to RSVP, submit attendance, etc. <a href="?resend-verification-email=1">Resend verification email</a>')
-        
+            messages.warning(
+                request, 'Please verify your account to RSVP, submit attendance, etc. <a href="?resend-verification-email=1">Resend verification email</a>')
+
         form_data = {
             'first_name': request.user.first_name,
             'last_name': request.user.last_name,
@@ -129,11 +143,12 @@ def user_account(request):
 
     return render(request, 'registration/account.html', {'form': form})
 
+
 @login_required
 def verify_account(request):
     if not request.method == 'GET' or not 'code' in request.GET:
         return HttpResponse(status=400)
-    
+
     code = request.GET['code']
 
     if code == request.user.member.verification_code:
@@ -142,14 +157,25 @@ def verify_account(request):
         request.user.member.verification_code = None
         request.user.member.save()
         logger.info(f'User {request.user} verified their account.')
-        messages.success(request, f'Congratulations, you verified your account and are now an official <b>DSC {settings.SCHOOL_NAME_SHORT}</b> member!')
+
+        # Invite to Slack
+        requests.post('https://slack.com/api/users.admin.invite', data={
+            'email': request.user.email,
+            'token': settings.LEGACY_SLACK_TOKEN,
+            # 'channels': ''
+        })
+
+        messages.success(
+            request, f'Congratulations, you verified your account and are now an official <b>DSC {settings.SCHOOL_NAME_SHORT}</b> member! Check your email for an invite to the Slack.')
     else:
         # Wrong code!
-        messages.warning(request, f'That was not the correct code! Please check the email again.')
+        messages.warning(
+            request, f'That was not the correct code! Please check the email again.')
 
     return HttpResponseRedirect('/account')
 
 # EVENTS
+
 
 def event_index(request):
     '''
@@ -171,9 +197,11 @@ def event_index(request):
     now = timezone.now()
     today = now.date()
 
-    user_rsvped_events = list(map(lambda rsvp: rsvp.event, request.user.rsvps.all()))
-    user_attended_events = list(map(lambda attnd: attnd.event, request.user.attendance.all()))
-    
+    user_rsvped_events = list(
+        map(lambda rsvp: rsvp.event, request.user.rsvps.all()))
+    user_attended_events = list(
+        map(lambda attnd: attnd.event, request.user.attendance.all()))
+
     ongoing_events = Event.objects.filter(
         start__lte=now, end__gte=now, hidden=False)
     upcoming_events = Event.objects.filter(
@@ -185,7 +213,7 @@ def event_index(request):
         'user_rsvped_events': user_rsvped_events,
         'user_attended_events': user_attended_events,
         'ongoing_events': ongoing_events,
-        'upcoming_events': upcoming_events, 
+        'upcoming_events': upcoming_events,
         'past_events': past_events,
         'google_calendar_id': settings.GOOGLE_CALENDAR_ID
     }
@@ -216,7 +244,7 @@ def event_detail(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     show_rsvp_form = False
     show_submit_attendance = False
-    
+
     # Make sure user is logged in to allow attendance, rsvping, etc.
     if request.user.is_authenticated:
         attendance_submitted = event.attendance.filter(
@@ -257,7 +285,7 @@ def event_detail(request, event_id):
             messages.success(
                 request, 'Successfully saved event review!')
             event.save()
-        
+
         return HttpResponseRedirect(request.path_info)
 
     context = {
@@ -271,6 +299,7 @@ def event_detail(request, event_id):
     }
 
     return render(request, 'club/events/detail.html', context)
+
 
 @user_passes_test(verified_member_check, login_url='/account', redirect_field_name=None)
 def event_rsvp(request, event_id):
@@ -287,7 +316,8 @@ def event_rsvp(request, event_id):
         messages.warning(request, 'Core Team members can\'t RSVP for events.')
     elif event.has_started:
         # Event has started so no more RSVPs are accepted
-        messages.warning(request, 'This event has already started so you change your RSVP. You can still attend though!')
+        messages.warning(
+            request, 'This event has already started so you change your RSVP. You can still attend though!')
     elif rsvp:
         # User is already RSVPed
         if remove:
@@ -295,11 +325,13 @@ def event_rsvp(request, event_id):
             logger.info(f'User {request.user} removed their RSVP for {event}')
             messages.success(request, 'Your RSVP has been removed.')
         else:
-            messages.warning(request, 'You have already RSVPed for this event.')
+            messages.warning(
+                request, 'You have already RSVPed for this event.')
     else:
         # New RSVP
         if remove:
-            messages.warning(request, 'We could not find your RSVP to remove. You should be fine...')
+            messages.warning(
+                request, 'We could not find your RSVP to remove. You should be fine...')
         else:
             rsvp = EventRSVP(user=request.user, event=event)
             if 'rsvp-message' in request.POST:
@@ -310,6 +342,7 @@ def event_rsvp(request, event_id):
 
     return HttpResponseRedirect(f'/events/{event_id}')
 
+
 @user_passes_test(verified_member_check, login_url='/account', redirect_field_name=None)
 def event_attendance(request, event_id):
     now = timezone.now()
@@ -317,16 +350,18 @@ def event_attendance(request, event_id):
 
     if request.method != 'POST':
         return HttpResponseRedirect(f'/events/{event_id}?submit-attendance=1')
-    
-    if not event.is_ongoing:   
-        messages.warning(request, 'You can only submit the attendance code during the event. Reach out to a Core Team meber if you have issues.')
+
+    if not event.is_ongoing:
+        messages.warning(
+            request, 'You can only submit the attendance code during the event. Reach out to a Core Team meber if you have issues.')
         return HttpResponseRedirect(f'/events/{event_id}')
 
     # All good, check submitted code
 
     if 'attendance-code' not in request.POST or request.POST['attendance-code'] != event.attendance_code:
         # Missing or invalid code
-        messages.warning(request, 'Wrong attendance code. Please make sure you\'re on the right event and have typed in the code correctly.')
+        messages.warning(
+            request, 'Wrong attendance code. Please make sure you\'re on the right event and have typed in the code correctly.')
     else:
         # Correct code, record their attendance!
         event_attendance = EventAttendance(user=request.user, event=event)
@@ -339,6 +374,7 @@ def event_attendance(request, event_id):
                 request, 'You already submitted your attendance code for this event!')
 
     return HttpResponseRedirect(f'/events/{event_id}')
+
 
 def project_index(request):
     '''
@@ -395,7 +431,8 @@ def member_detail(request, member_id):
     # TODO: docstring
     member = get_object_or_404(Member, pk=member_id)
     if not member.verified:
-        messages.warning(request, 'This user has not yet verified their account!')
+        messages.warning(
+            request, 'This user has not yet verified their account!')
     return render(request, 'club/members/detail.html', {'member': member})
 
 

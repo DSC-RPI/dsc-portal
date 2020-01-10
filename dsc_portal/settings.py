@@ -242,6 +242,8 @@ GS_CREDENTIALS = service_account.Credentials.from_service_account_info(json.load
 
 FACEBOOK_ACCESS_TOKEN = os.environ['FACEBOOK_ACCESS_TOKEN']
 
+LEGACY_SLACK_TOKEN = os.environ['LEGACY_SLACK_TOKEN']
+
 # Activate Django-Heroku.
 # https://devcenter.heroku.com/articles/django-app-configuration
 django_heroku.settings(locals())
