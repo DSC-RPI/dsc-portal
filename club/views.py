@@ -2,7 +2,7 @@ import os
 import random
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
@@ -100,6 +100,21 @@ def user_account(request):
         return HttpResponseRedirect(request.path_info)
     # if a GET (or any other method) we'll create a blank form
     else:
+        if 'resend-verification-email' in request.GET and request.GET['resend-verification-email'] == '1':
+            # Resend verification email
+            request.user.member.verification_code = ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for i in range(6))
+            request.user.member.save()
+            email_data = {
+                'user': request.user,
+                'verification_code': request.user.member.verification_code,
+                'website': settings.DOMAIN
+            }
+            send_templated_email('Verify School Account', 'verification_code', email_data, [request.user.member.school_email])
+            messages.info(request, f'Resent verification email to {request.user.member.school_email}.')
+        elif not request.user.member.verified:
+            messages.warning(request, 'Please verify your account to RSVP, submit attendance, etc. <a href="?resend-verification-email=1">Resend verification email</a>')
+        
+        
         form_data = {
             'first_name': request.user.first_name,
             'last_name': request.user.last_name,
@@ -241,7 +256,7 @@ def event_detail(request, event_id):
 
     return render(request, 'club/events/detail.html', context)
 
-@login_required
+@user_passes_test(verified_member_check, login_url='/account', redirect_field_name=None)
 def event_rsvp(request, event_id):
     now = timezone.now()
     event = get_object_or_404(Event, pk=event_id)
@@ -277,6 +292,7 @@ def event_rsvp(request, event_id):
 
     return HttpResponseRedirect(f'/events/{event_id}')
 
+@user_passes_test(verified_member_check, login_url='/account', redirect_field_name=None)
 def event_attendance(request, event_id):
     now = timezone.now()
     event = get_object_or_404(Event, pk=event_id)
@@ -349,14 +365,14 @@ def update_detail(request, update_id):
     return render(request, 'club/updates/detail.html', {'update': update})
 
 
-@login_required
+@user_passes_test(verified_member_check, login_url='/account', redirect_field_name=None)
 def member_index(request):
     # TODO: docstring
     members = Member.verified_members.all()
     return render(request, 'club/members/index.html', {'members': members})
 
 
-@login_required
+@user_passes_test(verified_member_check, login_url='/account', redirect_field_name=None)
 def member_detail(request, member_id):
     # TODO: docstring
     member = get_object_or_404(Member, pk=member_id)
