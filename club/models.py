@@ -31,11 +31,18 @@ class SchoolYear(models.Model):
     def __str__(self):
         return f'School Year {self.title}'
 
+class VerifiedMemberManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(verified=True)
+
 class Member(models.Model):
     '''
     Member represents a club member, an extension of the base user model.
     This holds club member info such as school grade and dietary restrictions.
     '''
+    objects = models.Manager()
+    verified_members = VerifiedMemberManager()
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
 
     school_username = models.CharField(max_length=100, blank=True, null=True, help_text='The username of the student/faculty member of the school.')
