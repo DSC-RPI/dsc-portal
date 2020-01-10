@@ -28,6 +28,9 @@ def verified_member_check(user):
 def index(request):
     if request.user.is_authenticated:
         now = timezone.now()
+
+        upcoming_rsvps = filter(lambda rsvp: not rsvp.event.has_started, request.user.rsvps.all())
+
         # Find ongoing event
         try:
             ongoing_event = Event.objects.get(
@@ -35,7 +38,7 @@ def index(request):
         except ObjectDoesNotExist:
             ongoing_event = None
 
-        return render(request, 'club/index.html', {'ongoing_event': ongoing_event})
+        return render(request, 'club/index.html', {'ongoing_event': ongoing_event, 'upcoming_rsvps': upcoming_rsvps})
     else:
         core_team = User.objects.filter(is_staff=True)
         today = timezone.now().date()
