@@ -164,6 +164,9 @@ def event_index(request):
     now = timezone.now()
     today = now.date()
 
+    user_rsvped_events = list(map(lambda rsvp: rsvp.event, request.user.rsvps.all()))
+    user_attended_events = list(map(lambda attnd: attnd.event, request.user.attendance.all()))
+    
     ongoing_events = Event.objects.filter(
         start__lte=now, end__gte=now, hidden=False)
     upcoming_events = Event.objects.filter(
@@ -171,7 +174,16 @@ def event_index(request):
     past_events = Event.objects.filter(
         end__lt=today, hidden=False).order_by('created_at')
 
-    return render(request, 'club/events/index.html', {'ongoing_events': ongoing_events, 'upcoming_events': upcoming_events, 'past_events': past_events, 'google_calendar_id': settings.GOOGLE_CALENDAR_ID})
+    context = {
+        'user_rsvped_events': user_rsvped_events,
+        'user_attended_events': user_attended_events,
+        'ongoing_events': ongoing_events,
+        'upcoming_events': upcoming_events, 
+        'past_events': past_events,
+        'google_calendar_id': settings.GOOGLE_CALENDAR_ID
+    }
+
+    return render(request, 'club/events/index.html', context)
 
 
 def event_detail(request, event_id):

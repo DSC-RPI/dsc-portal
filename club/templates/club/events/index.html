@@ -52,6 +52,10 @@
                             <span class="tag is-dark">{{ event.rsvps.count }} RSVPs</span>
                             <span class="tag is-info">{{ event.attendance.count }} attendees</span>
                         </div>
+                        {% else %}
+                        {% if event in user_rsvped_events %}
+                        <span class="tag is-primary">RSVPed</span>
+                        {% endif %}
                         {% endif %}
                     </div>
                     <!-- <a class="button is-primary" >View</a> -->
@@ -93,7 +97,15 @@
                 <tr>
                     <td>{{ event.start }}</td>
                     <td>{{ event.get_event_type_display }}</td>
-                    <td>{{ event.title }}</td>
+                    <td>
+                        {{ event.title }}
+                        {% if event in user_rsvped_events %}
+                        <span class="tag is-primary">RSVPed</span>
+                        {% endif %}
+                        {% if event in user_attended_events %}
+                        <span class="tag is-success">Attended</span>
+                        {% endif %}
+                    </td>
                     {% if user.is_staff %}
                     <td>{{ event.attendance.count }}/{{ event.rsvps.count }}</td>
                     <td>

@@ -168,6 +168,12 @@ class Event(models.Model):
         now = timezone.now()
         return self.end < now
 
+    def has_user_rsvped(self, user):
+        return self.rsvps.filter(user=user).exists()
+
+    def has_user_attended(self, user):
+        return self.attendance.filter(user=user).exists()
+
     calendar_event_id = models.CharField(max_length=300, blank=True, null=True, help_text='The Google Calendar event ID')
 
     # Timestamps
