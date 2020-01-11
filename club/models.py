@@ -393,6 +393,7 @@ class Event(models.Model):
     
     class Meta:
         ordering = ['-start']
+        get_latest_by = ['start']
 
 post_save.connect(Event.post_save, sender=Event)
 
