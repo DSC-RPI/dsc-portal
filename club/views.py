@@ -25,7 +25,7 @@ from .twitter_api import tweet
 
 
 def verified_member_check(user):
-    return user.member.verified or user.is_staff
+    return user.is_authenticated and (user.member.verified or user.is_staff)
 
 
 def index(request):
