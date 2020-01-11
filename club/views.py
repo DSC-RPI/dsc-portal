@@ -131,7 +131,8 @@ def user_account(request):
                 request, f'Please check your school email {request.user.member.school_email} for the verification email. You will not be able to use the site until you do. <a href="?resend-verification-email=1">Resend verification email</a>')
 
             if settings.SCHOOL_NAME_SHORT == 'RPI':
-                messages.warning(request, f'Your verification email most likely went into RPI\'s spam system. <b><a href="http://respite.rpi.edu/canit/">Login Directly to Access It</a></b>')
+                messages.warning(
+                    request, f'Your verification email most likely went into RPI\'s spam system. <b><a href="http://respite.rpi.edu/canit/">Login Directly to Access It</a></b>')
 
         form_data = {
             'first_name': request.user.first_name,
@@ -198,21 +199,34 @@ def event_index(request):
     now = timezone.now()
     today = now.date()
 
-    
     if request.user.is_authenticated:
         user_rsvped_events = list(
             map(lambda rsvp: rsvp.event, request.user.rsvps.all()))
-        user_attended_events = list(map(lambda attnd: attnd.event, request.user.attendance.all()))
+        user_attended_events = list(
+            map(lambda attnd: attnd.event, request.user.attendance.all()))
     else:
         user_rsvped_events = []
         user_attended_events = []
 
+    # Start by getting ALL events and then filter based on user
     ongoing_events = Event.objects.filter(
-        start__lte=now, end__gte=now, hidden=False)
+        start__lte=now, end__gte=now)
     upcoming_events = Event.objects.filter(
-        start__gte=today, hidden=False).order_by('start')
+        start__gte=today)
     past_events = Event.objects.filter(
-        end__lt=today, hidden=False).order_by('created_at')
+        end__lt=today)
+
+    if not request.user.is_staff:    
+        if request.user.is_authenticated and request.user.member.verified:
+            # Verified member, so show non-hidden public and member events
+            ongoing_events = ongoing_events.exclude(visibility='C').exclude(hidden=True)
+            upcoming_events = upcoming_events.exclude(visibility='C').exclude(hidden=True)
+            past_events = past_events.exclude(visibility='C').exclude(hidden=True)
+        else:
+            # Anonymous or not-verified user, so only show non-hidden public events
+            ongoing_events = ongoing_events.filter(visibility='P', hidden=False)
+            upcoming_events = upcoming_events.filter(visibility='P', hidden=False)
+            past_events = past_events.filter(visibility='P', hidden=False)
 
     context = {
         'user_rsvped_events': user_rsvped_events,
@@ -254,12 +268,13 @@ def event_detail(request, event_id):
 
     if event.visibility == 'M' and not request.user.member.verified:
         messages.warning(request, 'Only verified members can view this event.')
-        return HttpResponseRedirect('/events')    
+        return HttpResponseRedirect('/events')
 
     if event.visibility == 'C' and not request.user.is_staff:
-        messages.warning(request, 'Only Core Team members can view this event.')
+        messages.warning(
+            request, 'Only Core Team members can view this event.')
         return HttpResponseRedirect('/events')
-    
+
     show_rsvp_form = False
     show_submit_attendance = False
 

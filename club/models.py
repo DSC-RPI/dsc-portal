@@ -390,6 +390,10 @@ class Event(models.Model):
     # e.g. "Welcome!: Info Session on 11/14/2019"
     def __str__(self):
         return f'{self.title}: {self.get_event_type_display()} on {self.start.strftime("%m/%d/%Y")}'
+    
+    class Meta:
+        ordering = ['-start']
+
 post_save.connect(Event.post_save, sender=Event)
 
 class EventAttendance(models.Model):
