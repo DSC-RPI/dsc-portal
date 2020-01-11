@@ -94,7 +94,7 @@
         {% if user.is_staff and event.has_started %}
         <hr>
         <h2 class="subtitle">Event Review</h2>
-        <form method="POST">
+        <form method="POST" onsubmit="return confirm('Make sure you have submitted the official DSC Report Form first!')">
             {% csrf_token %}
             <textarea class="input" name="review" id="event-review"
                 placeholder="How did the event go? In particular, what issues did you face? How can you avoid similar mistakes in the future? How was feedback?">{% if event.review %}{{ event.review }}{% endif %}</textarea>
