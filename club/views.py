@@ -197,10 +197,14 @@ def event_index(request):
     now = timezone.now()
     today = now.date()
 
-    user_rsvped_events = list(
-        map(lambda rsvp: rsvp.event, request.user.rsvps.all()))
-    user_attended_events = list(
-        map(lambda attnd: attnd.event, request.user.attendance.all()))
+    
+    if request.user.is_authenticated:
+        user_rsvped_events = list(
+            map(lambda rsvp: rsvp.event, request.user.rsvps.all()))
+        user_attended_events = list(map(lambda attnd: attnd.event, request.user.attendance.all()))
+    else:
+        user_rsvped_events = []
+        user_attended_events = []
 
     ongoing_events = Event.objects.filter(
         start__lte=now, end__gte=now, hidden=False)
