@@ -3,20 +3,58 @@
 <section class="section">
     <div class="container">
         <h1 class="title">Your Account</h1>
-        
+
+        {% if user.member.verification_code and not user.member.verified %}
+        <div class="modal is-active">
+            <div class="modal-background"></div>
+            <div class="modal-content box">
+                <h1 class="title">Verify Your Account</h1>
+
+                <div class="messages">
+                    {% for message in messages %}
+                        <li>{{ message|safe }}</li>
+                    {% endfor %}
+                </div>
+
+                <p class="help">You're verification code was sent to <b>{{ user.member.school_email }}</b>.
+                    {% if school_name_short == 'RPI' %}
+                    <a target="_blank" href="http://respite.rpi.edu/canit/">Check Spam</a>
+                    |
+                    {% endif %}
+                    <a href="?resend-verification-email=1">Resend email</a>
+                    |
+                    <a href="?reset-school-username=1">Change email</a>
+
+                </p>
+                <form action="/account/verify" method="GET">
+                    <div class="field has-addons">
+                        <div class="control is-expanded">
+                            <input type="text" class="input" name="code" minlength="1" maxlength="20"
+                                required>
+                        </div>
+                        <div class="control">
+                            <button type="submit" class="button is-success">Verify</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <button class="modal-close is-large" aria-label="close"></button>
+        </div>
+        {% else %}
         {% include 'club/includes/messages.html' %}
-        
+        {% endif %}
+
         <div class="columns">
             <div class="column">
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    
+
                     {% include "../includes/form.html" %}
-        
+
                     <input class="button" type="submit" value="Save">
                 </form>
             </div>
-            
+
         </div>
     </div>
 </section>

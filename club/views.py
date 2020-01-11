@@ -125,16 +125,17 @@ def user_account(request):
                 f'Resent school account verification email for user {request.user} to {request.user.member.school_email}')
             messages.info(
                 request, f'Resent verification email to {request.user.member.school_email}.')
+        
+        elif 'reset-school-username' in request.GET and request.GET['reset-school-username'] == '1':
+            # Reset school username
+            request.user.member.school_username = None
+            request.user.member.verification_code = None
+            request.user.member.verified = False
+            request.user.member.save()
+            messages.warning(request, 'Please enter your <a href="#id_school_username">school username</a> to verify your account.')
         elif not request.user.member.verified:
             if not request.user.member.school_username:
                 messages.warning(request, 'Please enter your <a href="#id_school_username">school username</a> to verify your account.')
-            else:
-                messages.warning(
-                    request, f'Please check your school email {request.user.member.school_email} for the verification email. You will not be able to use the site until you do. <a href="?resend-verification-email=1">Resend verification email</a>')
-
-                if settings.SCHOOL_NAME_SHORT == 'RPI':
-                    messages.warning(
-                        request, f'Your verification email most likely went into RPI\'s spam system. <b><a href="http://respite.rpi.edu/canit/">Login Directly to Access It</a></b>')
 
         form_data = {
             'first_name': request.user.first_name,
