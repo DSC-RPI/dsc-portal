@@ -3,9 +3,9 @@
 <section class="section">
     <div class="container">
         {% include 'club/includes/messages.html' %}
-        
+
         <h2 class="title">Social Media Management</h2>
-        
+
         <div class="columns is-multiline">
             <div class="column is-one-third">
                 <div class="box">
@@ -19,7 +19,52 @@
                         </div>
                     </form>
                     <hr>
-                    <a class="twitter-timeline" href="https://twitter.com/{{ twitter_username }}?ref_src=twsrc%5Etfw">Tweets by {{ twitter_username }}</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                    <a class="twitter-timeline"
+                        href="https://twitter.com/{{ twitter_username }}?ref_src=twsrc%5Etfw">Tweets by
+                        {{ twitter_username }}</a>
+                    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+                    <hr>
+                    <a target="_blank" href="https://twitter.com/{{ twitter_username }}" class="button is-link">
+                        <span class="icon">
+                            <i class="fas fa-external-link-alt"></i>
+                        </span>
+                        <span>View Page</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="column is-one-third">
+                <div class="box">
+                    <a class="subtitle" target="_blank" href="{{ facebook_link }}">Facebook</a>
+
+                    <p class="has-text-grey">Page management coming soon...</p>
+
+                    <hr>
+                    <a target="_blank" href="{{ facebook_link }}" class="button is-link">
+                        <span class="icon">
+                            <i class="fas fa-external-link-alt"></i>
+                        </span>
+                        <span>View Page</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="column is-one-third">
+                <div class="box">
+                    <a href="https://www.instagram.com/{{ instagram_username }}" target="_blank"
+                        class="subtitle">Instagram</a>
+                    <span class="has-text-grey">@{{ instagram_username }}</span>
+
+                    <p class="has-text-grey">Page management coming soon...</p>
+
+                    <hr>
+                    <a target="_blank" href="https://www.instagram.com/{{ instagram_username }}" class="button is-link">
+                        <span class="icon">
+                            <i class="fas fa-external-link-alt"></i>
+                        </span>
+                        <span>View Page</span>
+                    </a>
                 </div>
             </div>
         </div>
