@@ -339,16 +339,21 @@ class Event(models.Model):
         We either create or update the Google Calendar event for it.
         '''
         if created:
-            if instance.visibility == 'P' or instance.visibility == 'M':
+            if instance.visibility == 'P' or instance.visibility == 'M' and not instance.hidden:
                 instance.create_google_calendar_event()
                 # message = f'New event scheduled **{instance.title}**'
                 # r = requests.post('https://hooks.slack.com/services/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', data={'text':message})
         else:
-            try:
-                instance.update_google_calendar_event()
-            except:
-                # TODO: handle
-                pass
+            if not instance.hidden and instance.calendar_event_id is None:
+                instance.create_google_calendar_event()
+            elif instance.hidden and instance.calendar_event_id is not None:
+                instance.delete_google_calendar_event()
+            else:
+                try:
+                    instance.update_google_calendar_event()
+                except:
+                    # TODO: handle
+                    pass
         
     def save(self, *args, **kwargs):
         if not self.attendance_code:
