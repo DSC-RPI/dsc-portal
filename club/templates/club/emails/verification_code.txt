@@ -1,3 +1,0 @@
-Hey {{ user.first_name }}, your verification code is <code>{{ verification_code }}</code>.
-
-Go to {{ website }}/account/verify?code={{ verification_code }} to verify.

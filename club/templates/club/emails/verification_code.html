@@ -1,5 +1,3 @@
-Hey {{ user.first_name }}, your verification code is <code>{{ verification_code }}</code>.
+Hey {{ user.first_name }}, your verification code is <code><pre>{{ verification_code }}</pre></code>
 
-<a href="{{ website }}/account/verify?code={{ verification_code }}">
-    <button>Click Here to Verify</button>
-</a>
+You can either <a href="{{ website }}/account/verify?code={{ verification_code }}">click here to verify</a> or copy-paste the code on your profile page.

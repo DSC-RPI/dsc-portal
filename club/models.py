@@ -80,8 +80,7 @@ class Member(models.Model):
                 'website': settings.DOMAIN,
                 'school_name_short': settings.SCHOOL_NAME_SHORT
             }
-            return send_templated_email('Welcome to DSC!', 'new_member', data, [instance.email])
-
+            return send_templated_email('Welcome to DSC!', 'new_user', data, [instance.email])
 
         try:
             has_member = instance.member is not None
