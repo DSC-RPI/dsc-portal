@@ -232,6 +232,8 @@ class Event(models.Model):
         Deletes the Google Calendar event associated with the club event.
         '''
         calendar_service.events().delete(calendarId=settings.GOOGLE_CALENDAR_ID, eventId=self.calendar_event_id).execute()
+        self.calendar_event_id = None
+        self.save()
 
     def create_meeting_notes(self):
         '''
@@ -339,15 +341,21 @@ class Event(models.Model):
         We either create or update the Google Calendar event for it.
         '''
         if created:
-            if instance.visibility == 'P' or instance.visibility == 'M' and not instance.hidden:
+            if (instance.visibility == 'P' or instance.visibility == 'M') and not instance.hidden:
                 instance.create_google_calendar_event()
                 # message = f'New event scheduled **{instance.title}**'
                 # r = requests.post('https://hooks.slack.com/services/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', data={'text':message})
         else:
             if not instance.hidden and instance.calendar_event_id is None:
-                instance.create_google_calendar_event()
+                try:
+                    instance.create_google_calendar_event()
+                except:
+                    pass
             elif instance.hidden and instance.calendar_event_id is not None:
-                instance.delete_google_calendar_event()
+                try:
+                    instance.delete_google_calendar_event()
+                except:
+                    pass
             else:
                 try:
                     instance.update_google_calendar_event()
