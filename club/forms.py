@@ -10,4 +10,4 @@ class MemberAccountForm(forms.Form):
     school_username = forms.CharField(label=f'{settings.SCHOOL_NAME_SHORT} Username', max_length=100, required=False)
     grade = forms.ChoiceField(label='Grade', widget=forms.RadioSelect, choices=Member.GRADE_TYPES)
     bio = forms.CharField(widget=forms.Textarea, max_length=2000, label='Bio', required=False)
-    profile_image = forms.ImageField(required=False)
+    # profile_image = forms.ImageField(required=False)
