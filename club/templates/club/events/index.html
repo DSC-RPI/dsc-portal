@@ -98,7 +98,8 @@
                     <td>{{ event.start }}</td>
                     <td>{{ event.get_event_type_display }}</td>
                     <td>
-                        {{ event.title }}
+                        {% if event.visibility == 'C' %}<span class="icon" title="Core Team only"><i class="fas fa-lock"></i></span>{% endif %}
+                        <span>{{ event.title }}</span>
                         {% if event in user_rsvped_events %}
                         <span class="tag is-primary">RSVPed</span>
                         {% endif %}
