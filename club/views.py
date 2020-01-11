@@ -247,6 +247,19 @@ def event_detail(request, event_id):
     # Context variables
     now = timezone.now()
     event = get_object_or_404(Event, pk=event_id)
+
+    if event.hidden and not request.user.is_staff:
+        messages.warning(request, 'That event is not public yet.')
+        return HttpResponseRedirect('/events')
+
+    if event.visibility == 'M' and not request.user.member.verified:
+        messages.warning(request, 'Only verified members can view this event.')
+        return HttpResponseRedirect('/events')    
+
+    if event.visibility == 'C' and not request.user.is_staff:
+        messages.warning(request, 'Only Core Team members can view this event.')
+        return HttpResponseRedirect('/events')
+    
     show_rsvp_form = False
     show_submit_attendance = False
 
