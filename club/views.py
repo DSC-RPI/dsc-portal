@@ -211,7 +211,7 @@ def event_index(request):
     ongoing_events = Event.objects.filter(
         start__lte=now, end__gte=now)
     upcoming_events = Event.objects.filter(
-        start__gte=today)
+        start__gte=today).order_by('start')
     past_events = Event.objects.filter(
         end__lt=today)
 
