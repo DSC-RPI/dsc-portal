@@ -93,8 +93,6 @@ def user_account(request):
                 }
                 send_templated_email('Verify School Account', 'verification_code', email_data, [
                                      request.user.member.school_email])
-                messages.warning(
-                    request, f'You must verify that you are <b>{request.user.member.school_username}</b>. You have been sent a verification link to your school email address. Please check spam if you cannot find it!')
 
             if 'profile_image' in request.FILES:
                 messages.warning(request, 'Uploaded profile image!')
@@ -130,7 +128,10 @@ def user_account(request):
                 request, f'Resent verification email to {request.user.member.school_email}.')
         elif not request.user.member.verified:
             messages.warning(
-                request, 'Please verify your account to RSVP, submit attendance, etc. <a href="?resend-verification-email=1">Resend verification email</a>')
+                request, f'Please check your school email {request.user.member.school_email} for the verification email. You will not be able to use the site until you do. <a href="?resend-verification-email=1">Resend verification email</a>')
+
+            if settings.SCHOOL_NAME_SHORT == 'RPI':
+                messages.warning(request, f'Your verification email most likely went into RPI\'s spam system. <b><a href="http://respite.rpi.edu/canit/">Login Directly to Access It</a></b>')
 
         form_data = {
             'first_name': request.user.first_name,
