@@ -1,4 +1,4 @@
-<div class="event-details box">
+<div class="event-info box">
     <div class="event-time is-flex" title="When the event is being held">
         <span class="icon">
             <i class="far fa-clock"></i>
@@ -9,7 +9,6 @@
             <span class="has-text-grey">{{ event.start|date:"g:i a" }} - {{ event.end|date:"g:i a" }}</span>
         </p>
     </div>
-    <br>
     <div class="event-location is-flex" title="Where the event is being held">
         <span class="icon">
             <i class="fas fa-map-marker-alt"></i>
@@ -17,6 +16,13 @@
         <span><a target="_blank"
                 href="https://maps.google.com/?q={{ event.location|urlencode }}">{{ event.location }}</a></span>
     </div>
+    <div class="event-what-to-bring" title="What you need to bring">
+        <span class="icon">
+            <i class="fas fa-suitcase"></i>
+        </span>
+        <span>{% firstof event.what_to_bring 'Nothing required!' %}</span>
+    </div>
+    {% if not user.is_staff and user.is_authenticated %}
     <hr>
 
     {% if event.is_ongoing %}
@@ -62,5 +68,6 @@
         You did not RSVP for or attend this event.
         {% endif %}
     </p>
+    {% endif %}
     {% endif %}
 </div>

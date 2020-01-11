@@ -127,6 +127,8 @@ class Event(models.Model):
     # Required event description
     description = models.TextField(max_length=10000, help_text='Long descriptionf of the event. Supports Markdown.')
 
+    what_to_bring = models.CharField(max_length=500, blank=True, null=True, help_text='An optional description of items members should bring, e.g. laptop and notebook')
+
     review = models.TextField(max_length=10000, blank=True, null=True, help_text='A review after the event concludes covering how the event went, turn out, issues faced, etc. for future leaders to read and take into account.')
 
     # Date and time range of event
