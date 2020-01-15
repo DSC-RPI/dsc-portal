@@ -27,9 +27,9 @@ class UserAdmin(BaseUserAdmin):
 # EVENT INLINES
 class EventAgendaItemInline(admin.StackedInline):
     model = EventAgendaItem
-class EventRSVPInline(admin.StackedInline):
+class EventRSVPInline(admin.TabularInline):
     model = EventRSVP
-class EventAttendanceInline(admin.StackedInline):
+class EventAttendanceInline(admin.TabularInline):
     model = EventAttendance
 
 class EventAdmin(admin.ModelAdmin):
