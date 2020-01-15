@@ -21,6 +21,14 @@
     .event-info > div {
         margin-bottom: 10px;
     }
+
+    .event-agenda li {
+        list-style: none;
+    }
+
+    .event-agenda-description:not(:last-child) {
+        margin-bottom: 10px;
+    }
 </style>
 {% endblock %}
 {% block content %}
@@ -33,8 +41,8 @@
             events page yet.</div>
         {% endif %}
 
-        <h1 class="title event-title">{{ event.title }}</h1>
-        <h2 class="subtitle has-text-grey">
+        <h1 class="title event-title is-size-2">{{ event.title }}</h1>
+        <h2 class="subtitle has-text-grey is-size-4">
             {% if event.is_ongoing %}Ongoing{% endif %} {{ event.get_event_type_display }}
             {% if event.visibility == 'M' %}
             (Members Only)

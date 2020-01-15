@@ -409,6 +409,17 @@ class EventAgendaItem(models.Model):
     estimated_start_time = models.TimeField(help_text='The estimated start time of the item. (Within the bounds of the event)')
     estimated_duration = models.DurationField(help_text='How long the item is expected to take.')
 
+    @property
+    def duration_string(self):
+        total_seconds = int(self.estimated_duration.total_seconds())
+        hours = total_seconds // 3600
+        minutes = (total_seconds % 3600) // 60
+
+        if hours > 0:
+            return f'{hours}h {minutes} m'
+        else:
+            return f'{minutes} min'
+
     def __str__(self):
         return f'Agenda item "{self.title}" for {self.event}'
     
