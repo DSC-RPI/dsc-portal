@@ -46,7 +46,10 @@ def index(request):
     else:
         core_team = User.objects.filter(is_staff=True)
         today = timezone.now().date()
-        closest_event = upcoming_events = Event.objects.filter(hidden=False, visibility='P').latest()
+        try:
+            closest_event = Event.objects.filter(hidden=False, visibility='P').latest()
+        except ObjectDoesNotExist:
+            closest_event = None
         return render(request, 'club/splash.html', {'core_team': core_team, 'closest_event': closest_event})
 
 

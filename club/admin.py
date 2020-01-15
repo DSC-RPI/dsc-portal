@@ -2,12 +2,11 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import SchoolYear, FAQ, Member, Event, EventRSVP, EventAttendance, Project, Update, RoadmapMilestone
+from .models import SchoolYear, FAQ, Member, Event, EventAgendaItem, EventRSVP, EventAttendance, Project, Update, RoadmapMilestone
 
 admin.site.register(SchoolYear)
 admin.site.register(Member)
 admin.site.register(FAQ)
-admin.site.register(Event)
 admin.site.register(EventRSVP)
 admin.site.register(EventAttendance)
 admin.site.register(Project)
@@ -24,6 +23,22 @@ class MemberInline(admin.StackedInline):
 # Define a new User admin
 class UserAdmin(BaseUserAdmin):
     inlines = (MemberInline,)
+
+# EVENT INLINES
+class EventAgendaItemInline(admin.StackedInline):
+    model = EventAgendaItem
+class EventRSVPInline(admin.TabularInline):
+    model = EventRSVP
+class EventAttendanceInline(admin.TabularInline):
+    model = EventAttendance
+
+class EventAdmin(admin.ModelAdmin):
+    inlines = [
+        EventAgendaItemInline,
+        EventRSVPInline,
+        EventAttendanceInline
+    ]
+admin.site.register(Event, EventAdmin)
 
 # Re-register UserAdmin
 admin.site.unregister(User)

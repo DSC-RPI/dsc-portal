@@ -67,3 +67,7 @@ footer .links {
 footer .links a {
     margin: 0.25em;
 }
+
+.media-body {
+    flex: 1;
+}

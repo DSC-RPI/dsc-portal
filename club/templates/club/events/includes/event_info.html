@@ -1,4 +1,5 @@
-<div class="event-info box">
+<div class="event-info box content">
+    <h3 class="subtitle is-size-5">Event Info</h3>
     <div class="event-time is-flex" title="When the event is being held">
         <span class="icon">
             <i class="far fa-clock"></i>
@@ -70,4 +71,19 @@
     </p>
     {% endif %}
     {% endif %}
+    <hr>
+    <div class="event-agenda">
+        <h3 class="subtitle is-size-5">Agenda</h3>
+        {% for item in event.agenda.all %}
+        <li>
+            <strong>~{{ item.estimated_start_time|time:"g:iA" }}</strong> - {{ item.title }} <em class="has-text-grey">({{ item.duration_string }})</em>
+            {% if user.is_staff %}
+            <p class="event-agenda-description">{{ item.description }}</p>
+            {% endif %}
+        </li>
+        {% empty %}
+        <p class="is-size-7 has-text-grey">No agenda items yet!</p>
+        {% endfor %}
+    </div>
+
 </div>
