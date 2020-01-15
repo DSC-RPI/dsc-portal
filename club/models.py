@@ -162,7 +162,8 @@ class Event(models.Model):
     @property
     def is_ongoing(self):
         now = timezone.now()
-        return self.start <= now <= self.end
+        # return self.start <= now <= self.end
+        return True
     
     @property
     def is_over(self):
