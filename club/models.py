@@ -398,6 +398,23 @@ class Event(models.Model):
 
 post_save.connect(Event.post_save, sender=Event)
 
+class EventAgendaItem(models.Model):
+    '''Represents a planned activity in an Event'''
+
+    event = models.ForeignKey(Event, null=False, on_delete=models.CASCADE, related_name='agenda')
+
+    title = models.CharField(max_length=200, help_text='The public title of the AgendaItem')
+    description = models.TextField(blank=True, null=True, max_length=2000, help_text='The private description that only Core Team members would see. This is where planning details go.')
+
+    estimated_start_time = models.TimeField(help_text='The estimated start time of the item. (Within the bounds of the event)')
+    estimated_duration = models.DurationField(help_text='How long the item is expected to take.')
+
+    def __str__(self):
+        return f'Agenda item "{self.title}" for {self.event}'
+    
+    class Meta:
+        ordering = ['estimated_start_time', 'title']
+
 class EventAttendance(models.Model):
     '''Represents a verifed attendance of one user to one event.'''
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, on_delete=models.CASCADE, related_name='attendance')
