@@ -1,5 +1,12 @@
 {% extends "club/base.html" %}
-
+{% block head %}
+<style>
+    .media-body hr {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+</style>
+{% endblock %}
 {% block content %}
 <section class="hero is-primary">
     <div class="hero-body">
@@ -39,22 +46,24 @@
                         <h4 class="subtitle"><em>{{ event.tagline }}</em></h4>
                         {% endif %}
 
+                        <i class="far fa-clock"></i>
+                        <span class="event-date">{{ event.start|date:"l, F jS" }}</span> | 
+                        <span class="event-time">{{ event.start|time:"g:i a" }} - {{ event.end|time:"g:i a" }}</span>
+                        <br>
                         <a href="https://maps.google.com/?q={{ event.location|urlencode }}"
                             title="This event is being held in {{ event.location }}" target="_blank"
                             class="event-location">
                             <i class="fas fa-map-marker-alt"></i>
                             {{ event.location }}
                         </a>
-                        <span class="event-date-time">{{ event.start }} - {{ event.end }}</span>
 
+                        <hr>
                         {% if user.is_staff %}
-                        <div class="tags">
+                        <div class="tags is-pulled-right">
                             <span class="tag is-dark">{{ event.rsvps.count }} RSVPs</span>
                             <span class="tag is-info">{{ event.attendance.count }} attendees</span>
                         </div>
-                        {% else %}
                         {% endif %}
-                        <hr>
                         <div class="buttons">
                             {% if not event.has_started %}
                             {% if event in user_rsvped_events %}
