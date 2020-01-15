@@ -24,12 +24,19 @@ class MemberInline(admin.StackedInline):
 class UserAdmin(BaseUserAdmin):
     inlines = (MemberInline,)
 
+# EVENT INLINES
 class EventAgendaItemInline(admin.StackedInline):
     model = EventAgendaItem
+class EventRSVPInline(admin.StackedInline):
+    model = EventRSVP
+class EventAttendanceInline(admin.StackedInline):
+    model = EventAttendance
 
 class EventAdmin(admin.ModelAdmin):
     inlines = [
-        EventAgendaItemInline
+        EventAgendaItemInline,
+        EventRSVPInline,
+        EventAttendanceInline
     ]
 admin.site.register(Event, EventAdmin)
 
