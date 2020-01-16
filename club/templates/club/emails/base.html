@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -9,20 +10,14 @@
     <style lang="text/css">
       @import url("https://themes.googleusercontent.com/fonts/css?kit=DFQxm4rd7fRHgM9OTejWVbGEn0Gc9pEgGHTNg2hcHI-5kFni9xGj3Ov4A_dZWje7iSuT_49kqPuR2tXeebJbaOgV3O06CsdO7v3PBaWai9CR_0ptpBNtzjT1BDgsYfLW");
 
-      :root {
-        --primary-color: #4285f4;
-        --secondary-color: #fafafa;
-      }
-
       html, body {
-        margin: 0;
+        max-width: 468pt;
+        margin: 0 auto;
         padding: 0;
       }
 
       body {
         /* Center on page and limit to narrow */
-        max-width: 468pt;
-        margin: 0 auto;
         font-family: "Roboto";
         font-size: 1em;
         font-weight: 300;
@@ -51,7 +46,7 @@
 
       header, section, footer {
         padding: 48px;
-        background-color: var(--secondary-color);
+        background-color: #fafafa;
       }
 
       header {
@@ -76,7 +71,7 @@
       }
 
       .primary {
-        background-color: var(--primary-color);
+        background-color: #4285f4;
         color: white;
       }
 
@@ -91,43 +86,11 @@
       <img class="logo" alt="Club logo" src="images/image5.png" />
     </header>
     <main>
-      <section class="primary">
-        <img src="images/image3.jpg" alt="">
-        <h1 class="subtitle">Welcome to the club!</h1>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae quam inventore expedita animi, nobis magni provident nulla nam assumenda itaque.</p>
-      </section>
-      <section>
-        <h2 class="subtitle">Next Steps</h2>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas a,
-          incidunt corporis voluptatibus eius sed cupiditate facilis tempore
-          perspiciatis beatae maiores repudiandae recusandae magni! Labore enim
-          vero sit quod fuga unde non error officia earum, ratione quidem
-          debitis! Dicta mollitia laudantium temporibus, iure dignissimos
-          deleniti nesciunt rem ducimus, adipisci reiciendis dolorum praesentium
-          eligendi? Ea reiciendis laborum, voluptatum vero atque veniam culpa
-          aliquid unde praesentium porro, voluptas iusto repellendus! Quibusdam
-          harum sunt, omnis illum vero libero recusandae! A accusamus delectus
-          nam, accusantium esse eaque vitae incidunt, doloremque consectetur
-          nostrum repellendus alias eum non blanditiis dolor minus unde, dolore
-          in? Sit soluta ea deserunt illum vel id ipsa doloribus libero sequi?
-          Velit delectus tenetur facere, quasi reprehenderit dolor expedita amet
-          repellendus minima molestias nobis commodi atque corporis laborum ea
-          rem recusandae natus culpa eaque voluptate obcaecati modi maxime
-          explicabo eligendi! Impedit deserunt, fugit id officiis, ratione
-          soluta ullam accusamus voluptate dolore assumenda odio, nemo modi
-          tenetur labore sint beatae facere harum molestias aut amet. Quasi,
-          laudantium mollitia error rem natus nemo voluptates, nihil, accusamus
-          veniam cupiditate repellendus et excepturi quae commodi reiciendis
-          officiis cumque deserunt officia animi nam. Voluptatum, laudantium
-          itaque cupiditate ullam perferendis nam deserunt fuga. Fuga rem quod
-          corporis natus!
-        </p>
-      </section>
+      {% block content %}{% endblock %}
     </main>
 
     <footer class="footer primary">
-      <img class="logo" src="images/image1.png" alt="">
+      <img class="logo" src="{% static 'club/img/google_developers_logomark_white.png' %}}" alt="Google Developers logo">
       <p class="links">
         <a
           href="https://www.instagram.com/{{ instagram_username }}"
