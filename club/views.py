@@ -480,6 +480,10 @@ def core_team(request):
     # TODO: docstring
     return render(request, 'club/core_team/index.html', {'google_drive_folder_id': settings.GOOGLE_DRIVE_FOLDER_ID})
 
+@staff_member_required
+def core_team_email(request):
+    context = {}
+    return render(request, 'club/core_team/email.html', context)
 
 @staff_member_required
 def roadmap_index(request):

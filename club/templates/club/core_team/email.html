@@ -1,0 +1,31 @@
+{% extends "club/base.html" %}
+{% block content %}
+<section class="section">
+    <div class="container">
+        {% include 'club/includes/messages.html' %}
+        
+        <h2 class="title">Email</h2>
+
+        <div class="columns">
+            <div class="column">
+                <div class="box">
+                    <h2 class="subtitle">Mass Email</h2>
+
+                    <form>
+                        <div class="field">
+                            <label class="label" for="email-template">Email Template</label>
+                            <div class="select">
+                                <select id="email-template" name="email-template">
+                                    {% for template in email_templates %}
+                                    <option value="{{ template }}">{{ template }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

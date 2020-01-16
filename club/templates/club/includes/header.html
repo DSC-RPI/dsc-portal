@@ -80,6 +80,9 @@
                         </a>
                         <hr class="navbar-divider">
                         </hr>
+                        <a href="{% url 'core_team_email' %}" class="navbar-item {% if '/core-team/email' in request.path_info %}is-active{% endif %}">
+                            Email
+                        </a>
                         <a href="{% url 'roadmap' %}" class="navbar-item {% if '/core-team/roadmap' in request.path_info %}is-active{% endif %}">
                             Club Roadmap
                         </a>
