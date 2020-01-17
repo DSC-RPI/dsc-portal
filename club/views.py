@@ -161,17 +161,8 @@ def verify_account(request):
 
     if code == request.user.member.verification_code:
         # Successfully verified user
-        request.user.member.verified = True
-        request.user.member.verification_code = None
+        request.user.member.verify()
         request.user.member.save()
-        logger.info(f'User {request.user} verified their account.')
-
-        # Invite to Slack
-        requests.post('https://slack.com/api/users.admin.invite', data={
-            'email': request.user.email,
-            'token': settings.LEGACY_SLACK_TOKEN,
-            # 'channels': ''
-        })
 
         messages.success(
             request, f'Congratulations, you verified your account and are now an official <b>DSC {settings.SCHOOL_NAME_SHORT}</b> member! Check your email for an invite to the Slack.')

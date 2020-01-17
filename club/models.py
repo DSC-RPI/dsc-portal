@@ -1,5 +1,6 @@
 import requests
 
+from .logger import logger
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -70,6 +71,18 @@ class Member(models.Model):
     # TODO: make an tag system for dietary restrictions to easily query
 
     bio = models.TextField(max_length=2000, blank=True, null=True, help_text='A short bio about the member which will be public.')
+
+    def verify(self):
+        self.verified = True
+        self.verification_code = None
+        logger.info(f'User {self.user} verified their account.')
+
+        # Invite to Slack
+        requests.post('https://slack.com/api/users.admin.invite', data={
+            'email': self.user.email,
+            'token': settings.LEGACY_SLACK_TOKEN,
+            # 'channels': ''
+        })
 
     @classmethod
     def post_user_save(cls, sender, instance, created, *args, **kwargs):
@@ -234,7 +247,6 @@ class Event(models.Model):
         '''
         calendar_service.events().delete(calendarId=settings.GOOGLE_CALENDAR_ID, eventId=self.calendar_event_id).execute()
         self.calendar_event_id = None
-
 
     def create_meeting_notes(self):
         '''
