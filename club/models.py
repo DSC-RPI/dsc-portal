@@ -17,6 +17,7 @@ class SchoolYear(models.Model):
     start_date = models.DateField(help_text='The first day of the school year.')
     end_date = models.DateField(help_text='The last day of the school year.')
 
+    @property
     def is_ongoing(self):
         return self.start_date <= timezone.now().date() <= self.end_date
     
@@ -452,7 +453,6 @@ class EventAttendance(models.Model):
         ]
 
 class EventRSVP(models.Model):
-    ''''''
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, on_delete=models.CASCADE, related_name='rsvps')
     event = models.ForeignKey(Event, null=False, on_delete=models.CASCADE, related_name='rsvps')
     message = models.CharField(max_length=200, help_text='(optional) A condition for RSVPing', blank=True, null=True)
@@ -462,6 +462,13 @@ class EventRSVP(models.Model):
 
     def __str__(self):
         return f'{self.event} RSVP by {self.user}{": " + self.message if self.message else "" }'
+
+class EventFeedback(models.Model):
+    event = models.ForeignKey(Event, null=False, on_delete=models.CASCADE, related_name='feedback')
+    
+    # TODO: add categories
+
+    comments = models.TextField(max_length=1000, null=True, blank=True, help_text='Optional comment for members to address anything else.')
 
 class Project(models.Model):
     '''Project represents a tech-based solution.'''
