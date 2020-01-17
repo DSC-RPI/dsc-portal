@@ -3,7 +3,7 @@ import requests
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
+from django.db.models.signals import pre_save, post_save, pre_delete, post_delete
 from .email import send_templated_email
 from random import choice
 from string import ascii_uppercase
@@ -230,11 +230,11 @@ class Event(models.Model):
 
     def delete_google_calendar_event(self):
         '''
-        Deletes the Google Calendar event associated with the club event.
+        Deletes the Google Calendar event associated with the club event. DOES NOT SAVE THE DOCUMENT!
         '''
         calendar_service.events().delete(calendarId=settings.GOOGLE_CALENDAR_ID, eventId=self.calendar_event_id).execute()
         self.calendar_event_id = None
-        self.save()
+
 
     def create_meeting_notes(self):
         '''
@@ -335,6 +335,13 @@ class Event(models.Model):
         pass
 
     @classmethod
+    def pre_save(cls, sender, instance, *args, **kwargs):
+        if not instance.attendance_code:
+            instance.attendance_code = ''.join(choice(ascii_uppercase) for i in range(6))
+        if instance.slideshow_id != None and not instance.thumbnail_link:
+            instance.get_thumbnail_link()
+
+    @classmethod
     def post_save(cls, sender, instance, created, *args, **kwargs):
         '''
         This is called *after* an event is saved. It is "saved" because
@@ -347,14 +354,15 @@ class Event(models.Model):
                 # message = f'New event scheduled **{instance.title}**'
                 # r = requests.post('https://hooks.slack.com/services/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', data={'text':message})
         else:
-            if not instance.hidden and instance.calendar_event_id is None:
+            if not instance.hidden and instance.visibility != 'C' and instance.calendar_event_id is None:
                 try:
                     instance.create_google_calendar_event()
                 except:
                     pass
-            elif instance.hidden and instance.calendar_event_id is not None:
+            elif (instance.hidden or instance.visibility == 'C') and instance.calendar_event_id is not None:
                 try:
                     instance.delete_google_calendar_event()
+                    instance.save()
                 except:
                     pass
             else:
@@ -363,29 +371,19 @@ class Event(models.Model):
                 except:
                     # TODO: handle
                     pass
-        
-    def save(self, *args, **kwargs):
-        if not self.attendance_code:
-            self.attendance_code = ''.join(choice(ascii_uppercase) for i in range(6))
-        if self.slideshow_id != None and not self.thumbnail_link:
-            self.get_thumbnail_link()
 
-        super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
+    @classmethod
+    def post_delete(cls, sender, instance, using, *args, **kwargs):
         '''
         This is run when a event is deleted. It deletes any associated Google Drive documents
         or Google Calendar events.
         '''
         # Delete meeting notes if they were made when event is deleted
-        if self.meeting_notes_id:
-            self.delete_meeting_notes()
+        if instance.meeting_notes_id:
+            instance.delete_meeting_notes()
             
-        if self.calendar_event_id:
-            self.delete_google_calendar_event()
-
-        # Carry on with actual event delete
-        super().delete(*args, **kwargs)
+        if instance.calendar_event_id:
+            instance.delete_google_calendar_event()
 
     # String representation of an Event
     # e.g. "Welcome!: Info Session on 11/14/2019"
@@ -396,7 +394,9 @@ class Event(models.Model):
         ordering = ['-start']
         get_latest_by = ['start']
 
+pre_save.connect(Event.pre_save, sender=Event)
 post_save.connect(Event.post_save, sender=Event)
+post_delete.connect(Event.post_delete, sender=Event)
 
 class EventAgendaItem(models.Model):
     '''Represents a planned activity in an Event'''
