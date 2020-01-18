@@ -1,0 +1,31 @@
+{% extends "club/base.html" %}
+{% block content %}
+<section class="section">
+    <div class="container">
+        {% include 'club/includes/messages.html' %}
+        
+        <h2 class="title">Email</h2>
+
+        <div class="columns">
+            <div class="column">
+                <div class="box">
+                    <h2 class="subtitle">Pending Verification</h2>
+
+                    {% for member in unverified_members %}
+                    <li>
+                      {{ member.user.get_full_name }} ({{ member.user.email }}): <span class="has-text-grey">{{ member.school_username }}</span>
+                      <form method="POST" style="display: inline-block;">
+                        {% csrf_token %}
+                        <input type="hidden" name="verify-member-id" value="{{ member.id }}">
+                        <button class="button is-small">Verify</button>
+                      </form>
+                    </li>
+                    {% empty %}
+                    <p class="has-text-grey is-size-7">No members are pending verification.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
