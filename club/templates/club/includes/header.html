@@ -80,6 +80,9 @@
                         </a>
                         <hr class="navbar-divider">
                         </hr>
+                        <a href="{% url 'member_management' %}" class="navbar-item {% if '/core-team/member-management' in request.path_info %}is-active{% endif %}">
+                            Member Management
+                        </a>
                         <a href="{% url 'core_team_email' %}" class="navbar-item {% if '/core-team/email' in request.path_info %}is-active{% endif %}">
                             Email
                         </a>
