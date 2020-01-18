@@ -18,6 +18,7 @@ urlpatterns = [
     path('core-team/email', views.core_team_email, name='core_team_email'),
     path('core-team/roadmap', views.roadmap_index, name='roadmap'),
     path('core-team/social-media', views.social_media, name='social_media'),
+    path('core-team/member-management', views.member_management, name='member_management'),
     path('account/', views.user_account, name='user_account'),
     path('account/verify', views.verify_account, name='verify_account')
 ]

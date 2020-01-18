@@ -501,6 +501,27 @@ def social_media(request):
             request, f'Successfully tweeted! <a target="_blank" href="https://www.twitter.com/{sent_tweet.user.screen_name}/status/{sent_tweet.id}">Link to tweet</a>')
     return render(request, 'club/core_team/social_media.html', {'twitter_username': os.environ['TWITTER_USERNAME']})
 
+@staff_member_required
+def member_management(request):
+    unverified_members = Member.objects.filter(verified=False, school_username__isnull=False)
+
+    if request.method == 'POST' and 'verify-member-id' in request.POST:
+        # Verify specified member
+        member = Member.objects.get(pk=request.POST['verify-member-id'])
+        if member is None:
+            messages.warning(request, f'No such member found!')
+        elif member.verified:
+            messages.warning(request, f'{member.user.get_full_name()} is already verfified!')
+        else:
+            member.verify()
+            member.save()
+            messages.success(request, f'Successfully verified {member.user.get_full_name()}!')
+            return HttpResponseRedirect(request.path_info)
+
+    context = {
+        'unverified_members': unverified_members
+    }
+    return render(request, 'club/core_team/member_management.html', context)
 
 @login_required
 def profile_image(request):
