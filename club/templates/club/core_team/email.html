@@ -1,4 +1,11 @@
 {% extends "club/base.html" %}
+{% block head %}
+<style>
+code {
+    display: block;
+}
+</style>
+{% endblock %}
 {% block content %}
 <section class="section">
     <div class="container">
@@ -23,6 +30,25 @@
                             </div>
                         </div>
                     </form>
+                </div>
+            </div>
+
+            <div class="column">
+                <div class="box">
+                    <h3 class="subtitle">All Users</h3>
+                    <code>
+                        {{ all_user_emails }}
+                    </code>
+                    <hr>
+                    <h3 class="subtitle">All Members</h3>
+                    <code>
+                        {{ all_member_emails }}
+                    </code>
+                    <hr>
+                    <h3 class="subtitle">Verified Members</h3>
+                    <code>
+                        {{ verified_member_emails }}
+                    </code>
                 </div>
             </div>
         </div>

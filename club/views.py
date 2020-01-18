@@ -473,7 +473,14 @@ def core_team(request):
 
 @staff_member_required
 def core_team_email(request):
-    context = {}
+    verified_member_emails = '; '.join(list(map(lambda member: member.user.email, Member.objects.filter(verified=True))))
+    all_member_emails = '; '.join(list(map(lambda member: member.user.email, Member.objects.all())))
+    all_user_emails = '; '.join(list(map(lambda user: user.email, User.objects.all())))
+    context = {
+        'verified_member_emails': verified_member_emails,
+        'all_member_emails': all_member_emails,
+        'all_user_emails': all_user_emails
+    }
     return render(request, 'club/core_team/email.html', context)
 
 @staff_member_required
