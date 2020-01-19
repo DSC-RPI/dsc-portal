@@ -81,6 +81,7 @@ def user_account(request):
             request.user.last_name = form.cleaned_data['last_name']
             request.user.member.grade = form.cleaned_data['grade']
             request.user.member.bio = form.cleaned_data['bio']
+            request.user.member.tags.set(form.cleaned_data['dietary_restrictions'] | form.cleaned_data['skills'])
 
             if request.user.member.school_username != form.cleaned_data['school_username']:
                 # School username was set or changed! Start verification process.
@@ -145,7 +146,9 @@ def user_account(request):
             'last_name': request.user.last_name,
             'school_username': request.user.member.school_username,
             'grade': request.user.member.grade,
-            'bio': request.user.member.bio
+            'bio': request.user.member.bio,
+            'skills': request.user.member.skills(),
+            'dietary_restrictions': request.user.member.dietary_restrictions()
         }
         form = MemberAccountForm(form_data)
 
