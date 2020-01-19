@@ -117,16 +117,17 @@ class Tag(models.Model):
         ('D', 'Dietary Restriction'),
         ('S', 'Skill')
     ]
-    tag_type = models.CharField(max_length=1, choices=TAG_TYPE_CHOICES, help_text='The type of tag.')
-    title = models.CharField(max_length=50)
+    tag_type = models.CharField(max_length=5, choices=TAG_TYPE_CHOICES, help_text='The type of tag.')
+    title = models.CharField(max_length=50, help_text='The title of the tag.')
 
-    members = models.ManyToManyField(Member, related_name='tags')
+    members = models.ManyToManyField(Member, blank=True, related_name='tags')
 
+    objects = models.Manager()
     skills = SkillTagManager()
     dietary_restrictions = DietaryRestrictionTagManager()
 
     def __str__(self):
-        return f'{self.get_tag_type_display()}: {self.title}'
+        return f'{self.tag_type}: {self.title}'
 
 class Event(models.Model):
     '''Events represent one-time club meetings.'''
