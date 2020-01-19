@@ -73,6 +73,12 @@ class Member(models.Model):
 
     bio = models.TextField(max_length=2000, blank=True, null=True, help_text='A short bio about the member which will be public.')
 
+    def skills(self):
+        return self.tags.filter(tag_type='S')
+    
+    def dietary_restrictions(self):
+        return self.tags.filter(tag_type='D')
+
     def verify(self):
         self.verified = True
         self.verification_code = None

@@ -37,6 +37,16 @@
                     </ul>
                 </div>
                 <hr>
+                {% if member.skills %}
+                <h4 class="subtitle">{{ member.user.first_name }} has experience with</h4>
+                <div class="tags skills">
+                    {% for skill in member.skills %}
+                    <span class="tag is-medium is-primary">{{ skill.title }}</span>
+                    {% empty %}
+                    <p class="has-text-grey">No skills!</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
