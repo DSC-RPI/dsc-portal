@@ -127,7 +127,10 @@ class Tag(models.Model):
     dietary_restrictions = DietaryRestrictionTagManager()
 
     def __str__(self):
-        return f'{self.tag_type}: {self.title}'
+        return f'{self.get_tag_type_display()}: {self.title}'
+    
+    class Meta:
+        ordering = ['tag_type', 'title']
 
 class Event(models.Model):
     '''Events represent one-time club meetings.'''
