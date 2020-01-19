@@ -12,6 +12,34 @@ from string import ascii_uppercase
 from .google_api import docs_service, drive_service, slides_service, calendar_service
 from django.utils import timezone
 
+
+class SkillTagManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(tag_type='S')
+
+class DietaryRestrictionTagManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(tag_type='D')
+
+class Tag(models.Model):
+    TAG_TYPE_CHOICES = [
+        ('D', 'Dietary Restriction'),
+        ('S', 'Skill')
+    ]
+    tag_type = models.CharField(max_length=5, choices=TAG_TYPE_CHOICES, help_text='The type of tag.')
+    title = models.CharField(max_length=50, help_text='The title of the tag.')
+
+    objects = models.Manager()
+    skills = SkillTagManager()
+    dietary_restrictions = DietaryRestrictionTagManager()
+
+    def __str__(self):
+        return f'{self.get_tag_type_display()}: {self.title}'
+    
+    class Meta:
+        ordering = ['tag_type', 'title']
+
+
 class SchoolYear(models.Model):
     '''A SchoolYear represents a full year of school...'''
     start_date = models.DateField(help_text='The first day of the school year.')
@@ -73,6 +101,8 @@ class Member(models.Model):
 
     bio = models.TextField(max_length=2000, blank=True, null=True, help_text='A short bio about the member which will be public.')
 
+    tags = models.ManyToManyField(Tag, blank=True, related_name='members')
+
     def skills(self):
         return self.tags.filter(tag_type='S')
     
@@ -108,35 +138,6 @@ class Member(models.Model):
             instance.member = Member()
             instance.member.save()
 post_save.connect(Member.post_user_save, sender=settings.AUTH_USER_MODEL)
-
-class SkillTagManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(tag_type='S')
-
-class DietaryRestrictionTagManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(tag_type='D')
-
-
-class Tag(models.Model):
-    TAG_TYPE_CHOICES = [
-        ('D', 'Dietary Restriction'),
-        ('S', 'Skill')
-    ]
-    tag_type = models.CharField(max_length=5, choices=TAG_TYPE_CHOICES, help_text='The type of tag.')
-    title = models.CharField(max_length=50, help_text='The title of the tag.')
-
-    members = models.ManyToManyField(Member, blank=True, related_name='tags')
-
-    objects = models.Manager()
-    skills = SkillTagManager()
-    dietary_restrictions = DietaryRestrictionTagManager()
-
-    def __str__(self):
-        return f'{self.get_tag_type_display()}: {self.title}'
-    
-    class Meta:
-        ordering = ['tag_type', 'title']
 
 class Event(models.Model):
     '''Events represent one-time club meetings.'''

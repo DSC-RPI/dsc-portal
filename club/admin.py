@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 from .models import SchoolYear, FAQ, Member, Event, EventAgendaItem, EventRSVP, EventAttendance, Project, Update, RoadmapMilestone, Tag
 
 admin.site.register(SchoolYear)
-admin.site.register(Member)
 admin.site.register(FAQ)
 admin.site.register(EventRSVP)
 admin.site.register(EventAttendance)
@@ -17,6 +16,13 @@ admin.site.register(Tag)
 
 admin.site.site_title = f'DSC {settings.SCHOOL_NAME_SHORT} Management'
 admin.site.site_header = 'Club Management'
+
+class TagInline(admin.TabularInline):
+    model = Tag
+
+class MemberAdmin(admin.ModelAdmin):
+    inlines = (TagInline),
+# admin.site.register(Member, MemberAdmin)
 
 # Define an inline admin descriptor for Employee model
 # which acts a bit like a singleton
