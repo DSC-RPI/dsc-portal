@@ -121,6 +121,9 @@ class Member(models.Model):
             # 'channels': ''
         })
 
+    def __str__(self):
+        return f'{self.user.get_full_name()} ({self.user.email})'
+
     @classmethod
     def post_user_save(cls, sender, instance, created, *args, **kwargs):
         if created:
