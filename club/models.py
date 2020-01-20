@@ -87,6 +87,14 @@ class Member(models.Model):
 
     profile_image = models.ImageField(blank=True, null=True, upload_to='profile-images')
 
+    @property
+    def profile_image_url(self):
+        ''''''
+        if self.profile_image:
+            return self.profile_image.url
+        else:
+            return 'https://bulma.io/images/placeholders/1280x960.png'
+
     GRADE_TYPES = [
         ('Fr', 'Freshman'),
         ('So', 'Sophomore'),

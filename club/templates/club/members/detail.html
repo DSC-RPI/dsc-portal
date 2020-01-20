@@ -17,7 +17,7 @@
         <div class="columns is-centered">
             <div class="column is-3">
                 <figure class="image" style="width: 100%;">
-                    <img src="{% if member.profile_image %}{{ member.profile_image.url }}{% else %}https://bulma.io/images/placeholders/1280x960.png{% endif %}">
+                    <img src="{{ member.profile_image_url }}">
                 </figure>
                 <h1 class="title member-full-name is-size-2">{{ member.user.get_full_name }}</h1>
                 <h3 class="subtitle is-size-4">{% if member.user.is_staff %}Core Team Member{% else %}Club Member{% endif %}</h3>
