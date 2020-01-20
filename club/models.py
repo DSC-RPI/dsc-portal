@@ -85,7 +85,7 @@ class Member(models.Model):
 
     verified = models.BooleanField(default=False, help_text='Whether the user has verified their school username or not. True means that they are a real club member.')
 
-    profile_image = models.ImageField(blank=True, null=True, upload_to='')
+    profile_image = models.ImageField(blank=True, null=True, upload_to='profile-images')
 
     GRADE_TYPES = [
         ('Fr', 'Freshman'),

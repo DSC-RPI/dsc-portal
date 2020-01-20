@@ -12,4 +12,4 @@ class MemberAccountForm(forms.Form):
     bio = forms.CharField(widget=forms.Textarea, max_length=2000, label='Bio', required=False)
     skills = forms.ModelMultipleChoiceField(queryset=Tag.skills.all(), widget=forms.CheckboxSelectMultiple, label='I have experience in', required=False)
     dietary_restrictions = forms.ModelMultipleChoiceField(queryset=Tag.dietary_restrictions.all(), widget=forms.CheckboxSelectMultiple, label='My dietary preferences/restrictions are', required=False)
-    # profile_image = forms.ImageField(required=False)
+    profile_image = forms.ImageField(required=False)

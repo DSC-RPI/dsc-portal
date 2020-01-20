@@ -237,7 +237,7 @@ GOOGLE_CALENDAR_ID = os.environ['GOOGLE_CALENDAR_ID']
 GS_PROJECT_ID = os.environ['GS_PROJECT_ID']
 GS_BUCKET_NAME = os.environ['GS_BUCKET_NAME']
 GS_DEFAULT_ACL = 'publicRead'
-GS_SCOPES = ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/devstorage.full_control']
+GS_SCOPES = ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/devstorage.read_write']
 GS_CREDENTIALS = service_account.Credentials.from_service_account_info(json.loads(os.environ['GOOGLE_SERVICE_ACCOUNT_JSON']), scopes=GS_SCOPES)
 
 FACEBOOK_ACCESS_TOKEN = os.environ['FACEBOOK_ACCESS_TOKEN']

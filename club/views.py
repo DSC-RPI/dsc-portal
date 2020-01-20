@@ -100,8 +100,9 @@ def user_account(request):
             if 'profile_image' in request.FILES:
                 messages.warning(request, 'Uploaded profile image!')
                 profile_image = request.FILES['profile_image']
+                name, extension = os.path.splitext(profile_image.name)
                 request.user.member.profile_image.save(
-                    profile_image.name, profile_image)
+                    f'{request.user.username}{extension}', profile_image)
             request.user.save()
             request.user.member.save()
 

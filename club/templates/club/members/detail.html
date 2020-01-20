@@ -1,5 +1,11 @@
 {% extends "club/base.html" %}
-
+{% block head %}
+<style>
+.member-full-name {
+    margin-top: 20px;
+}
+</style>
+{% endblock %}
 {% block content %}
 <section class="section member-index">
     <div class="container">
@@ -11,10 +17,10 @@
         <div class="columns is-centered">
             <div class="column is-3">
                 <figure class="image" style="width: 100%;">
-                    <img src="https://bulma.io/images/placeholders/128x128.png">
+                    <img src="{% if member.profile_image %}{{ member.profile_image.url }}{% else %}https://bulma.io/images/placeholders/1280x960.png{% endif %}">
                 </figure>
-                <h1 style="font-size: 24px" class="title member-full-name">{{ member.user.get_full_name }}</h1>
-                <h3 class="subtitle">{% if member.user.is_staff %}Core Team Member{% else %}Club Member{% endif %}</h3>
+                <h1 class="title member-full-name is-size-2">{{ member.user.get_full_name }}</h1>
+                <h3 class="subtitle is-size-4">{% if member.user.is_staff %}Core Team Member{% else %}Club Member{% endif %}</h3>
             </div>
             <div class="column is-7">
                 <h4 class="subtitle">About {{ member.user.first_name }}</h4>
