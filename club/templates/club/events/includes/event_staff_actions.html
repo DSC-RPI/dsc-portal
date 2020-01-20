@@ -3,7 +3,7 @@
         <details class="box" id="view-rsvps">
             <summary>RSVPs</summary>
             {% for rsvp in event.rsvps.all %}
-                <li>{{ rsvp }}</li>
+                <li>{{ rsvp.user.member }}{% if rsvp.is_conditional %}: {{ rsvp.message }}{% endif %}</li>
             {% endfor %}
         </details>
     </div>
