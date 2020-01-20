@@ -197,6 +197,10 @@ class Event(models.Model):
 
     location = models.CharField(max_length=100, help_text='Where the event is being held.')
 
+    @property
+    def full_location(self):
+        return self.location + settings.SCHOOL_LOCATION_SUFFIX
+
     attendance_code = models.CharField(max_length=6, blank=True, null=True, help_text='Random attendance code for members to submit to verify their attendance.')
 
     slideshow_id = models.CharField(max_length=300, blank=True, null=True, help_text='(optional) The ID of the Google Slides slideshow.')

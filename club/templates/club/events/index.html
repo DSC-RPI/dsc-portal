@@ -50,7 +50,7 @@
                         <span class="event-date">{{ event.start|date:"l, F jS" }}</span> | 
                         <span class="event-time">{{ event.start|time:"g:i a" }} - {{ event.end|time:"g:i a" }}</span>
                         <br>
-                        <a href="https://maps.google.com/?q={{ event.location|urlencode }}"
+                        <a href="https://maps.google.com/?q={{ event.full_location|urlencode }}"
                             title="This event is being held in {{ event.location }}" target="_blank"
                             class="event-location">
                             <i class="fas fa-map-marker-alt"></i>
