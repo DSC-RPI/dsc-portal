@@ -320,7 +320,7 @@
                         </div>
                         <div class="media-content">
                             <h2 class="title is-size-5">{{ user.get_full_name }}</h2>
-                            <h3 class="subtitle">{% firstof user.groups.first 'Core Team Member' %}</h3>
+                            <h3 class="subtitle">{{ user.member.group_names }}</h3>
                         </div>
                     </div>
                 </div>

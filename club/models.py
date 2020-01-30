@@ -111,6 +111,12 @@ class Member(models.Model):
 
     tags = models.ManyToManyField(Tag, blank=True, related_name='members')
 
+    @property
+    def group_names(self):
+        if self.user.groups.count() > 0:
+            return ' & '.join(self.user.groups.values_list('name',flat = True))
+        return 'Core Team Member'
+
     def skills(self):
         return self.tags.filter(tag_type='S')
     
