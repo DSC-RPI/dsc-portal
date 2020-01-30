@@ -417,6 +417,12 @@ class Event(models.Model):
                 instance.create_google_calendar_event()
                 # message = f'New event scheduled **{instance.title}**'
                 # r = requests.post('https://hooks.slack.com/services/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', data={'text':message})
+            
+            # Automatically RSVP core team
+            core_team = User.objects.filter(is_staff=True)
+            for user in core_team:
+                new_rsvp = EventRSVP(user=user, event=instance)
+                new_rsvp.save()
         else:
             if not instance.hidden and instance.visibility != 'C' and instance.calendar_event_id is None:
                 try:
