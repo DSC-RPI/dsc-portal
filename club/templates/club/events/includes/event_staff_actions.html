@@ -12,8 +12,17 @@
             <summary>Attendance</summary>
             <h3 class="subtitle">{{ event.attendance_code }}</h3>
             {% for mark in event.attendance.all %}
-                <li>{{ mark }}</li>
+                <li>{{ mark.user.member }}</li>
             {% endfor %}
+            <hr>
+            <a href="https://wheelofnames.com/" target="_blank" class="button is-link is-small">
+                <span class="icon">
+                    <i class="fas fa-spinner"></i>
+                </span>
+                <span>
+                    Wheel of Names            
+                </span>
+            </a>
         </details>
     </div>
 </div>
