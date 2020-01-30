@@ -528,10 +528,28 @@ class EventRSVP(models.Model):
 
 class EventFeedback(models.Model):
     event = models.ForeignKey(Event, null=False, on_delete=models.CASCADE, related_name='feedback')
-    
-    # TODO: add categories
+    user = models.ForeignKey(User, null=False, on_delete=models.CASCADE, related_name='event_feedback')
 
-    comments = models.TextField(max_length=1000, null=True, blank=True, help_text='Optional comment for members to address anything else.')
+    RATING_CHOICES = [
+        (1, 'Horrible'),
+        (2, 'Bad'),
+        (3, 'Okay'),
+        (4, 'Good'),
+        (5, 'Great')
+    ]
+    overall_rating = models.IntegerField(choices=RATING_CHOICES, help_text='The subjective rating of the whole event in general.')
+
+    date_time_rating = models.IntegerField(choices=RATING_CHOICES, help_text='The subjective rating of the date and time of the event.')
+
+    location_rating = models.IntegerField(choices=RATING_CHOICES)
+
+    pacing_rating = models.IntegerField(choices=RATING_CHOICES)
+
+    speaker_rating = models.IntegerField(choices=RATING_CHOICES, blank=True, null=True)
+    
+    food_rating = models.IntegerField(choices=RATING_CHOICES, blank=True, null=True)
+
+    comments = models.TextField(max_length=2000, null=True, blank=True, help_text='Optional comment for members to address anything else.')
 
 class Project(models.Model):
     '''Project represents a tech-based solution.'''

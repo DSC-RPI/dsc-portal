@@ -3,12 +3,13 @@ from django.conf import settings
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import SchoolYear, FAQ, Member, Event, EventAgendaItem, EventRSVP, EventAttendance, Project, Update, RoadmapMilestone, Tag
+from .models import SchoolYear, FAQ, Member, Event, EventAgendaItem, EventRSVP, EventAttendance, EventFeedback, Project, Update, RoadmapMilestone, Tag
 
 admin.site.register(SchoolYear)
 admin.site.register(FAQ)
 admin.site.register(EventRSVP)
 admin.site.register(EventAttendance)
+admin.site.register(EventFeedback)
 admin.site.register(Project)
 admin.site.register(Update)
 admin.site.register(RoadmapMilestone)
