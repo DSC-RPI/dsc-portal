@@ -20,7 +20,22 @@
                     <img src="{{ member.profile_image_url }}">
                 </figure>
                 <h1 class="title member-full-name is-size-2">{{ member.user.get_full_name }}</h1>
-                <h3 class="subtitle is-size-4">{% if member.user.is_staff %}Core Team Member{% else %}Club Member{% endif %}</h3>
+                {% if member.user.is_staff %}<h3 class="subtitle is-size-4">Core Team Member</h3>{% endif %}
+                <div class="social">
+                    <p class="email">
+                        <span class="icon">
+                            <i class="far fa-envelope"></i>
+                        </span>
+                        <span class="has-text-grey"><a href="mailto:{{ member.user.email }}">{{ member.user.email }}</a></span>
+                    </p>
+
+                    <p class="github">
+                        <span class="icon">
+                            <i class="fab fa-github"></i>
+                        </span>
+                        <span class="has-text-grey">not yet set</span>
+                    </p>
+                </div>
             </div>
             <div class="column is-7">
                 <h4 class="subtitle">About {{ member.user.first_name }}</h4>
