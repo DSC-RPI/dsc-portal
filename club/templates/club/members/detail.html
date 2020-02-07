@@ -17,7 +17,7 @@
         <div class="columns is-centered">
             <div class="column is-3">
                 <figure class="image" style="width: 100%;">
-                    <img src="{{ member.profile_image_url }}">
+                    <img src="{{ member.profile_image_url }}" style="border-radius: 5px">
                 </figure>
                 <h1 class="title member-full-name is-size-2">{{ member.user.get_full_name }}</h1>
                 {% if member.user.is_staff %}<h3 class="subtitle is-size-4">{{ member.group_names }}</h3>{% endif %}

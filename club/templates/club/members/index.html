@@ -4,11 +4,6 @@
     .card-content {
         padding: 10px;
     }
-
-    .card-content .subtitle {
-        font-weight: 600;
-        /* text-align: center; */
-    }
 </style>
 {% endblock %}
 
@@ -25,6 +20,17 @@
     <div class="container">
         {% include 'club/includes/messages.html' %}
 
+        <form class="box">
+            <div class="field has-addons ">
+                <div class="control is-expanded">
+                    <input name="q" type="search" class="input" placeholder="Search members by name, email, GitHub, skills, etc.">
+                </div>
+                <div class="control">
+                    <button class="button is-success">Search</button>
+                </div>
+            </div>
+        </form>
+
         <div class="columns is-flex is-multiline">
             {% for member in members %}
             <div class="column is-half-mobile is-3-tablet is-2-desktop">
@@ -34,7 +40,7 @@
                             <img src="{{ member.profile_image_url }}" alt="Placeholder image">
                         </figure>
                         {% if member.user.is_staff %}
-                        <span class="tag is-small is-dark" style="position: absolute; right:5px; top:5px">Core Team</span>
+                        <span class="tag is-small is-dark" style="position: absolute; left:5px; bottom:5px">Core Team</span>
                         {% endif %}
                     </div>
                     <div class="card-content">
