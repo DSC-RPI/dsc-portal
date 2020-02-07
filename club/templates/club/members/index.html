@@ -1,4 +1,16 @@
 {% extends "club/base.html" %}
+{% block head %}
+<style>
+    .card-content {
+        padding: 10px;
+    }
+
+    .card-content .subtitle {
+        font-weight: 600;
+        /* text-align: center; */
+    }
+</style>
+{% endblock %}
 
 {% block content %}
 <section class="hero is-info">
@@ -15,20 +27,22 @@
 
         <div class="columns is-flex is-multiline">
             {% for member in members %}
-            <div class="column is-half-mobile is-one-quarter-tablet is-one-fifth-desktop">
+            <div class="column is-half-mobile is-3-tablet is-2-desktop">
                 <div class="card">
                     <div class="card-image" style="position: relative;">
                         <figure class="image">
                             <img src="{{ member.profile_image_url }}" alt="Placeholder image">
                         </figure>
                         {% if member.user.is_staff %}
-                        <span class="tag is-medium is-dark" style="position: absolute; left:5px; bottom:5px">Core Team</span>
+                        <span class="tag is-small is-dark" style="position: absolute; right:5px; top:5px">Core Team</span>
                         {% endif %}
                     </div>
                     <div class="card-content">
+                        <a href="{% url 'member_detail' member.id %}">
                         <h2 class="subtitle is-size-6 is-marginless">
-                            <a href="{% url 'member_detail' member.id %}">{{ member.user.get_full_name }}</a>
+                            {{ member.user.get_full_name }}
                         </h2>
+                    </a>
                         <p>
                             
                         </p>
