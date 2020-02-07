@@ -38,6 +38,11 @@
         pointer-events: none;
         z-index: -1;
     }
+
+    .core-team-member .image {
+        border-radius: 100%;
+        background-size: cover;
+    }
 </style>
 {% endblock %}
 {% load static %}
@@ -241,7 +246,9 @@
                 <div class="box">
                     <i class="background-icon fas fa-cloud"></i>
                     <h2 class="subtitle">Study Jams</h2>
-                    <p>A longer event, a collective learning program designed to give students practical experience in Google Cloud Tools. These are created and provided by Google using <a href="https://www.qwiklabs.com/" target="_blank" rel="noopener noreferrer">QwikLabs</a>.
+                    <p>A longer event, a collective learning program designed to give students practical experience in
+                        Google Cloud Tools. These are created and provided by Google using <a
+                            href="https://www.qwiklabs.com/" target="_blank" rel="noopener noreferrer">QwikLabs</a>.
                     </p>
                 </div>
             </div>
@@ -249,7 +256,8 @@
                 <div class="box">
                     <i class="background-icon fas fa-toolbox"></i>
                     <h2 class="subtitle">Hands-on Workshop</h2>
-                    <p>A hands-on activity where students have come together to review technical content and write code, e.g. Code Labs.
+                    <p>A hands-on activity where students have come together to review technical content and write code,
+                        e.g. Code Labs.
                     </p>
                 </div>
             </div>
@@ -284,8 +292,11 @@
 <section class="section">
     <div class="container">
         <p>
-            <a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a> to get started. Then <a href="{% url 'user_account' %}">fill out your profile</a> and enter your {{ school_name_short }} username.
-            You'll then be able to RSVP for events <span class="has-text-grey">(not required)</span> and you'll be added to the official mailing list to be notified of planned events!
+            <a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a> to get started. Then <a
+                href="{% url 'user_account' %}">fill out your profile</a> and enter your {{ school_name_short }}
+            username.
+            You'll then be able to RSVP for events <span class="has-text-grey">(not required)</span> and you'll be added
+            to the official mailing list to be notified of planned events!
         </p>
     </div>
 </section>
@@ -314,9 +325,8 @@
                 <div class="box core-team-member">
                     <div class="media">
                         <div class="media-left">
-                            <p class="image is-64x64">
-                                <img class="is-rounded" src="{{ user.member.profile_image_url }}">
-                            </p>
+                            <p class="image is-64x64"
+                                style="background-image: url('{{ user.member.profile_image_url }}')"></p>
                         </div>
                         <div class="media-content">
                             <h2 class="title is-size-5">{{ user.get_full_name }}</h2>
