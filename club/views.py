@@ -485,6 +485,18 @@ def core_team_email(request):
         'all_member_emails': all_member_emails,
         'all_user_emails': all_user_emails
     }
+
+    if request.method == 'POST':
+        # Send email
+        sections = [{'title': z[0], 'image': z[1], 'content': z[2]} for z in zip(request.POST.getlist('section-title'), request.POST.getlist('section-image'), request.POST.getlist('section-content'))]
+        data = {
+            'title': request.POST['email-title'],
+            'sections': sections
+        }
+        send_templated_email(request.POST['email-subject'], 'update', data, ['frank@matranga.family'])
+        messages.success(request, 'Sent email!')
+        return HttpResponseRedirect(request.path_info)
+
     return render(request, 'club/core_team/email.html', context)
 
 @staff_member_required
