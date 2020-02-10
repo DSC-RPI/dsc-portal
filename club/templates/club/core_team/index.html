@@ -14,6 +14,16 @@
         <hr>
         <div class="columns">
             <div class="column">
+                <div class="box core-team">
+                    <h3 class="subtitle is-size-4">Leads</h3>
+                    <ul>
+                        {% for user in core_team %}
+                        <li><a href="{% url 'member_detail' user.id %}">{{ user.get_full_name }} | {{ user.member.group_names }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="column">
                 <div class="box links">
                     <h3 class="subtitle is-size-4">Quicklinks</h3>
                     <ul>
