@@ -527,6 +527,7 @@ def social_media(request):
 @staff_member_required
 def member_management(request):
     unverified_members = Member.objects.filter(verified=False, school_username__isnull=False)
+    verified_members = Member.verified_members.all()
 
     if request.method == 'POST' and 'verify-member-id' in request.POST:
         # Verify specified member
@@ -542,7 +543,8 @@ def member_management(request):
             return HttpResponseRedirect(request.path_info)
 
     context = {
-        'unverified_members': unverified_members
+        'unverified_members': unverified_members,
+        'verified_members': verified_members
     }
     return render(request, 'club/core_team/member_management.html', context)
 

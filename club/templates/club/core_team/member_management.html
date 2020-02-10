@@ -26,6 +26,29 @@
                 </div>
             </div>
         </div>
+
+        <hr>
+
+        <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>RPI Username</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for member in verified_members %}
+                <tr>
+                    <td>{{ member.user.get_full_name }}</td>
+                    <td>{{ member.user.email }}</td>
+                    <td>{{ member.school_username }}</td>
+                    <td><a href="{% url 'member_detail' member.id %}" class="button is-small">View</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </section>
 {% endblock %}
