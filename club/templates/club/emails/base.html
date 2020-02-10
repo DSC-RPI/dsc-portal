@@ -1,122 +1,116 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Email Template</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <style lang="text/css">
-      @import url("https://themes.googleusercontent.com/fonts/css?kit=DFQxm4rd7fRHgM9OTejWVbGEn0Gc9pEgGHTNg2hcHI-5kFni9xGj3Ov4A_dZWje7iSuT_49kqPuR2tXeebJbaOgV3O06CsdO7v3PBaWai9CR_0ptpBNtzjT1BDgsYfLW");
+        @import url("https://themes.googleusercontent.com/fonts/css?kit=DFQxm4rd7fRHgM9OTejWVbGEn0Gc9pEgGHTNg2hcHI-5kFni9xGj3Ov4A_dZWje7iSuT_49kqPuR2tXeebJbaOgV3O06CsdO7v3PBaWai9CR_0ptpBNtzjT1BDgsYfLW");
 
-      html, body {
-        max-width: 468pt;
-        margin: 0 auto;
-        padding: 0;
-      }
+        html,
+        body {
+            
+            padding: 0;
+        }
 
-      body {
-        /* Center on page and limit to narrow */
-        font-family: "Roboto";
-        font-size: 1em;
-        font-weight: 300;
-      }
-      
-      img {
-        width: 100%;
-      }
+        body {
+            /* Center on page and limit to narrow */
+            font-family: "Roboto";
+            font-size: 1.2em;
+            font-weight: 300;
+        }
 
-      .title {
-        font-size: 1.6em;
-        font-weight: 500;
-        font-family: "Google Sans";
-      }
+        img {
+            width: 100%;
+        }
 
-      .subtitle {
-        margin: 0;
-        font-size: 1.4em;
-        font-weight: 400;
-        font-family: "Google Sans";
-      }
+        .title {
+            font-size: 2em;
+            font-weight: 500;
+            font-family: "Google Sans";
+        }
 
-      .subtitle:not(:first-child) {
-        margin: 24px 0 0 0;
-      }
+        .subtitle {
+            margin: 15px 0px !important;
+            font-size: 1.8em;
+            font-weight: 400;
+            font-family: "Google Sans";
+        }
 
-      header, section, footer {
-        padding: 48px;
-        background-color: #fafafa;
-      }
+        .subtitle:not(:first-child) {
+            margin: 24px 0 0 0;
+        }
 
-      header {
-        padding: 24px;
-      }
+        header,
+        section,
+        footer {
+            padding: 48px;
+            background-color: #fafafa;
+        }
 
-      header .logo {
-        width: 100%;
-      }
+        header {
+            padding: 24px;
+        }
 
-      footer {
-        text-align: center;
-      }
+        header .logo {
+            width: 100%;
+        }
 
-      footer .logo {
-        width: 100px;
-      }
+        footer {
+            text-align: center;
+        }
 
-      footer a {
-        color: white;
-        font-weight: 500;
-      }
+        footer .logo {
+            width: 100px;
+        }
 
-      .primary {
-        background-color: #4285f4;
-        color: white;
-      }
+        footer a {
+            color: white !important;
+            font-weight: 500;
+        }
 
-      /* Testing borders */
-      /* * {
+        .primary {
+            background-color: #4285f4;
+            color: white;
+        }
+
+        /* Testing borders */
+        /* * {
         border: 1px solid red;
       } */
     </style>
-  </head>
-  <body>
-    <header>
-      <img class="logo" alt="Club logo" src="images/image5.png" />
-    </header>
-    <main>
-      {% block content %}{% endblock %}
-    </main>
+</head>
 
-    <footer class="footer primary">
-      <img class="logo" src="{% static 'club/img/google_developers_logomark_white.png' %}}" alt="Google Developers logo">
-      <p class="links">
-        <a
-          href="https://www.instagram.com/{{ instagram_username }}"
-          title="The official DSC {{ school_name }} Instagram"
-          target="_blank"
-          rel="noopener noreferrer"
-          >Instagram</a>
-        <a
-          href="{{ facebook_link }}"
-          title="The official DSC {{ school_name }} Facebook page"
-          target="_blank"
-          rel="noopener noreferrer"
-          >Facebook</a>
-        <a
-          href="https://twitter.com/{{ twitter_username }}"
-          title="The official DSC {{ school_name }} Twitter feed"
-          target="_blank"
-          rel="noopener noreferrer"
-          >Twitter</a>
-        <a
-          href="{{ github_link }}"
-          title="The full source of the DSC Portal (this site)"
-          target="_blank"
-          rel="noopener noreferrer"
-          >GitHub</a>
-      </p>
-    </footer>
-  </body>
+<body>
+    <div id="email" style="max-width: 600px !important; margin: 0 auto;">
+        <header>
+            <img class="logo" alt="Club logo" src="https://dsc-rpi.club/static/club/img/DSC_RPI.png" />
+        </header>
+    
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+    
+        <footer class="footer primary" style="padding: 1.5em 0.5em 0.5em 0.5em">
+            <img class="logo" src="https://dsc-rpi.club/static/club/img/google_developers_logomark_white.png"
+                alt="Google Developers logo" style="width: 50px"/>
+            <p class="links">
+                <a href="https://www.instagram.com/{{ instagram_username }}"
+                    title="The official DSC {{ school_name }} Instagram" target="_blank"
+                    rel="noopener noreferrer">Instagram</a>
+                <a href="{{ facebook_link }}" title="The official DSC {{ school_name }} Facebook page" target="_blank"
+                    rel="noopener noreferrer">Facebook</a>
+                <a href="https://twitter.com/{{ twitter_username }}" title="The official DSC {{ school_name }} Twitter feed"
+                    target="_blank" rel="noopener noreferrer">Twitter</a>
+                <a href="{{ github_link }}" title="The full source of the DSC Portal" target="_blank"
+                    rel="noopener noreferrer">GitHub</a>
+            </p>
+        </footer>
+    </div>
+</body>
+
 </html>
