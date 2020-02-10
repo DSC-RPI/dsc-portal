@@ -1,8 +1,5 @@
 {% extends "club/emails/base.html" %}
 {% block content %}
-<section>
-    <h2 class="title">{{title}}</h2>
-</section>
 {% for section in sections %}
 <section class="section {% cycle 'primary' '' %}">
   {% if section.image|length > 0 %}<img src="{{ section.image }}">{% endif %}

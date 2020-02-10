@@ -39,17 +39,17 @@
         <div class="columns">
             <div class="column">
                 <div class="box">
-                    <h2 class="subtitle">Mass Email</h2>
+                    <h2 class="title is-size-4">Mass Email</h2>
+                    <h3 class="subtitle is-size-6">
+                        This will send a general email to all <strong>verified members</strong>.
+                    </h3>
+
 
                     <form method="POST" onsubmit="return confirm('Send email update to all members?')">
                         {% csrf_token %}
                         <div class="field">
                             <label class="label" for="email-subject">Subject</label>
                             <input class="input" type="text" name="email-subject" id="email-subject" required />
-                        </div>
-                        <div class="field">
-                            <label class="label" for="email-title">Title</label>
-                            <input class="input" type="text" name="email-title" id="email-title" required />
                         </div>
 
                         <template id="email-section-template">
@@ -71,12 +71,13 @@
                         </template>
                         <hr />
                         <div id="email-sections"></div>
-                        <strong>Sections</strong>
-                        <button type="button" class="button" onclick="addSection()">
-                            Add Section
-                        </button>
-                        <hr>
-                        <button class="button is-success">Send</button>
+                        <div class="buttons">
+                            <button type="button" class="button" onclick="addSection()">
+                                Add Section
+                            </button>
+                            <button type="button" class="button is-warning" disabled>Preview</button>
+                            <button class="button is-success">Send</button>
+                        </div>
                     </form>
                 </div>
             </div>
