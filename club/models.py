@@ -163,8 +163,8 @@ class Event(models.Model):
     # Taken from https://sites.google.com/google.com/developerstudentclubleads/dsc-activities-reporting
     EVENT_TYPES = [
         ('IS', 'Info Session'),
-        ('WS', 'Workshop'),
-        ('SJ', 'Study Jam Workshop'),
+        ('SJ', 'Study Jam'),
+        ('OH', 'Office Hours'),
         ('HO', 'Hands-on Workshop'),
         ('HA', 'Hackathon'),
         ('SS', 'Speaker Session'),
