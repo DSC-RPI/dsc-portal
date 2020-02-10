@@ -1,16 +1,39 @@
-{% extends "club/base.html" %}
-{% block head %}
+{% extends "club/base.html" %} {% block head %}
 <style>
-code {
-    display: block;
-}
+    code {
+        display: block;
+    }
 </style>
-{% endblock %}
-{% block content %}
+<script>
+    let sections = 0
+    function addSection() {
+        sections += 1
+        const emailSectionHolder = document.getElementById("email-sections");
+
+        const emailSectionTemplate = document.getElementById('email-section-template')
+
+        const newSection = emailSectionTemplate.content.cloneNode(true)
+
+        // Section title field
+        newSection.querySelector('input.section-title').id = 'section-title-' + sections
+        // newSection.querySelector('input.section-title').name = 'section-title-' + sections
+        newSection.querySelector('label.section-title').htmlFor = 'section-title-' + sections
+        newSection.querySelector('label.section-title').innerText = 'Section ' + sections + ' Title'
+
+        // Section content field
+        newSection.querySelector('textarea.section-content').id = 'section-content-' + sections
+        // newSection.querySelector('textarea.section-content').name = 'section-content-' + sections
+        newSection.querySelector('label.section-content').htmlFor = 'section-content-' + sections
+        newSection.querySelector('label.section-content').innerText = 'Section ' + sections + ' Content'
+
+        emailSectionHolder.appendChild(newSection)
+
+    }
+</script>
+{% endblock %} {% block content %}
 <section class="section">
     <div class="container">
         {% include 'club/includes/messages.html' %}
-        
         <h2 class="title">Email</h2>
 
         <div class="columns">
@@ -18,17 +41,42 @@ code {
                 <div class="box">
                     <h2 class="subtitle">Mass Email</h2>
 
-                    <form>
+                    <form method="POST" onsubmit="return confirm('Send email update to all members?')">
+                        {% csrf_token %}
                         <div class="field">
-                            <label class="label" for="email-template">Email Template</label>
-                            <div class="select">
-                                <select id="email-template" name="email-template">
-                                    {% for template in email_templates %}
-                                    <option value="{{ template }}">{{ template }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
+                            <label class="label" for="email-subject">Subject</label>
+                            <input class="input" type="text" name="email-subject" id="email-subject" required />
                         </div>
+                        <div class="field">
+                            <label class="label" for="email-title">Title</label>
+                            <input class="input" type="text" name="email-title" id="email-title" required />
+                        </div>
+
+                        <template id="email-section-template">
+                            <div class="field">
+                                <label class="label section-title">Section Title</label>
+                                <input class="input section-title" name="section-title" type="text"
+                                    placeholder="Hello World" required/>
+                            </div>
+                            <div class="field">
+                                <label class="label section-image">Section Image</label>
+                                <input class="input section-image" name="section-image" type="url"/>
+                            </div>
+                            <div class="field">
+                                <label class="label section-content">Section Content</label>
+                                <textarea class="input section-content" name="section-content" type="text"
+                                    placeholder="Hello World" required></textarea>
+                            </div>
+                            <hr>
+                        </template>
+                        <hr />
+                        <div id="email-sections"></div>
+                        <strong>Sections</strong>
+                        <button type="button" class="button" onclick="addSection()">
+                            Add Section
+                        </button>
+                        <hr>
+                        <button class="button is-success">Send</button>
                     </form>
                 </div>
             </div>
@@ -37,18 +85,18 @@ code {
                 <div class="box">
                     <h3 class="subtitle">All Users</h3>
                     <code>
-                        {{ all_user_emails }}
-                    </code>
-                    <hr>
+            {{ all_user_emails }}
+          </code>
+                    <hr />
                     <h3 class="subtitle">All Members</h3>
                     <code>
-                        {{ all_member_emails }}
-                    </code>
-                    <hr>
+            {{ all_member_emails }}
+          </code>
+                    <hr />
                     <h3 class="subtitle">Verified Members</h3>
                     <code>
-                        {{ verified_member_emails }}
-                    </code>
+            {{ verified_member_emails }}
+          </code>
                 </div>
             </div>
         </div>
