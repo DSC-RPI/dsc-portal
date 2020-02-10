@@ -8,6 +8,8 @@ FROM = f'DSC {settings.SCHOOL_NAME_SHORT} <{settings.GOOGLE_ACCOUNT}>'
 
 def send_templated_email(subject, template, data, recipients):
     # https://stackoverflow.com/questions/2809547/creating-email-templates-with-django
+    data['github_link'] = settings.GITHUB_LINK
+    data['facebook_link'] = settings.FACEBOOK_LINK
     html_message = render_to_string(f'club/emails/{template}.html', data)
     try:
         # Try to find the plaintext template
