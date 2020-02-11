@@ -40,6 +40,20 @@ main .notifications {
     animation-iteration-count: infinite;
 }
 
+@keyframes growIn {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+.grow-in {
+    animation: growIn 0.75s;
+}
+
 @keyframes fade {
     0%, 100% {
         opacity: 0.1
