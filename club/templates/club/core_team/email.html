@@ -27,7 +27,12 @@
         newSection.querySelector('label.section-content').innerText = 'Section ' + sections + ' Content'
 
         emailSectionHolder.appendChild(newSection)
+    }
 
+    function preview() {
+        const emailForm = document.getElementById('email-form')
+        emailForm.action += '?preview=1'
+        emailForm.submit()
     }
 </script>
 {% endblock %} {% block content %}
@@ -45,7 +50,7 @@
                     </h3>
 
 
-                    <form method="POST" onsubmit="return confirm('Send email update to all members?')">
+                    <form id="email-form" action="{% url 'core_team_email' %}" method="POST" onsubmit="return confirm('Send email update to all members?')">
                         {% csrf_token %}
                         <div class="field">
                             <label class="label" for="email-subject">Subject</label>
@@ -75,7 +80,7 @@
                             <button type="button" class="button" onclick="addSection()">
                                 Add Section
                             </button>
-                            <button type="button" class="button is-warning" disabled>Preview</button>
+                            <button type="button" class="button is-warning" onclick="preview()">Preview</button>
                             <button class="button is-success">Send</button>
                         </div>
                     </form>

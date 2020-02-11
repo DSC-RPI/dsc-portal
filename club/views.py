@@ -493,9 +493,13 @@ def core_team_email(request):
         data = {
             'sections': sections
         }
-        send_templated_email(request.POST['email-subject'], 'update', data, ['frank@matranga.family'])
-        messages.success(request, f'Sent email to all verified members!')
-        return HttpResponseRedirect(request.path_info)
+        if 'preview' in request.GET and request.GET['preview'] == '1':
+            return render(request, 'club/emails/update.html', data)
+        else:
+            send_templated_email(request.POST['email-subject'], 'update', data, ['frank@matranga.family'])
+            messages.success(request, f'Sent email to all verified members!')
+            return HttpResponseRedirect(request.path_info)
+
 
     return render(request, 'club/core_team/email.html', context)
 
