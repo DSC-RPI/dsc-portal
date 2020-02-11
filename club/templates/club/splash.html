@@ -44,6 +44,19 @@
         background-size: cover;
         background-position: center;
     }
+
+    @keyframes growIn {
+        from {
+            transform: scale(0);
+        }
+
+        to {
+            transform: scale(1);
+        }
+    }
+    .next-event {
+        animation: growIn 0.75s;
+    }
 </style>
 {% endblock %}
 {% load static %}
@@ -64,9 +77,9 @@
                     </div>
 
                     <div class="column is-5">
-                        <div class="box">
+                        <div class="box next-event">
                             <h2 class="subtitle has-text-dark">Next Event</h2>
-                            {% if closest_event %}
+                            {% if closest_event and not closest_event.has_started %}
                             <p>
                                 {{ closest_event }}
                                 <a href="{% url 'event_detail' closest_event.id %}">View</a>
