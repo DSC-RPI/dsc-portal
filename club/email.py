@@ -19,7 +19,7 @@ def send_templated_email(subject, template, data, recipients):
         plain_message = html2text(html_message)
 
     logger.info(f'Sending email with subject "{subject}" to {recipients} with template "{template}"')
-    return sm(subject, plain_message, FROM, recipients, html_message=html_message)
+    return sm(subject, plain_message, FROM, recipients, html_message=html_message, fail_silently=False)
 
 def send_email(subject, body, recipients):
     '''
@@ -30,4 +30,4 @@ def send_email(subject, body, recipients):
     recipients: list
     '''
     logger.info(f'Sending email with subject "{subject}" to {recipients}')
-    return sm(subject, html2text(body), FROM, recipients, html_message=body)
+    return sm(subject, html2text(body), FROM, recipients, html_message=body, fail_silently=False)

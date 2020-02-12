@@ -208,11 +208,11 @@ DOMAIN = 'https://' + os.environ['WEBSITE']
 
 # EMAIL
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = os.environ['GOOGLE_ACCOUNT']
-EMAIL_HOST_PASSWORD = os.environ['GOOGLE_ACCOUNT_PASSWORD']
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = os.environ['SENDGRID_API_KEY']
 
 # DSC GOOGLE ACCOUNT
 GOOGLE_ACCOUNT = os.environ['GOOGLE_ACCOUNT']
