@@ -315,7 +315,7 @@ class Event(models.Model):
             return
 
         # This will be the document name
-        name = self.start.strftime("[%y/%m/%d] DSC " + settings.SCHOOL_NAME_SHORT + " Meeting Notes")
+        name = self.start.strftime("[%Y-%m-%d] DSC " + settings.SCHOOL_NAME_SHORT + " Meeting Notes")
 
         document = drive_service.files().copy(fileId=settings.GOOGLE_DRIVE_MEETING_NOTES_TEMPLATE_ID, body={
             'name': name,  # Name document
@@ -351,7 +351,7 @@ class Event(models.Model):
                         'text': '{{date}}',
                         'matchCase':  'true'
                     },
-                    'replaceText': self.start.strftime('%A, %B %-m %Y'),
+                    'replaceText': self.start.strftime('%A, %B %-d %Y'),
                 }
             },
             {
@@ -360,7 +360,25 @@ class Event(models.Model):
                         'text': '{{short_date}}',
                         'matchCase':  'true'
                     },
-                    'replaceText': self.start.strftime('%m/%d/%y'),
+                    'replaceText': self.start.strftime('%Y-%m-%d'),
+                }
+            },
+            {
+                'replaceAllText': {
+                    'containsText': {
+                        'text': '{{event_link}}',
+                        'matchCase':  'true'
+                    },
+                    'replaceText': f'https://{settings.WEBSITE}/events/{self.id}',
+                }
+            },
+            {
+                'replaceAllText': {
+                    'containsText': {
+                        'text': '{{location}}',
+                        'matchCase':  'true'
+                    },
+                    'replaceText': self.location,
                 }
             }
             # Add more replacements here!

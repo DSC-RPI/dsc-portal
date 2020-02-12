@@ -31,6 +31,8 @@ GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ['ENV'] == 'development'
 
+WEBSITE = os.environ['WEBSITE']
+
 ALLOWED_HOSTS = ['127.0.0.1', os.environ['WEBSITE']]
 
 DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
