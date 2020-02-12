@@ -493,7 +493,7 @@ def core_team_email(request):
         data = {
             'sections': sections
         }
-        if 'preview' in request.GET and request.GET['preview'] == '1':
+        if 'show-preview' in request.POST and request.POST['show-preview'] == '1':
             return render(request, 'club/emails/update.html', data)
         else:
             send_templated_email(request.POST['email-subject'], 'update', data, ['frank@matranga.family'])
