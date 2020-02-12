@@ -19,8 +19,9 @@ def send_templated_email(subject, template, data, recipients):
         plain_message = html2text(html_message)
 
     logger.info(f'Sending email with subject "{subject}" to {recipients} with template "{template}"')
-    return sm(subject, plain_message, FROM, recipients, html_message=html_message, fail_silently=False)
-
+    for recipient in recipients:
+        sm(subject, plain_message, FROM, [recipient], html_message=html_message, fail_silently=False)
+    
 def send_email(subject, body, recipients):
     '''
     Sends an email to the recipients.
