@@ -4,7 +4,7 @@ from django.conf import settings
 from .logger import logger
 from html2text import html2text
 
-FROM = f'DSC {settings.SCHOOL_NAME_SHORT} <{settings.GOOGLE_ACCOUNT}>'
+FROM = f'DSC {settings.SCHOOL_NAME_SHORT} <{settings.EMAIL_SENDER}>'
 
 def send_templated_email(subject, template, data, recipients):
     # https://stackoverflow.com/questions/2809547/creating-email-templates-with-django

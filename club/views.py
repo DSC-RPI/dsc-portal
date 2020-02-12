@@ -498,7 +498,8 @@ def core_team_email(request):
             return render(request, 'club/emails/update.html', data)
         else:
             if settings.DEBUG:
-                messages.warning(request, 'Prevented sending since in dev mode.')
+                messages.warning(request, f'Sent to only {settings.GOOGLE_ACCOUNT} since in dev mode.')
+                send_templated_email(request.POST['email-subject'], 'update', data, [settings.GOOGLE_ACCOUNT])
             else:
                 send_templated_email(request.POST['email-subject'], 'update', data, verified_member_email_list)
                 messages.success(request, f'Sent email to all verified members!')
