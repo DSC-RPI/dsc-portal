@@ -1,0 +1,24 @@
+<div class="modal submit-feedback-modal is-active">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Submit Feedback for {{ event.title }}</p>
+        </header>
+        <section class="modal-card-body">
+            <form action="{% url 'event_feedback' event.id %}" id="submit-feedback" method="POST" autocomplete="off">
+                {% csrf_token %}
+                <p class="has-text-grey">Coming soon...</p>
+            </form>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success" type="submit" form="submit-feedback">
+              <span class="icon">
+                <i class="fas fa-calendar-alt"></i>
+              </span>
+              <span>Submit</span>
+          </button>
+          <a href="?submit-feedback=0" class="button">Cancel</a>
+        </footer>
+    </div>
+    <a href="?submit-feedback=0" class="modal-close is-large" aria-label="close"></a>
+</div>

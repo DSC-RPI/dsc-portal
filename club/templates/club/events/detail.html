@@ -102,6 +102,10 @@
         {% elif event.is_ongoing and show_submit_attendance %}
         {% include "club/events/includes/event_attendance_modal.html" %}
         {% endif %}
+        
+        {% if event.is_over and show_submit_feedback  %}
+        {% include "club/events/includes/event_feedback_modal.html" %}
+        {% endif %}
 
         {% if user.is_staff and event.has_started %}
         <hr>
