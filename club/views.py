@@ -478,7 +478,8 @@ def core_team(request):
 
 @staff_member_required
 def core_team_email(request):
-    verified_member_emails = '; '.join(list(map(lambda member: member.user.email, Member.objects.filter(verified=True))))
+    verified_member_email_list = list(map(lambda member: member.user.email, Member.objects.filter(verified=True)))
+    verified_member_emails = '; '.join(verified_member_email_list)
     all_member_emails = '; '.join(list(map(lambda member: member.user.email, Member.objects.all())))
     all_user_emails = '; '.join(list(map(lambda user: user.email, User.objects.all())))
     context = {
@@ -496,8 +497,11 @@ def core_team_email(request):
         if 'show-preview' in request.POST and request.POST['show-preview'] == '1':
             return render(request, 'club/emails/update.html', data)
         else:
-            send_templated_email(request.POST['email-subject'], 'update', data, ['frank@matranga.family'])
-            messages.success(request, f'Sent email to all verified members!')
+            if settings.DEBUG:
+                messages.warning(request, 'Refrained from sending email since in dev mode.')
+            else:
+                send_templated_email(request.POST['email-subject'], 'update', data, verified_member_email_list)
+                messages.success(request, f'Sent email to all verified members!')
             return HttpResponseRedirect(request.path_info)
 
 
