@@ -490,7 +490,23 @@ def member_detail(request, member_id):
 def core_team(request):
     # TODO: docstring
     core_team = User.objects.filter(is_staff=True)
-    return render(request, 'club/core_team/index.html', {'core_team': core_team, 'google_drive_folder_id': settings.GOOGLE_DRIVE_FOLDER_ID})
+    links = [
+        ('Community Leads Portal', 'https://communityleads.dev/home/'),
+        ('Google Cloud Console', 'https://console.cloud.google.com/'),
+        ('Club Google Drive', 'https://drive.google.com/drive/u/1/folders/{{ google_drive_folder_id }}'),
+        ('DSC Lead Home', 'https://sites.google.com/google.com/developerstudentclubleads/home'),
+        ('DSC Resources Spreadsheet', 'https://docs.google.com/spreadsheets/d/1qHvNvuYzI0Wjt_QUU85JMsKUZIQLmwg0VKYMpifZ914/edit#gid=0'),
+        ('Cloud Study Jams Organizer Guide', 'https://docs.google.com/presentation/d/1_YaJ4YJC2vXL16m0feYijtYZQa3809k2mzMPALozBeU/edit#slide=id.g707393ed40_0_1980')
+    ]
+    if settings.SCHOOL_NAME_SHORT == 'RPI':
+        links.append(('RPI Event Scheduler', 'https://rpi.emscloudservice.com/web/'))
+
+    context = {
+        'core_team': core_team,
+        'google_drive_folder_id': settings.GOOGLE_DRIVE_FOLDER_ID,
+        'links': links
+    }
+    return render(request, 'club/core_team/index.html', context)
 
 @staff_member_required
 def core_team_email(request):
