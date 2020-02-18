@@ -11,7 +11,7 @@ from django.conf import settings
 from .logger import logger
 from .email import send_templated_email
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib import messages
 
 from .models import Member, FAQ, Event, Project, Update, EventAttendance, EventRSVP, RoadmapMilestone
@@ -507,6 +507,22 @@ def core_team(request):
         'links': links
     }
     return render(request, 'club/core_team/index.html', context)
+
+@staff_member_required
+def core_team_role(request, role_name):
+    groups = {}
+    for group in Group.objects.all():
+        formatted_group_name = group.name.lower().replace(' ', '_')
+        groups[formatted_group_name] = group
+    
+    print(groups)
+
+    # Ensure core team member is in specified group
+    if role_name in groups and request.user.groups.filter(name=groups[role_name]).exists():
+        return render(request, f'club/core_team/roles/{role_name}.html')
+    else:
+        messages.warning(request, 'You do not have permission to view that Core Team page!')
+        return HttpResponseRedirect('/core-team')
 
 @staff_member_required
 def core_team_email(request):
