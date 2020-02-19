@@ -15,7 +15,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib import messages
 
 from .models import Member, FAQ, Event, Project, Update, EventAttendance, EventRSVP, RoadmapMilestone
-from .forms import MemberAccountForm
+from .forms import MemberAccountForm, EventFeedbackForm
 from django.utils import timezone
 from django.db import IntegrityError
 
@@ -288,7 +288,9 @@ def event_detail(request, event_id):
         show_slideshows = 'select-slideshow' in request.GET and request.GET['select-slideshow'] == '1'
         show_submit_attendance = 'submit-attendance' in request.GET and request.GET['submit-attendance'] == '1'
         show_submit_feedback = 'submit-feedback' in request.GET and request.GET['submit-feedback'] == '1'
+        feedback_form = EventFeedbackForm()
     else:
+        feedback_form = None
         attendance_submitted = False
         rsvp = None
         show_slideshows = False
@@ -331,7 +333,8 @@ def event_detail(request, event_id):
         'show_slideshows': show_slideshows,
         'show_submit_attendance': show_submit_attendance,
         'show_submit_feedback': show_submit_feedback,
-        'slideshows': slideshows
+        'slideshows': slideshows,
+        'feedback_form': feedback_form
     }
 
     return render(request, 'club/events/detail.html', context)
@@ -423,6 +426,15 @@ def event_feedback(request, event_id):
         messages.warning(
             request, 'You can only submit feedback after the event. Reach out to a Core Team meber if you have issues.')
         return HttpResponseRedirect(f'/events/{event_id}')
+
+    # Submit feedback
+    form = EventFeedbackForm({ 'user': request.user, 'event': event}.update(request.POST))
+    if form.is_valid():
+        messages.success(request, 'Thank you for the feedback!')
+        form.save()
+    else:
+        logger.error(form.errors)
+        messages.error(request, 'There was an issue submitting your feedback.')
 
     return HttpResponseRedirect(f'/events/{event_id}')
 
