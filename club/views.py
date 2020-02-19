@@ -14,7 +14,7 @@ from .email import send_templated_email
 from django.contrib.auth.models import User, Group
 from django.contrib import messages
 
-from .models import Member, FAQ, Event, Project, Update, EventAttendance, EventRSVP, RoadmapMilestone
+from .models import Member, FAQ, Event, Project, Update, EventAttendance, EventRSVP, EventFeedback, RoadmapMilestone
 from .forms import MemberAccountForm, EventFeedbackForm
 from django.utils import timezone
 from django.db import IntegrityError
@@ -419,19 +419,36 @@ def event_feedback(request, event_id):
     now = timezone.now()
     event = get_object_or_404(Event, pk=event_id)
 
+    # If a GET request, redirect to event detail page with feedback modal open
     if request.method != 'POST':
         return HttpResponseRedirect(f'/events/{event_id}?submit-feedback=1')
 
+    # Only allow feedback for past events
     if not event.is_over:
         messages.warning(
             request, 'You can only submit feedback after the event. Reach out to a Core Team meber if you have issues.')
         return HttpResponseRedirect(f'/events/{event_id}')
 
     # Submit feedback
-    form = EventFeedbackForm({ 'user': request.user, 'event': event}.update(request.POST))
+    form = EventFeedbackForm(request.POST)
     if form.is_valid():
         messages.success(request, 'Thank you for the feedback!')
-        form.save()
+        feedback = EventFeedback(event=event, user=request.user)
+
+        feedback.overall_rating = form.cleaned_data['overall_rating']
+        feedback.date_time_rating = form.cleaned_data['date_time_rating']
+        feedback.location_rating = form.cleaned_data['location_rating']
+        feedback.pacing_rating = form.cleaned_data['pacing_rating']
+
+        # Optional ratings
+        if 'speaker_rating' in form.cleaned_data:
+            feedback.speaker_rating = form.cleaned_data['speaker_rating']
+        if 'food_rating' in form.cleaned_data:
+            feedback.food_rating = form.cleaned_data['food_rating']
+        if 'comments' in form.cleaned_data:
+            feedback.comments = form.cleaned_data['comments']
+
+        feedback.save()
     else:
         logger.error(form.errors)
         messages.error(request, 'There was an issue submitting your feedback.')
