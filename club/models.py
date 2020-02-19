@@ -575,6 +575,9 @@ class EventFeedback(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f'Feedback for {self.event}'
+
 class Project(models.Model):
     '''Project represents a tech-based solution.'''
 
