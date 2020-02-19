@@ -571,6 +571,10 @@ class EventFeedback(models.Model):
 
     comments = models.TextField(max_length=2000, null=True, blank=True, help_text='Optional comment for members to address anything else.')
 
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
 class Project(models.Model):
     '''Project represents a tech-based solution.'''
 

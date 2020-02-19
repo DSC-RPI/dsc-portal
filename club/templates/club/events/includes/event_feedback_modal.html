@@ -7,7 +7,7 @@
         <section class="modal-card-body">
             <form action="{% url 'event_feedback' event.id %}" id="submit-feedback" method="POST" autocomplete="off">
                 {% csrf_token %}
-                <p class="has-text-grey">Coming soon...</p>
+                {{ feedback_form }}
             </form>
         </section>
         <footer class="modal-card-foot">
