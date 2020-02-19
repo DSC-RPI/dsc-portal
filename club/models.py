@@ -156,8 +156,16 @@ class Member(models.Model):
             instance.member.save()
 post_save.connect(Member.post_user_save, sender=settings.AUTH_USER_MODEL)
 
+
+class PublicEventManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(hidden=False).exclude(event_type='CT')
+
 class Event(models.Model):
     '''Events represent one-time club meetings.'''
+
+    objects = models.Manager()
+    public_events = PublicEventManager()
 
     # Recognized types of events
     # Taken from https://sites.google.com/google.com/developerstudentclubleads/dsc-activities-reporting
@@ -174,14 +182,10 @@ class Event(models.Model):
 
     event_type = models.CharField(max_length=2, choices=EVENT_TYPES, help_text='Whether the event is a Workshop, Info session, etc.')
     
-    # Who can see the event
-    VISIBILITY_TYPES = [
-        ('P', 'Public'),
-        ('M', 'Members'),
-        ('C', 'Core Team')
-    ]
-    visibility = models.CharField(max_length=1, choices=VISIBILITY_TYPES, help_text='Determines who can see/register for the event.')
-    
+    @property
+    def is_publicly_visible(self):
+        return self.event_type != 'CT' and not self.hidden
+
     hidden = models.BooleanField(default=False, help_text='If true then the event will not be shown anywhere. Use this to create event drafts.')
 
     # Title of Event limited to 100 characters
@@ -437,7 +441,7 @@ class Event(models.Model):
         We either create or update the Google Calendar event for it.
         '''
         if created:
-            if (instance.visibility == 'P' or instance.visibility == 'M') and not instance.hidden:
+            if instance.is_publicly_visible:
                 instance.create_google_calendar_event()
                 # message = f'New event scheduled **{instance.title}**'
                 # r = requests.post('https://hooks.slack.com/services/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', data={'text':message})
@@ -450,12 +454,12 @@ class Event(models.Model):
                 new_attendance = EventAttendance(user=user, event=instance)
                 new_attendance.save()
         else:
-            if not instance.hidden and instance.visibility != 'C' and instance.calendar_event_id is None:
+            if instance.is_publicly_visible and instance.calendar_event_id is None:
                 try:
                     instance.create_google_calendar_event()
                 except:
                     pass
-            elif (instance.hidden or instance.visibility == 'C') and instance.calendar_event_id is not None:
+            elif not instance.is_publicly_visible and instance.calendar_event_id is not None:
                 try:
                     instance.delete_google_calendar_event()
                     instance.save()

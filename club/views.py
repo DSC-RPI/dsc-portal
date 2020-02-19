@@ -47,7 +47,7 @@ def index(request):
         core_team = User.objects.filter(is_staff=True)
         today = timezone.now().date()
         try:
-            closest_event = Event.objects.filter(hidden=False, visibility='P').latest()
+            closest_event = Event.public_events.latest()
         except ObjectDoesNotExist:
             closest_event = None
         return render(request, 'club/splash.html', {'core_team': core_team, 'closest_event': closest_event})
@@ -210,24 +210,21 @@ def event_index(request):
         user_attended_events = []
 
     # Start by getting ALL events and then filter based on user
-    ongoing_events = Event.objects.filter(
-        start__lte=now, end__gte=now)
-    upcoming_events = Event.objects.filter(
-        start__gte=today).order_by('start')
-    past_events = Event.objects.filter(
-        end__lt=today)
-
-    if not request.user.is_staff:    
-        if request.user.is_authenticated and request.user.member.verified:
-            # Verified member, so show non-hidden public and member events
-            ongoing_events = ongoing_events.exclude(visibility='C').exclude(hidden=True)
-            upcoming_events = upcoming_events.exclude(visibility='C').exclude(hidden=True)
-            past_events = past_events.exclude(visibility='C').exclude(hidden=True)
-        else:
-            # Anonymous or not-verified user, so only show non-hidden public events
-            ongoing_events = ongoing_events.filter(visibility='P', hidden=False)
-            upcoming_events = upcoming_events.filter(visibility='P', hidden=False)
-            past_events = past_events.filter(visibility='P', hidden=False)
+    if request.user.is_staff:
+        ongoing_events = Event.objects.filter(
+            start__lte=now, end__gte=now)
+        upcoming_events = Event.objects.filter(
+            start__gte=today).order_by('start')
+        past_events = Event.objects.filter(
+            end__lt=today)
+    else:
+        # Non-core team
+        ongoing_events = Event.public_events.filter(
+            start__lte=now, end__gte=now)
+        upcoming_events = Event.public_events.filter(
+            start__gte=today).order_by('start')
+        past_events = Event.public_events.filter(
+            end__lt=today)
 
     context = {
         'user_rsvped_events': user_rsvped_events,
@@ -263,17 +260,9 @@ def event_detail(request, event_id):
     now = timezone.now()
     event = get_object_or_404(Event, pk=event_id)
 
-    if event.hidden and not request.user.is_staff:
-        messages.warning(request, 'That event is not public yet.')
-        return HttpResponseRedirect('/events')
-
-    if event.visibility == 'M' and not request.user.member.verified:
-        messages.warning(request, 'Only verified members can view this event.')
-        return HttpResponseRedirect('/events')
-
-    if event.visibility == 'C' and not request.user.is_staff:
-        messages.warning(
-            request, 'Only Core Team members can view this event.')
+    # Prevent acces if event is hidden or Core Team only
+    if not event.is_publicly_visible and not request.user.is_staff:
+        messages.warning(request, 'You cannot view that event.')
         return HttpResponseRedirect('/events')
 
     show_rsvp_form = False

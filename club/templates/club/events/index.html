@@ -38,7 +38,8 @@
                     </div>
                     <div class="media-body">
                         <a href="{% url 'event_detail' event.id %}">
-                            <h3 class="title is-size-4">{{ event.title }}
+                            <h3 class="title is-size-4">
+                                {{ event.title }}
                                 <span class="has-text-grey">{{ event.get_event_type_display }}</span>
                             </h3>
                         </a>
@@ -56,6 +57,7 @@
                             <i class="fas fa-map-marker-alt"></i>
                             {{ event.location }}
                         </a>
+                        {% if not event.is_publicly_visible %}<span class="icon" title="Not publicily visible"><i class="far fa-eye-slash"></i></span>{% endif %}
 
                         <hr>
                         {% if user.is_staff %}
@@ -157,7 +159,7 @@
                     <td>{{ event.start }}</td>
                     <td>{{ event.get_event_type_display }}</td>
                     <td>
-                        {% if event.visibility == 'C' %}<span class="icon" title="Core Team only"><i class="fas fa-lock"></i></span>{% endif %}
+                        {% if not event.is_publicly_visible %}<span class="icon" title="Not publicily visible"><i class="far fa-eye-slash"></i></span>{% endif %}
                         <span>{{ event.title }}</span>
                         {% if event in user_rsvped_events %}
                         <span class="tag is-primary">RSVPed</span>

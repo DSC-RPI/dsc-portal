@@ -44,11 +44,6 @@
         <h1 class="title event-title is-size-2">{{ event.title }}</h1>
         <h2 class="subtitle has-text-grey is-size-4">
             {% if event.is_ongoing %}Ongoing{% endif %} {{ event.get_event_type_display }}
-            {% if event.visibility == 'M' %}
-            (Members Only)
-            {% elif event.visibility == 'C' %}
-            (Core Team Only)
-            {% endif %}
         </h2>
         {% if event.meeting_notes_id %}
         <a href="{{ event.meeting_notes_link }}" target="_blank" class="event-meeting-notes">
