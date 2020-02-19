@@ -2,10 +2,24 @@
 
 {% block content %}
 <section class="section">
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const randomColor = ['success', 'danger', 'warning', 'info'][Math.floor(Math.random() * 4)]
+            const nameEl = document.getElementById('name')
+            nameEl.classList.add('has-text-' + randomColor)
+
+            new Typed(nameEl, {
+                strings: [nameEl.dataset.name + '!'],
+                typeSpeed: 50,
+                showCursor: false,
+            });
+        })
+    </script>
     <div class="container">
         {% include 'club/includes/messages.html' %}
 
-        <h1 class="title is-size-1">Welcome back, {{ user.first_name }}!</h1>
+        <h1 class="title is-size-1">Welcome, <span data-name="{{user.first_name}}" id="name"></span></h1>
 
         <div class="columns is-multiline">
             {% if ongoing_event %}
@@ -34,7 +48,8 @@
                         {% for rsvp in upcoming_rsvps %}
                         <li><a href="{% url 'event_detail' rsvp.event.id %}">{{ rsvp.event }}</a></li>
                         {% empty %}
-                        <p class="has-text-grey">You haven't RSVPed for any <a href="{% url 'events' %}">upcoming events</a>.</p>
+                        <p class="has-text-grey">You haven't RSVPed for any <a href="{% url 'events' %}">upcoming
+                                events</a>.</p>
                         {% endfor %}
                     </ul>
                 </div>

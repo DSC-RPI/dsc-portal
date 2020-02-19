@@ -65,7 +65,7 @@ class EventAdmin(admin.ModelAdmin):
     # https://docs.djangoproject.com/en/dev/ref/contrib/admin/#modeladmin-options
     fieldsets = (
         (None, {
-            'fields': ('event_type', ('title', 'tagline'), ('start', 'end'), 'description', ('visibility', 'hidden'), ('location', 'what_to_bring'), 'review')
+            'fields': ('event_type', ('title', 'tagline'), ('start', 'end'), 'description', ('hidden'), ('location', 'what_to_bring'), 'review')
         }),
         ('Advanced options', {
             'classes': ('collapse',),
