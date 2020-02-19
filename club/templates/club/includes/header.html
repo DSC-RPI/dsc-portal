@@ -79,6 +79,10 @@
                             Overview
                         </a>
                         <hr class="navbar-divider">
+                        {% for group in user.groups.all %}
+                        <a href="/core-team/{{group.name.lower.split|join:'_'}}" class="navbar-item">{{group.name}}s</a>
+                        {% endfor %}
+                        <hr class="navbar-divider">
                         </hr>
                         <a href="{% url 'member_management' %}" class="navbar-item {% if '/core-team/member-management' in request.path_info %}is-active{% endif %}">
                             Member Management
@@ -91,7 +95,7 @@
                         </a>
                         <a href="{% url 'social_media' %}" class="navbar-item {% if '/core-team/social-media' in request.path_info %}is-active{% endif %}">
                             Social Media
-                        </a>
+                        </a>                        
                     </div>
                 </div>
                 {% endif %}

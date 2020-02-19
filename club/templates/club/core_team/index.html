@@ -27,11 +27,9 @@
                 <div class="box links">
                     <h3 class="subtitle is-size-4">Quicklinks</h3>
                     <ul>
-                        <li><a href="https://communityleads.dev/home/" target="_blank" rel="noopener noreferrer">Community Leads Portal</a></li>
-                        <li><a href="https://console.cloud.google.com/" target="_blank" rel="noopener noreferrer">Google Cloud Console</a></li>
-                        <li><a target="_blank" href="https://drive.google.com/drive/u/1/folders/{{ google_drive_folder_id }}">Club Google Drive</a></li>
-                        <li><a href="https://sites.google.com/google.com/developerstudentclubleads/home" target="_blank" rel="noopener noreferrer">Google DSC Lead Home</a></li>
-                        <li><a href="https://docs.google.com/spreadsheets/d/1qHvNvuYzI0Wjt_QUU85JMsKUZIQLmwg0VKYMpifZ914/edit#gid=0" target="_blank" rel="noopener noreferrer">DSC Resources List</a></li>
+                        {% for name, link in links %}
+                        <li><a href="{{link}}" target="_blank" rel="noopener noreferrer">{{name}}</a></li>
+                        {% endfor %}
                     </ul>
                 </div>
             </div>

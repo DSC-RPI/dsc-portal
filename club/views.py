@@ -11,10 +11,10 @@ from django.conf import settings
 from .logger import logger
 from .email import send_templated_email
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib import messages
 
-from .models import Member, FAQ, Event, Project, Update, EventAttendance, EventRSVP, RoadmapMilestone
+from .models import Member, FAQ, Event, Project, Update, EventAttendance, EventRSVP, EventFeedback, RoadmapMilestone
 from .forms import MemberAccountForm, EventFeedbackForm
 from django.utils import timezone
 from django.db import IntegrityError
@@ -408,19 +408,36 @@ def event_feedback(request, event_id):
     now = timezone.now()
     event = get_object_or_404(Event, pk=event_id)
 
+    # If a GET request, redirect to event detail page with feedback modal open
     if request.method != 'POST':
         return HttpResponseRedirect(f'/events/{event_id}?submit-feedback=1')
 
+    # Only allow feedback for past events
     if not event.is_over:
         messages.warning(
             request, 'You can only submit feedback after the event. Reach out to a Core Team meber if you have issues.')
         return HttpResponseRedirect(f'/events/{event_id}')
 
     # Submit feedback
-    form = EventFeedbackForm({ 'user': request.user, 'event': event}.update(request.POST))
+    form = EventFeedbackForm(request.POST)
     if form.is_valid():
         messages.success(request, 'Thank you for the feedback!')
-        form.save()
+        feedback = EventFeedback(event=event, user=request.user)
+
+        feedback.overall_rating = form.cleaned_data['overall_rating']
+        feedback.date_time_rating = form.cleaned_data['date_time_rating']
+        feedback.location_rating = form.cleaned_data['location_rating']
+        feedback.pacing_rating = form.cleaned_data['pacing_rating']
+
+        # Optional ratings
+        if 'speaker_rating' in form.cleaned_data:
+            feedback.speaker_rating = form.cleaned_data['speaker_rating']
+        if 'food_rating' in form.cleaned_data:
+            feedback.food_rating = form.cleaned_data['food_rating']
+        if 'comments' in form.cleaned_data:
+            feedback.comments = form.cleaned_data['comments']
+
+        feedback.save()
     else:
         logger.error(form.errors)
         messages.error(request, 'There was an issue submitting your feedback.')
@@ -491,7 +508,39 @@ def member_detail(request, member_id):
 def core_team(request):
     # TODO: docstring
     core_team = User.objects.filter(is_staff=True)
-    return render(request, 'club/core_team/index.html', {'core_team': core_team, 'google_drive_folder_id': settings.GOOGLE_DRIVE_FOLDER_ID})
+    links = [
+        ('Community Leads Portal', 'https://communityleads.dev/home/'),
+        ('Google Cloud Console', 'https://console.cloud.google.com/'),
+        ('Club Google Drive', 'https://drive.google.com/drive/u/1/folders/{{ google_drive_folder_id }}'),
+        ('DSC Lead Home', 'https://sites.google.com/google.com/developerstudentclubleads/home'),
+        ('DSC Resources Spreadsheet', 'https://docs.google.com/spreadsheets/d/1qHvNvuYzI0Wjt_QUU85JMsKUZIQLmwg0VKYMpifZ914/edit#gid=0'),
+        ('Cloud Study Jams Organizer Guide', 'https://docs.google.com/presentation/d/1_YaJ4YJC2vXL16m0feYijtYZQa3809k2mzMPALozBeU/edit#slide=id.g707393ed40_0_1980')
+    ]
+    if settings.SCHOOL_NAME_SHORT == 'RPI':
+        links.append(('RPI Event Scheduler', 'https://rpi.emscloudservice.com/web/'))
+
+    context = {
+        'core_team': core_team,
+        'google_drive_folder_id': settings.GOOGLE_DRIVE_FOLDER_ID,
+        'links': links
+    }
+    return render(request, 'club/core_team/index.html', context)
+
+@staff_member_required
+def core_team_role(request, role_name):
+    groups = {}
+    for group in Group.objects.all():
+        formatted_group_name = group.name.lower().replace(' ', '_')
+        groups[formatted_group_name] = group
+    
+    print(groups)
+
+    # Ensure core team member is in specified group
+    if role_name in groups and request.user.groups.filter(name=groups[role_name]).exists():
+        return render(request, f'club/core_team/roles/{role_name}.html')
+    else:
+        messages.warning(request, 'You do not have permission to view that Core Team page!')
+        return HttpResponseRedirect('/core-team')
 
 @staff_member_required
 def core_team_email(request):

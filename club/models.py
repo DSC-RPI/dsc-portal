@@ -555,11 +555,11 @@ class EventFeedback(models.Model):
     user = models.ForeignKey(User, null=False, on_delete=models.CASCADE, related_name='event_feedback')
 
     RATING_CHOICES = [
-        (1, 'Horrible'),
-        (2, 'Bad'),
-        (3, 'Okay'),
+        (5, 'Great'),
         (4, 'Good'),
-        (5, 'Great')
+        (3, 'Okay'),
+        (2, 'Bad'),
+        (1, 'Horrible')
     ]
     overall_rating = models.IntegerField(choices=RATING_CHOICES, help_text='The subjective rating of the whole event in general.')
 
@@ -578,6 +578,9 @@ class EventFeedback(models.Model):
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'Feedback for {self.event}'
 
 class Project(models.Model):
     '''Project represents a tech-based solution.'''
