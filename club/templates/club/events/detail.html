@@ -41,20 +41,23 @@
             events page yet.</div>
         {% endif %}
 
-        <h1 class="title event-title is-size-2">{{ event.title }}</h1>
-        <h2 class="subtitle has-text-grey is-size-4">
-            {% if event.is_ongoing %}Ongoing{% endif %} {{ event.get_event_type_display }}
-        </h2>
-        {% if event.meeting_notes_id %}
-        <a href="{{ event.meeting_notes_link }}" target="_blank" class="event-meeting-notes">
-            <span class="icon">
-                <i class="fas fa-file-alt"></i>
-            </span>
-            <span>Meeting Notes</span>
-        </a>
-        {% endif %}
         <div class="columns is-reversed-mobile">
             <div class="column">
+                <header>
+                    <h1 class="title event-title is-size-2">{{ event.title }}</h1>
+                    <h2 class="subtitle has-text-grey is-size-4">
+                        {% if event.is_ongoing %}Ongoing{% endif %} {{ event.get_event_type_display }}
+                    </h2>
+                    {% if event.meeting_notes_id %}
+                    <a href="{{ event.meeting_notes_link }}" target="_blank" class="event-meeting-notes">
+                        <span class="icon">
+                            <i class="fas fa-file-alt"></i>
+                        </span>
+                        <span>Meeting Notes</span>
+                    </a>
+                    {% endif %}
+                </header>
+                
                 <div class="content">
                     <blockquote>
                         <p class="event-description">{{ event.description|markdown_filter|safe }}</p>
