@@ -267,7 +267,8 @@ def event_detail(request, event_id):
 
     show_rsvp_form = False
     show_submit_attendance = False
-
+    show_submit_feedback = False
+    
     # Make sure user is logged in to allow attendance, rsvping, etc.
     if request.user.is_authenticated:
         attendance_submitted = event.attendance.filter(
