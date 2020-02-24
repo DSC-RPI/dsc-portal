@@ -68,6 +68,12 @@ def faq(request):
     faqs = FAQ.objects.filter(answer__isnull=False)
     return render(request, 'club/faq.html', {'faqs': faqs})
 
+def conduct(request):
+    '''
+    Displays the Code of Conduct.
+    '''
+
+    return render(request, 'club/conduct.html')
 
 @login_required
 def user_account(request):
