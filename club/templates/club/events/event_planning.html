@@ -1,0 +1,37 @@
+{% extends "club/base.html" %}
+{% block content %}
+<section class="section event-planning">
+    <div class="container">
+        {% include 'club/includes/messages.html' %}
+
+        <h1 class="title">Planning for {{event}}</h1>
+        
+        <div class="columns">
+            <div class="column">
+                <div class="panel">
+                    <p class="panel-heading">Pre-Event</p>
+                    <details class="panel-block">
+                        <summary>
+                            <input type="checkbox" class="is-pulled-right">
+                            <span>Register with Google</span>
+                        </summary>
+                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo non necessitatibus eveniet quos animi maiores tempora itaque sit impedit ratione.</p>
+                    </details>
+                </div>
+            </div>
+            <div class="column">
+                <div class="box">
+                    <span class="tag is-pulled-right">-/-</span>
+                    <h2 class="subtitle">During Event</h2>
+                </div>
+            </div>
+            <div class="column">
+                <div class="box">
+                    <span class="tag is-pulled-right">-/-</span>
+                    <h2 class="subtitle">Post-Event</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

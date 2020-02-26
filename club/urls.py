@@ -11,6 +11,7 @@ urlpatterns = [
     path('updates/', views.update_index, name='updates'),
     path('updates/<int:update_id>', views.update_detail, name='update_detail'),
     path('events/<int:event_id>', views.event_detail, name='event_detail'),
+    path('events/<int:event_id>/planning', views.event_planning, name='event_planning'),
     path('events/<int:event_id>/rsvp', views.event_rsvp, name='event_rsvp'),
     path('events/<int:event_id>/attendance', views.event_attendance, name='event_attendance'),
     path('events/<int:event_id>/feedback', views.event_feedback, name='event_feedback'),

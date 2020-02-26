@@ -336,6 +336,17 @@ def event_detail(request, event_id):
     return render(request, 'club/events/detail.html', context)
 
 
+@staff_member_required
+def event_planning(request, event_id):
+    now = timezone.now()
+    event = get_object_or_404(Event, pk=event_id)
+
+    context = {
+        'event': event
+    }
+
+    return render(request, 'club/events/event_planning.html', context)
+
 @user_passes_test(verified_member_check, login_url='/account', redirect_field_name=None)
 def event_rsvp(request, event_id):
     now = timezone.now()
