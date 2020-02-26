@@ -67,6 +67,9 @@ class EventAdmin(admin.ModelAdmin):
         (None, {
             'fields': ('event_type', ('title', 'tagline'), ('start', 'end'), 'description', ('hidden'), ('location', 'what_to_bring'), 'review')
         }),
+        ('Planning', {
+            'fields': ('registered_with_google', 'sent_club_email', 'advertised_on_social_media', 'recorded_session', 'took_photos', 'reported_to_google', 'posted_review_to_social_media')
+        }),
         ('Advanced options', {
             'classes': ('collapse',),
             'fields': ('attendance_code', 'slideshow_id', 'thumbnail_link', 'meeting_notes_id', 'calendar_event_id')

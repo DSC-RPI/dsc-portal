@@ -341,8 +341,15 @@ def event_planning(request, event_id):
     now = timezone.now()
     event = get_object_or_404(Event, pk=event_id)
 
+    pre_event_count = sum([event.registered_with_google, event.sent_club_email, event.advertised_on_social_media])
+    during_event_count = sum([event.recorded_session, event.took_photos])
+    post_event_count = sum([event.reported_to_google, event.posted_review_to_social_media])
+
     context = {
-        'event': event
+        'event': event,
+        'pre_event_count': pre_event_count,
+        'during_event_count': during_event_count,
+        'post_event_count': post_event_count
     }
 
     return render(request, 'club/events/event_planning.html', context)

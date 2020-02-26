@@ -1,4 +1,12 @@
 {% extends "club/base.html" %}
+{% block head %}
+<style>
+    .completed {
+        border-left: 4px solid green;
+        color: grey;
+    }
+</style>
+{% endblock %}
 {% block content %}
 <section class="section event-planning">
     <div class="container">
@@ -8,29 +16,88 @@
         
         <div class="columns">
             <div class="column">
-                <div class="panel">
-                    <p class="panel-heading">Pre-Event</p>
-                    <details class="panel-block">
+                <div class="panel pre-event-panel {% if pre_event_count == 3 %}is-success{% elif pre_event_count == 0 %}is-danger{% endif %}">
+                    <p class="panel-heading">
+                        <span class="tag is-pulled-right">{{ pre_event_count }}/3</span>
+                        <span>Pre-Event</span>
+                    </p>
+                    <details class="panel-block {% if event.registered_with_google %}completed{% endif %}">
                         <summary>
-                            <input type="checkbox" class="is-pulled-right">
                             <span>Register with Google</span>
                         </summary>
                         <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo non necessitatibus eveniet quos animi maiores tempora itaque sit impedit ratione.</p>
                     </details>
-                </div>
+                    
+                    <details class="panel-block {% if event.sent_club_email %}completed{% endif %}">
+                        <summary>
+                            <span>Sent Club Email</span>
+                        </summary>
+                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo non necessitatibus eveniet quos animi maiores tempora itaque sit impedit ratione.</p>
+                    </details>
+                    
+                    <details class="panel-block {% if event.advertised_on_social_media %}completed{% endif %}">
+                        <summary>
+                            <span>Advertised on Social Media</span>
+                        </summary>
+                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo non necessitatibus eveniet quos animi maiores tempora itaque sit impedit ratione.</p>
+                    </details>
+                </div>    
             </div>
+
             <div class="column">
-                <div class="box">
-                    <span class="tag is-pulled-right">-/-</span>
-                    <h2 class="subtitle">During Event</h2>
-                </div>
+                <div class="panel during-event-panel {% if during_event_count == 3 %}is-success{% elif during_event_count == 0 %}is-danger{% endif %}">
+                    <p class="panel-heading">
+                        <span class="tag is-pulled-right">{{ during_event_count }}/3</span>
+                        <span>During Event</span>
+                    </p>
+                    <details class="panel-block {% if event.recorded_session %}completed{% endif %}">
+                        <summary>
+                            <span>Recorded Session</span>
+                        </summary>
+                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo non necessitatibus eveniet quos animi maiores tempora itaque sit impedit ratione.</p>
+                    </details>
+
+                    <details class="panel-block {% if event.took_photos %}completed{% endif %}">
+                        <summary>
+                            <span>Took Photos</span>
+                        </summary>
+                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo non necessitatibus eveniet quos animi maiores tempora itaque sit impedit ratione.</p>
+                    </details>
+                </div>    
             </div>
+
             <div class="column">
-                <div class="box">
-                    <span class="tag is-pulled-right">-/-</span>
-                    <h2 class="subtitle">Post-Event</h2>
-                </div>
+                <div class="panel post-event-panel {% if post_event_count == 3 %}is-success{% elif post_event_count == 0 %}is-danger{% endif %}">
+                    <p class="panel-heading">
+                        <span class="tag is-pulled-right">{{ post_event_count }}/3</span>
+                        <span>Post Event</span>
+                    </p>
+                    <details class="panel-block {% if event.reported_to_google %}completed{% endif %}">
+                        <summary>
+                            <span>Reported to Google</span>
+                        </summary>
+                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo non necessitatibus eveniet quos animi maiores tempora itaque sit impedit ratione.</p>
+                    </details>
+                    
+                    <details class="panel-block {% if event.posted_review_to_social_media %}completed{% endif %}">
+                        <summary>
+                            <span>Posted Review to Social Media</span>
+                        </summary>
+                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo non necessitatibus eveniet quos animi maiores tempora itaque sit impedit ratione.</p>
+                    </details>
+                </div> 
             </div>
+        </div>
+
+        <hr>
+
+        <div class="buttons">
+            <a href="{% url 'event_detail' event.id %}" class="button is-link">
+                <span class="icon">
+                    <i class="fas fa-chevron-left"></i>
+                </span>
+                <span>Event Page</span>
+            </a>
         </div>
     </div>
 </section>
