@@ -218,7 +218,16 @@ class Event(models.Model):
     thumbnail_link = models.URLField(max_length=500, blank=True, null=True, help_text='An optional link to an image to show for the event. If a slideshow is associated with the event, it will automatically use the slide thumbnail.')
 
     meeting_notes_id = models.CharField(max_length=300, blank=True, null=True, help_text='The ID of the Google Docs meeting notes. This is most likely to an auto-generated Google Docs.')
-    
+
+    # PLANNING
+    registered_with_google = models.BooleanField(default=False)
+    sent_club_email = models.BooleanField(default=False)
+    advertised_on_social_media = models.BooleanField(default=False)
+    recorded_session = models.BooleanField(default=False)
+    took_photos = models.BooleanField(default=False)
+    reported_to_google = models.BooleanField(default=False)
+    posted_review_to_social_media = models.BooleanField(default=False)
+
     @property
     def meeting_notes_link(self):
         '''A direct link to the Google Doc meeting notes generated for the event.'''
